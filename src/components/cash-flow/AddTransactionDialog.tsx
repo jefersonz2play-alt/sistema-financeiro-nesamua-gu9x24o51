@@ -43,30 +43,75 @@ import { cn } from '@/lib/utils'
 import useDataStore from '@/stores/useDataStore'
 import { Transaction, PaymentMethod } from '@/types'
 
-const formSchema = z.object({
-  description: z.string().min(2, {
-    message: 'A descrição deve ter pelo menos 2 caracteres.',
-  }),
-  amount: z.string().refine((val) => !isNaN(Number(val)) && Number(val) > 0, {
-    message: 'O valor deve ser um número positivo.',
-  }),
-  type: z.enum(['entry', 'exit'], {
-    required_error: 'Selecione o tipo de movimentação.',
-  }),
-  category: z.enum(['service', 'product', 'other']),
-  date: z.date({
-    required_error: 'Selecione uma data.',
-  }),
-  paymentMethod: z.enum(['money', 'pix', 'link', 'debit_card', 'credit_card'], {
-    required_error: 'Selecione a forma de pagamento.',
-  }),
-  cardFee: z.string().optional(),
-  customerId: z.string().optional(),
-  employeeId: z.string().optional(),
-  employeePayment: z.string().optional(),
-  itemId: z.string().optional(),
-  quantity: z.string().optional(),
-})
+const formSchema = z
+  .object({
+    description: z.string().min(2, {
+      message: 'A descrição deve ter pelo menos 2 caracteres.',
+    }),
+    amount: z.string().refine((val) => !isNaN(Number(val)) && Number(val) > 0, {
+      message: 'O valor deve ser um número positivo.',
+    }),
+    type: z.enum(['entry', 'exit'], {
+      required_error: 'Selecione o tipo de movimentação.',
+    }),
+    category: z.enum(['service', 'product', 'other']),
+    date: z.date({
+      required_error: 'Selecione uma data.',
+    }),
+    paymentMethod: z.enum(
+      ['money', 'pix', 'link', 'debit_card', 'credit_card'],
+      {
+        required_error: 'Selecione a forma de pagamento.',
+      },
+    ),
+    cardFee: z.string().optional(),
+    customerId: z.string().optional(),
+    employeeId: z.string().optional(),
+    employeePayment: z.string().optional(),
+    itemId: z.string().optional(),
+    quantity: z.string().optional(),
+  })
+  .superRefine((data, ctx) => {
+    // Validation for Service and Product requirements
+    if (data.type === 'entry') {
+      if (data.category === 'service') {
+        if (!data.customerId) {
+          ctx.addIssue({
+            code: z.ZodIssueCode.custom,
+            message: 'Cliente é obrigatório para serviços.',
+            path: ['customerId'],
+          })
+        }
+        if (!data.employeeId) {
+          ctx.addIssue({
+            code: z.ZodIssueCode.custom,
+            message: 'Funcionário é obrigatório para serviços.',
+            path: ['employeeId'],
+          })
+        }
+      } else if (data.category === 'product') {
+        if (!data.itemId) {
+          ctx.addIssue({
+            code: z.ZodIssueCode.custom,
+            message: 'Selecione o produto.',
+            path: ['itemId'],
+          })
+        }
+      }
+    }
+
+    // Validation for Card Fees
+    if (
+      ['credit_card', 'debit_card'].includes(data.paymentMethod) &&
+      (!data.cardFee || Number(data.cardFee) < 0)
+    ) {
+      ctx.addIssue({
+        code: z.ZodIssueCode.custom,
+        message: 'A taxa do cartão é obrigatória.',
+        path: ['cardFee'],
+      })
+    }
+  })
 
 interface AddTransactionDialogProps {
   onAdd: (data: Transaction) => void
@@ -120,35 +165,11 @@ export function AddTransactionDialog({ onAdd }: AddTransactionDialogProps) {
       const service = services.find((s) => s.id === watchItemId)
       if (service) {
         form.setValue('description', service.name)
-        // Usually services have variable prices, but if we had a price we could set it
       }
     }
   }, [watchItemId, watchCategory, services, form])
 
   function onSubmit(values: z.infer<typeof formSchema>) {
-    // Validation
-    if (values.type === 'entry') {
-      if (values.category === 'service') {
-        if (!values.customerId) {
-          form.setError('customerId', {
-            message: 'Cliente é obrigatório para serviços.',
-          })
-          return
-        }
-        if (!values.employeeId) {
-          form.setError('employeeId', {
-            message: 'Funcionário é obrigatório para serviços.',
-          })
-          return
-        }
-      } else if (values.category === 'product') {
-        if (!values.itemId) {
-          form.setError('itemId', { message: 'Selecione o produto.' })
-          return
-        }
-      }
-    }
-
     const newTransaction: Transaction = {
       id: Math.random().toString(36).substr(2, 9),
       date: values.date.toISOString().split('T')[0],
@@ -540,6 +561,9 @@ export function AddTransactionDialog({ onAdd }: AddTransactionDialogProps) {
                           {...field}
                         />
                       </FormControl>
+                      <FormDescription className="text-xs text-muted-foreground">
+                        Valor descontado pela operadora.
+                      </FormDescription>
                       <FormMessage />
                     </FormItem>
                   )}

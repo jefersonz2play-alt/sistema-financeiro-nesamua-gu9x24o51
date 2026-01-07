@@ -78,7 +78,9 @@ export function TransactionTable({ transactions }: TransactionTableProps) {
                 <TableHead>Funcionário</TableHead>
                 <TableHead>Pagamento</TableHead>
                 <TableHead className="w-[100px]">Tipo</TableHead>
-                <TableHead className="text-right">Valor</TableHead>
+                <TableHead className="text-right">Valor Bruto</TableHead>
+                <TableHead className="text-right">Taxas</TableHead>
+                <TableHead className="text-right">Valor Líquido</TableHead>
                 <TableHead className="text-right">Saldo</TableHead>
               </TableRow>
             </TableHeader>
@@ -86,7 +88,7 @@ export function TransactionTable({ transactions }: TransactionTableProps) {
               {transactions.length === 0 ? (
                 <TableRow>
                   <TableCell
-                    colSpan={8}
+                    colSpan={10}
                     className="h-24 text-center text-muted-foreground"
                   >
                     Nenhuma movimentação encontrada para este período.
@@ -98,6 +100,10 @@ export function TransactionTable({ transactions }: TransactionTableProps) {
                     transaction.paymentMethod,
                   )
                   const PaymentIcon = payment.icon
+                  const fee = transaction.cardFee || 0
+                  const isEntry = transaction.type === 'entry'
+                  const grossAmount = transaction.amount
+                  const netAmount = isEntry ? grossAmount - fee : grossAmount
 
                   return (
                     <TableRow
@@ -117,18 +123,11 @@ export function TransactionTable({ transactions }: TransactionTableProps) {
                         {getEmployeeName(transaction.employeeId)}
                       </TableCell>
                       <TableCell>
-                        <div className="flex flex-col">
-                          <span className="flex items-center gap-1 text-sm text-foreground/80">
-                            {PaymentIcon && (
-                              <PaymentIcon className="w-3 h-3 text-muted-foreground" />
-                            )}
-                            {payment.label}
-                          </span>
-                          {transaction.cardFee ? (
-                            <span className="text-[10px] text-red-400">
-                              Taxa: {formatCurrency(transaction.cardFee)}
-                            </span>
-                          ) : null}
+                        <div className="flex items-center gap-1 text-sm text-foreground/80">
+                          {PaymentIcon && (
+                            <PaymentIcon className="w-3 h-3 text-muted-foreground" />
+                          )}
+                          {payment.label}
                         </div>
                       </TableCell>
                       <TableCell>
@@ -151,6 +150,12 @@ export function TransactionTable({ transactions }: TransactionTableProps) {
                           )}
                         </Badge>
                       </TableCell>
+                      <TableCell className="text-right text-muted-foreground font-medium">
+                        {formatCurrency(grossAmount)}
+                      </TableCell>
+                      <TableCell className="text-right text-red-400 font-medium text-xs">
+                        {fee > 0 ? `- ${formatCurrency(fee)}` : '-'}
+                      </TableCell>
                       <TableCell
                         className={
                           transaction.type === 'entry'
@@ -159,7 +164,7 @@ export function TransactionTable({ transactions }: TransactionTableProps) {
                         }
                       >
                         {transaction.type === 'exit' ? '-' : '+'}
-                        {formatCurrency(transaction.amount)}
+                        {formatCurrency(netAmount)}
                       </TableCell>
                       <TableCell className="text-right font-semibold text-muted-foreground">
                         {formatCurrency(transaction.balanceAfter)}

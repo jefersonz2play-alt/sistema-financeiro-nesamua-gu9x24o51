@@ -29,7 +29,10 @@ export default function Index() {
       .sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime())
       .map((t) => {
         if (t.type === 'entry') {
-          runningBalance += t.amount
+          // Subtract card fee from entry amount to get net cash impact
+          const fee = t.cardFee || 0
+          const netAmount = t.amount - fee
+          runningBalance += netAmount
         } else {
           runningBalance -= t.amount
         }
@@ -49,7 +52,12 @@ export default function Index() {
     if (filteredTransactions.length === 0) return 0
 
     const first = filteredTransactions[0]
-    if (first.type === 'entry') return first.balanceAfter - first.amount
+    // Reverse calculation to find previous balance
+    if (first.type === 'entry') {
+      const fee = first.cardFee || 0
+      const netAmount = first.amount - fee
+      return first.balanceAfter - netAmount
+    }
     return first.balanceAfter + first.amount
   }, [filteredTransactions])
 
@@ -59,9 +67,14 @@ export default function Index() {
   }, [filteredTransactions, initialBalance])
 
   const currentRevenue = useMemo(() => {
+    // Keeping revenue as Gross Revenue for goal tracking
     return filteredTransactions
       .filter((t) => t.type === 'entry')
       .reduce((sum, t) => sum + t.amount, 0)
+  }, [filteredTransactions])
+
+  const totalFees = useMemo(() => {
+    return filteredTransactions.reduce((sum, t) => sum + (t.cardFee || 0), 0)
   }, [filteredTransactions])
 
   const handleAddTransaction = (data: Transaction) => {
@@ -92,6 +105,7 @@ export default function Index() {
           <SummaryCards
             initialBalance={initialBalance}
             finalBalance={finalBalance}
+            totalFees={totalFees}
           />
         </div>
         <div className="lg:col-span-1">

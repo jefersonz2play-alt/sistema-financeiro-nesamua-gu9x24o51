@@ -24171,55 +24171,77 @@ var CardFooter = import_react.forwardRef(({ className, ...props }, ref) => /* @_
 	...props
 }));
 CardFooter.displayName = "CardFooter";
-function SummaryCards({ initialBalance, finalBalance }) {
+function SummaryCards({ initialBalance, finalBalance, totalFees }) {
 	const difference = finalBalance - initialBalance;
 	const isPositive = difference >= 0;
 	return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-		className: "grid gap-6 md:grid-cols-2",
-		children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)(Card, {
-			className: "shadow-subtle hover:shadow-lg transition-shadow duration-300 border-none",
-			children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)(CardHeader, {
-				className: "flex flex-row items-center justify-between space-y-0 pb-2",
-				children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(CardTitle, {
-					className: "text-sm font-medium text-muted-foreground uppercase tracking-wider",
-					children: "Saldo Inicial"
-				}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
-					className: "h-8 w-8 rounded-full bg-secondary flex items-center justify-center",
-					children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(DollarSign, { className: "h-4 w-4 text-primary" })
-				})]
-			}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(CardContent, { children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
-				className: "text-3xl font-bold text-foreground",
-				children: formatCurrency(initialBalance)
-			}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
-				className: "text-xs text-muted-foreground mt-1",
-				children: "Início do período selecionado"
-			})] })]
-		}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(Card, {
-			className: "shadow-subtle hover:shadow-lg transition-shadow duration-300 border-none",
-			children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)(CardHeader, {
-				className: "flex flex-row items-center justify-between space-y-0 pb-2",
-				children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(CardTitle, {
-					className: "text-sm font-medium text-muted-foreground uppercase tracking-wider",
-					children: "Saldo Final"
-				}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
-					className: `h-8 w-8 rounded-full flex items-center justify-center ${isPositive ? "bg-green-100 text-green-600" : "bg-red-100 text-red-600"}`,
-					children: isPositive ? /* @__PURE__ */ (0, import_jsx_runtime.jsx)(TrendingUp, { className: "h-4 w-4" }) : /* @__PURE__ */ (0, import_jsx_runtime.jsx)(TrendingDown, { className: "h-4 w-4" })
-				})]
-			}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(CardContent, { children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
-				className: "text-3xl font-bold text-foreground",
-				children: formatCurrency(finalBalance)
-			}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("p", {
-				className: "text-xs text-muted-foreground mt-1",
-				children: [
-					/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("span", {
-						className: isPositive ? "text-green-600 font-medium" : "text-red-600 font-medium",
-						children: [isPositive ? "+" : "", formatCurrency(difference)]
-					}),
-					" ",
-					"neste período"
-				]
-			})] })]
-		})]
+		className: "grid gap-6 grid-cols-1 md:grid-cols-3",
+		children: [
+			/* @__PURE__ */ (0, import_jsx_runtime.jsxs)(Card, {
+				className: "shadow-subtle hover:shadow-lg transition-shadow duration-300 border-none",
+				children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)(CardHeader, {
+					className: "flex flex-row items-center justify-between space-y-0 pb-2",
+					children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(CardTitle, {
+						className: "text-sm font-medium text-muted-foreground uppercase tracking-wider",
+						children: "Saldo Inicial"
+					}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+						className: "h-8 w-8 rounded-full bg-secondary flex items-center justify-center",
+						children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(DollarSign, { className: "h-4 w-4 text-primary" })
+					})]
+				}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(CardContent, { children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+					className: "text-3xl font-bold text-foreground",
+					children: formatCurrency(initialBalance)
+				}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
+					className: "text-xs text-muted-foreground mt-1",
+					children: "Início do período selecionado"
+				})] })]
+			}),
+			/* @__PURE__ */ (0, import_jsx_runtime.jsxs)(Card, {
+				className: "shadow-subtle hover:shadow-lg transition-shadow duration-300 border-none",
+				children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)(CardHeader, {
+					className: "flex flex-row items-center justify-between space-y-0 pb-2",
+					children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(CardTitle, {
+						className: "text-sm font-medium text-muted-foreground uppercase tracking-wider",
+						children: "Saldo Final"
+					}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+						className: `h-8 w-8 rounded-full flex items-center justify-center ${isPositive ? "bg-green-100 text-green-600" : "bg-red-100 text-red-600"}`,
+						children: isPositive ? /* @__PURE__ */ (0, import_jsx_runtime.jsx)(TrendingUp, { className: "h-4 w-4" }) : /* @__PURE__ */ (0, import_jsx_runtime.jsx)(TrendingDown, { className: "h-4 w-4" })
+					})]
+				}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(CardContent, { children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+					className: "text-3xl font-bold text-foreground",
+					children: formatCurrency(finalBalance)
+				}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("p", {
+					className: "text-xs text-muted-foreground mt-1",
+					children: [
+						/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("span", {
+							className: isPositive ? "text-green-600 font-medium" : "text-red-600 font-medium",
+							children: [isPositive ? "+" : "", formatCurrency(difference)]
+						}),
+						" ",
+						"neste período"
+					]
+				})] })]
+			}),
+			/* @__PURE__ */ (0, import_jsx_runtime.jsxs)(Card, {
+				className: "shadow-subtle hover:shadow-lg transition-shadow duration-300 border-none",
+				children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)(CardHeader, {
+					className: "flex flex-row items-center justify-between space-y-0 pb-2",
+					children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(CardTitle, {
+						className: "text-sm font-medium text-muted-foreground uppercase tracking-wider",
+						children: "Taxas de Cartão"
+					}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+						className: "h-8 w-8 rounded-full bg-rose-100 flex items-center justify-center",
+						children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(CreditCard, { className: "h-4 w-4 text-rose-600" })
+					})]
+				}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(CardContent, { children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+					className: "text-3xl font-bold text-foreground",
+					children: formatCurrency(totalFees)
+				}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
+					className: "text-xs text-muted-foreground mt-1",
+					children: "Descontado do faturamento"
+				})] })]
+			})
+		]
 	});
 }
 var Table = import_react.forwardRef(({ className, ...props }, ref) => /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
@@ -24601,7 +24623,15 @@ function TransactionTable({ transactions }) {
 						}),
 						/* @__PURE__ */ (0, import_jsx_runtime.jsx)(TableHead, {
 							className: "text-right",
-							children: "Valor"
+							children: "Valor Bruto"
+						}),
+						/* @__PURE__ */ (0, import_jsx_runtime.jsx)(TableHead, {
+							className: "text-right",
+							children: "Taxas"
+						}),
+						/* @__PURE__ */ (0, import_jsx_runtime.jsx)(TableHead, {
+							className: "text-right",
+							children: "Valor Líquido"
 						}),
 						/* @__PURE__ */ (0, import_jsx_runtime.jsx)(TableHead, {
 							className: "text-right",
@@ -24609,12 +24639,16 @@ function TransactionTable({ transactions }) {
 						})
 					] })
 				}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)(TableBody, { children: transactions.length === 0 ? /* @__PURE__ */ (0, import_jsx_runtime.jsx)(TableRow, { children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(TableCell, {
-					colSpan: 8,
+					colSpan: 10,
 					className: "h-24 text-center text-muted-foreground",
 					children: "Nenhuma movimentação encontrada para este período."
 				}) }) : transactions.map((transaction) => {
 					const payment = getPaymentMethodLabel(transaction.paymentMethod);
 					const PaymentIcon = payment.icon;
+					const fee = transaction.cardFee || 0;
+					const isEntry = transaction.type === "entry";
+					const grossAmount = transaction.amount;
+					const netAmount = isEntry ? grossAmount - fee : grossAmount;
 					return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(TableRow, {
 						className: "hover:bg-muted/20 transition-colors",
 						children: [
@@ -24635,14 +24669,8 @@ function TransactionTable({ transactions }) {
 								children: getEmployeeName(transaction.employeeId)
 							}),
 							/* @__PURE__ */ (0, import_jsx_runtime.jsx)(TableCell, { children: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-								className: "flex flex-col",
-								children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("span", {
-									className: "flex items-center gap-1 text-sm text-foreground/80",
-									children: [PaymentIcon && /* @__PURE__ */ (0, import_jsx_runtime.jsx)(PaymentIcon, { className: "w-3 h-3 text-muted-foreground" }), payment.label]
-								}), transaction.cardFee ? /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("span", {
-									className: "text-[10px] text-red-400",
-									children: ["Taxa: ", formatCurrency(transaction.cardFee)]
-								}) : null]
+								className: "flex items-center gap-1 text-sm text-foreground/80",
+								children: [PaymentIcon && /* @__PURE__ */ (0, import_jsx_runtime.jsx)(PaymentIcon, { className: "w-3 h-3 text-muted-foreground" }), payment.label]
 							}) }),
 							/* @__PURE__ */ (0, import_jsx_runtime.jsx)(TableCell, { children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Badge, {
 								variant: "secondary",
@@ -24655,9 +24683,17 @@ function TransactionTable({ transactions }) {
 									children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(CircleArrowDown, { className: "w-3 h-3" }), " Saída"]
 								})
 							}) }),
+							/* @__PURE__ */ (0, import_jsx_runtime.jsx)(TableCell, {
+								className: "text-right text-muted-foreground font-medium",
+								children: formatCurrency(grossAmount)
+							}),
+							/* @__PURE__ */ (0, import_jsx_runtime.jsx)(TableCell, {
+								className: "text-right text-red-400 font-medium text-xs",
+								children: fee > 0 ? `- ${formatCurrency(fee)}` : "-"
+							}),
 							/* @__PURE__ */ (0, import_jsx_runtime.jsxs)(TableCell, {
 								className: transaction.type === "entry" ? "text-emerald-600 text-right font-medium" : "text-rose-600 text-right font-medium",
-								children: [transaction.type === "exit" ? "-" : "+", formatCurrency(transaction.amount)]
+								children: [transaction.type === "exit" ? "-" : "+", formatCurrency(netAmount)]
 							}),
 							/* @__PURE__ */ (0, import_jsx_runtime.jsx)(TableCell, {
 								className: "text-right font-semibold text-muted-foreground",
@@ -29675,6 +29711,21 @@ function refine(fn, _params = {}) {
 function superRefine(fn) {
 	return _superRefine(fn);
 }
+const ZodIssueCode = {
+	invalid_type: "invalid_type",
+	too_big: "too_big",
+	too_small: "too_small",
+	invalid_format: "invalid_format",
+	not_multiple_of: "not_multiple_of",
+	unrecognized_keys: "unrecognized_keys",
+	invalid_union: "invalid_union",
+	invalid_key: "invalid_key",
+	invalid_element: "invalid_element",
+	invalid_value: "invalid_value",
+	custom: "custom"
+};
+var ZodFirstPartyTypeKind;
+(function(ZodFirstPartyTypeKind$1) {})(ZodFirstPartyTypeKind || (ZodFirstPartyTypeKind = {}));
 const daysInYear = 365.2425;
 Math.pow(10, 8) * 24 * 60 * 60 * 1e3;
 const millisecondsInWeek = 6048e5;
@@ -36633,6 +36684,32 @@ var formSchema = object({
 	employeePayment: string().optional(),
 	itemId: string().optional(),
 	quantity: string().optional()
+}).superRefine((data, ctx) => {
+	if (data.type === "entry") {
+		if (data.category === "service") {
+			if (!data.customerId) ctx.addIssue({
+				code: ZodIssueCode.custom,
+				message: "Cliente é obrigatório para serviços.",
+				path: ["customerId"]
+			});
+			if (!data.employeeId) ctx.addIssue({
+				code: ZodIssueCode.custom,
+				message: "Funcionário é obrigatório para serviços.",
+				path: ["employeeId"]
+			});
+		} else if (data.category === "product") {
+			if (!data.itemId) ctx.addIssue({
+				code: ZodIssueCode.custom,
+				message: "Selecione o produto.",
+				path: ["itemId"]
+			});
+		}
+	}
+	if (["credit_card", "debit_card"].includes(data.paymentMethod) && (!data.cardFee || Number(data.cardFee) < 0)) ctx.addIssue({
+		code: ZodIssueCode.custom,
+		message: "A taxa do cartão é obrigatória.",
+		path: ["cardFee"]
+	});
 });
 function AddTransactionDialog({ onAdd }) {
 	const [open, setOpen] = (0, import_react.useState)(false);
@@ -36689,23 +36766,6 @@ function AddTransactionDialog({ onAdd }) {
 		form
 	]);
 	function onSubmit(values) {
-		if (values.type === "entry") {
-			if (values.category === "service") {
-				if (!values.customerId) {
-					form.setError("customerId", { message: "Cliente é obrigatório para serviços." });
-					return;
-				}
-				if (!values.employeeId) {
-					form.setError("employeeId", { message: "Funcionário é obrigatório para serviços." });
-					return;
-				}
-			} else if (values.category === "product") {
-				if (!values.itemId) {
-					form.setError("itemId", { message: "Selecione o produto." });
-					return;
-				}
-			}
-		}
 		onAdd({
 			id: Math.random().toString(36).substr(2, 9),
 			date: values.date.toISOString().split("T")[0],
@@ -37007,6 +37067,10 @@ function AddTransactionDialog({ onAdd }) {
 										step: "0.01",
 										...field
 									}) }),
+									/* @__PURE__ */ (0, import_jsx_runtime.jsx)(FormDescription, {
+										className: "text-xs text-muted-foreground",
+										children: "Valor descontado pela operadora."
+									}),
 									/* @__PURE__ */ (0, import_jsx_runtime.jsx)(FormMessage, {})
 								] })
 							})]
@@ -37325,8 +37389,11 @@ function Index() {
 	const processedTransactions = (0, import_react.useMemo)(() => {
 		let runningBalance = 0;
 		return transactions.sort((a$1, b$1) => new Date(a$1.date).getTime() - new Date(b$1.date).getTime()).map((t$1) => {
-			if (t$1.type === "entry") runningBalance += t$1.amount;
-			else runningBalance -= t$1.amount;
+			if (t$1.type === "entry") {
+				const fee = t$1.cardFee || 0;
+				const netAmount = t$1.amount - fee;
+				runningBalance += netAmount;
+			} else runningBalance -= t$1.amount;
 			return {
 				...t$1,
 				balanceAfter: runningBalance
@@ -37346,7 +37413,11 @@ function Index() {
 	const initialBalance = (0, import_react.useMemo)(() => {
 		if (filteredTransactions.length === 0) return 0;
 		const first = filteredTransactions[0];
-		if (first.type === "entry") return first.balanceAfter - first.amount;
+		if (first.type === "entry") {
+			const fee = first.cardFee || 0;
+			const netAmount = first.amount - fee;
+			return first.balanceAfter - netAmount;
+		}
 		return first.balanceAfter + first.amount;
 	}, [filteredTransactions]);
 	const finalBalance = (0, import_react.useMemo)(() => {
@@ -37355,6 +37426,9 @@ function Index() {
 	}, [filteredTransactions, initialBalance]);
 	const currentRevenue = (0, import_react.useMemo)(() => {
 		return filteredTransactions.filter((t$1) => t$1.type === "entry").reduce((sum, t$1) => sum + t$1.amount, 0);
+	}, [filteredTransactions]);
+	const totalFees = (0, import_react.useMemo)(() => {
+		return filteredTransactions.reduce((sum, t$1) => sum + (t$1.cardFee || 0), 0);
 	}, [filteredTransactions]);
 	const handleAddTransaction = (data) => {
 		addTransaction(data);
@@ -37382,7 +37456,8 @@ function Index() {
 					className: "lg:col-span-2 space-y-6",
 					children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(SummaryCards, {
 						initialBalance,
-						finalBalance
+						finalBalance,
+						totalFees
 					})
 				}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
 					className: "lg:col-span-1",
@@ -40361,4 +40436,4 @@ var App = () => /* @__PURE__ */ (0, import_jsx_runtime.jsx)(BrowserRouter, {
 var App_default = App;
 (0, import_client.createRoot)(document.getElementById("root")).render(/* @__PURE__ */ (0, import_jsx_runtime.jsx)(App_default, {}));
 
-//# sourceMappingURL=index-BYVjevho.js.map
+//# sourceMappingURL=index-Zv6y0Egf.js.map
