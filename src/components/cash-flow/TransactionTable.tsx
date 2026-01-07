@@ -20,6 +20,7 @@ import {
 } from 'lucide-react'
 import { Transaction, PaymentMethod } from '@/types'
 import useDataStore from '@/stores/useDataStore'
+import { EditTransactionDialog } from './EditTransactionDialog'
 
 export type TransactionType = 'entry' | 'exit'
 export type { Transaction }
@@ -80,13 +81,14 @@ export function TransactionTable({ transactions }: TransactionTableProps) {
                 <TableHead className="text-right">Taxas</TableHead>
                 <TableHead className="text-right">Valor Líquido</TableHead>
                 <TableHead className="text-right">Saldo</TableHead>
+                <TableHead className="w-[50px]"></TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>
               {transactions.length === 0 ? (
                 <TableRow>
                   <TableCell
-                    colSpan={10}
+                    colSpan={11}
                     className="h-24 text-center text-muted-foreground"
                   >
                     Nenhuma movimentação encontrada para este período.
@@ -178,6 +180,9 @@ export function TransactionTable({ transactions }: TransactionTableProps) {
                       </TableCell>
                       <TableCell className="text-right font-semibold text-muted-foreground">
                         {formatCurrency(transaction.balanceAfter)}
+                      </TableCell>
+                      <TableCell>
+                        <EditTransactionDialog transaction={transaction} />
                       </TableCell>
                     </TableRow>
                   )

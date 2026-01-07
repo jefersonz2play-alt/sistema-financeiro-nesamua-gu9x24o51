@@ -24,6 +24,7 @@ interface DataContextType {
   monthlyGoal: number
   setMonthlyGoal: (goal: number) => void
   addTransaction: (transaction: Transaction) => void
+  updateTransaction: (id: string, data: Partial<Transaction>) => void
   addEmployee: (employee: Employee) => void
   updateEmployee: (id: string, data: Partial<Employee>) => void
   payEmployee: (id: string, amount: number) => void
@@ -213,6 +214,12 @@ export function DataProvider({ children }: { children: ReactNode }) {
     }
   }
 
+  const updateTransaction = (id: string, data: Partial<Transaction>) => {
+    setTransactions((prev) =>
+      prev.map((t) => (t.id === id ? { ...t, ...data } : t)),
+    )
+  }
+
   const addEmployee = (employee: Employee) => {
     setEmployees((prev) => [...prev, employee])
   }
@@ -318,6 +325,7 @@ export function DataProvider({ children }: { children: ReactNode }) {
         monthlyGoal,
         setMonthlyGoal,
         addTransaction,
+        updateTransaction,
         addEmployee,
         updateEmployee,
         payEmployee,

@@ -1027,6 +1027,9 @@ video {
 .w-\[1px\] {
   width: 1px;
 }
+.w-\[50px\] {
+  width: 50px;
+}
 .w-auto {
   width: auto;
 }
