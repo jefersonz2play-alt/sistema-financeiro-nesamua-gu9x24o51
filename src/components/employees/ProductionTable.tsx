@@ -9,16 +9,17 @@ import {
 import { Input } from '@/components/ui/input'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { formatCurrency } from '@/lib/utils'
-
-export const SERVICE_PRICES = [15, 20, 30, 40, 45, 50, 55, 60]
+import { Service } from '@/types'
 
 interface ProductionTableProps {
-  quantities: Record<number, number>
-  onQuantityChange: (price: number, quantity: number) => void
+  services: Service[]
+  quantities: Record<string, number>
+  onQuantityChange: (serviceId: string, quantity: number) => void
   readOnly?: boolean
 }
 
 export function ProductionTable({
+  services,
   quantities,
   onQuantityChange,
   readOnly = false,
@@ -27,7 +28,7 @@ export function ProductionTable({
     <Card className="shadow-subtle border-none overflow-hidden">
       <CardHeader className="bg-white border-b border-border/50">
         <CardTitle className="text-lg font-semibold">
-          Tabela de Serviços
+          Produção por Serviço
         </CardTitle>
       </CardHeader>
       <CardContent className="p-0">
@@ -35,35 +36,46 @@ export function ProductionTable({
           <Table>
             <TableHeader className="bg-muted/30">
               <TableRow>
-                <TableHead>Valor do Serviço</TableHead>
+                <TableHead>Serviço</TableHead>
+                <TableHead>Comissão (Payout)</TableHead>
                 <TableHead className="w-[150px]">Quantidade</TableHead>
                 <TableHead className="text-right">Subtotal</TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>
-              {SERVICE_PRICES.map((price) => (
+              {services.map((service) => (
                 <TableRow
-                  key={price}
+                  key={service.id}
                   className="hover:bg-muted/20 transition-colors"
                 >
                   <TableCell className="font-medium">
-                    {formatCurrency(price)}
+                    <div className="flex flex-col">
+                      <span>{service.name}</span>
+                      <span className="text-xs text-muted-foreground">
+                        {service.description}
+                      </span>
+                    </div>
+                  </TableCell>
+                  <TableCell className="text-muted-foreground">
+                    {formatCurrency(service.payout)}
                   </TableCell>
                   <TableCell>
                     <Input
                       type="number"
                       min="0"
                       className="w-full text-center"
-                      value={quantities[price] || ''}
+                      value={quantities[service.id] || ''}
                       onChange={(e) => {
                         const val = parseInt(e.target.value) || 0
-                        onQuantityChange(price, val)
+                        onQuantityChange(service.id, val)
                       }}
                       disabled={readOnly}
                     />
                   </TableCell>
                   <TableCell className="text-right font-bold text-muted-foreground">
-                    {formatCurrency(price * (quantities[price] || 0))}
+                    {formatCurrency(
+                      service.payout * (quantities[service.id] || 0),
+                    )}
                   </TableCell>
                 </TableRow>
               ))}

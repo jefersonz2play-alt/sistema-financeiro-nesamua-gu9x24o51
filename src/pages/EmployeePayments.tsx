@@ -12,19 +12,16 @@ import { Textarea } from '@/components/ui/textarea'
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import { Copy, Save } from 'lucide-react'
 import { useToast } from '@/hooks/use-toast'
-import {
-  ProductionTable,
-  SERVICE_PRICES,
-} from '@/components/employees/ProductionTable'
+import { ProductionTable } from '@/components/employees/ProductionTable'
 import { FinancialSummary } from '@/components/employees/FinancialSummary'
 import useDataStore from '@/stores/useDataStore'
 
 export default function EmployeePayments() {
-  const { employees, updateEmployee } = useDataStore()
+  const { employees, services, updateEmployee } = useDataStore()
   const [selectedEmployeeId, setSelectedEmployeeId] = useState<string>('')
 
   // Local state for editing before saving
-  const [quantities, setQuantities] = useState<Record<number, number>>({})
+  const [quantities, setQuantities] = useState<Record<string, number>>({})
   const [paidAmount, setPaidAmount] = useState(0)
   const [status, setStatus] = useState<'paid' | 'partial' | 'open'>('open')
   const [notes, setNotes] = useState('')
@@ -58,15 +55,15 @@ export default function EmployeePayments() {
     }
   }, [selectedEmployee])
 
-  const handleQuantityChange = (price: number, quantity: number) => {
-    setQuantities((prev) => ({ ...prev, [price]: quantity }))
+  const handleQuantityChange = (serviceId: string, quantity: number) => {
+    setQuantities((prev) => ({ ...prev, [serviceId]: quantity }))
   }
 
   const totalReceivable = useMemo(() => {
-    return SERVICE_PRICES.reduce((total, price) => {
-      return total + price * (quantities[price] || 0)
+    return services.reduce((total, service) => {
+      return total + service.payout * (quantities[service.id] || 0)
     }, 0)
-  }, [quantities])
+  }, [quantities, services])
 
   const handleSave = () => {
     if (!selectedEmployeeId) return
@@ -210,6 +207,7 @@ export default function EmployeePayments() {
           />
 
           <ProductionTable
+            services={services}
             quantities={quantities}
             onQuantityChange={handleQuantityChange}
           />

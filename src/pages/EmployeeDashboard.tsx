@@ -1,17 +1,14 @@
 import { useMemo } from 'react'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
-import {
-  ProductionTable,
-  SERVICE_PRICES,
-} from '@/components/employees/ProductionTable'
+import { ProductionTable } from '@/components/employees/ProductionTable'
 import { FinancialSummary } from '@/components/employees/FinancialSummary'
 import useAuthStore from '@/stores/useAuthStore'
 import useDataStore from '@/stores/useDataStore'
 
 export default function EmployeeDashboard() {
   const { user } = useAuthStore()
-  const { employees } = useDataStore()
+  const { employees, services } = useDataStore()
 
   const employeeData = useMemo(() => {
     return employees.find((emp) => emp.id === user?.id)
@@ -22,10 +19,10 @@ export default function EmployeeDashboard() {
   }, [employeeData])
 
   const totalReceivable = useMemo(() => {
-    return SERVICE_PRICES.reduce((total, price) => {
-      return total + price * (quantities[price] || 0)
+    return services.reduce((total, service) => {
+      return total + service.payout * (quantities[service.id] || 0)
     }, 0)
-  }, [quantities])
+  }, [quantities, services])
 
   if (!employeeData) {
     return <div className="p-8 text-center">Carregando dados...</div>
@@ -91,6 +88,7 @@ export default function EmployeeDashboard() {
           />
 
           <ProductionTable
+            services={services}
             quantities={employeeData.quantities}
             onQuantityChange={() => {}}
             readOnly={true}

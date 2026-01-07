@@ -6,6 +6,9 @@ import Index from './pages/Index'
 import EmployeePayments from './pages/EmployeePayments'
 import EmployeeDashboard from './pages/EmployeeDashboard'
 import RegisterEmployee from './pages/RegisterEmployee'
+import Products from './pages/Products'
+import Customers from './pages/Customers'
+import Services from './pages/Services'
 import Login from './pages/Login'
 import NotFound from './pages/NotFound'
 import Layout from './components/Layout'
@@ -46,6 +49,30 @@ const App = () => (
                 element={
                   <ProtectedRoute allowedRoles={['manager']}>
                     <EmployeePayments />
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path="/products"
+                element={
+                  <ProtectedRoute allowedRoles={['manager']}>
+                    <Products />
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path="/customers"
+                element={
+                  <ProtectedRoute allowedRoles={['manager']}>
+                    <Customers />
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path="/services"
+                element={
+                  <ProtectedRoute allowedRoles={['manager']}>
+                    <Services />
                   </ProtectedRoute>
                 }
               />

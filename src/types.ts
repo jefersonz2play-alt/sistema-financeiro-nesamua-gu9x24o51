@@ -17,7 +17,7 @@ export interface Employee {
   pix: string
   email: string
   password?: string
-  quantities: Record<number, number>
+  quantities: Record<string, number> // key is Service ID
   paidAmount: number
   status: 'paid' | 'partial' | 'open'
   lastUpdated?: string
@@ -28,4 +28,26 @@ export interface User {
   name: string
   email: string
   role: 'manager' | 'employee'
+}
+
+export interface Product {
+  id: string
+  name: string
+  brand: string
+  type: string
+}
+
+export interface Customer {
+  id: string
+  name: string
+  email: string
+  phone: string
+  birthday: Date
+}
+
+export interface Service {
+  id: string
+  name: string
+  description: string
+  payout: number
 }

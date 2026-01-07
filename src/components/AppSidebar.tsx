@@ -4,6 +4,9 @@ import {
   PieChart,
   Users,
   LayoutDashboard,
+  Package,
+  Scissors,
+  UserCheck,
 } from 'lucide-react'
 import {
   Sidebar,
@@ -40,9 +43,24 @@ export function AppSidebar() {
       icon: CreditCard,
     },
     {
-      title: 'Novo Funcionário',
-      url: '/employees/new',
+      title: 'Serviços',
+      url: '/services',
+      icon: Scissors,
+    },
+    {
+      title: 'Clientes',
+      url: '/customers',
       icon: Users,
+    },
+    {
+      title: 'Produtos',
+      url: '/products',
+      icon: Package,
+    },
+    {
+      title: 'Funcionários',
+      url: '/employees/new',
+      icon: UserCheck,
     },
   ]
 

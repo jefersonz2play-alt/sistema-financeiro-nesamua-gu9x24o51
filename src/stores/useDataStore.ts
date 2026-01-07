@@ -5,14 +5,26 @@ import {
   ReactNode,
   createElement,
 } from 'react'
-import { Transaction, Employee } from '@/types'
+import { Transaction, Employee, Product, Customer, Service } from '@/types'
 
 interface DataContextType {
   transactions: Transaction[]
   employees: Employee[]
+  products: Product[]
+  customers: Customer[]
+  services: Service[]
   addTransaction: (transaction: Transaction) => void
   addEmployee: (employee: Employee) => void
   updateEmployee: (id: string, data: Partial<Employee>) => void
+  addProduct: (product: Product) => void
+  updateProduct: (id: string, data: Partial<Product>) => void
+  deleteProduct: (id: string) => void
+  addCustomer: (customer: Customer) => void
+  updateCustomer: (id: string, data: Partial<Customer>) => void
+  deleteCustomer: (id: string) => void
+  addService: (service: Service) => void
+  updateService: (id: string, data: Partial<Service>) => void
+  deleteService: (id: string) => void
 }
 
 const INITIAL_TRANSACTIONS: Transaction[] = [
@@ -32,21 +44,32 @@ const INITIAL_TRANSACTIONS: Transaction[] = [
     amount: 350.5,
     balanceAfter: 1149.5,
   },
+]
+
+const INITIAL_SERVICES: Service[] = [
   {
-    id: '3',
-    date: '2023-10-26',
-    description: 'Venda de Produto A',
-    type: 'entry',
-    amount: 200.0,
-    balanceAfter: 1349.5,
+    id: 's1',
+    name: 'Corte Masculino',
+    description: 'Corte tradicional com tesoura ou máquina',
+    payout: 30,
   },
   {
-    id: '4',
-    date: '2023-10-27',
-    description: 'Conta de Luz',
-    type: 'exit',
-    amount: 450.0,
-    balanceAfter: 899.5,
+    id: 's2',
+    name: 'Barba',
+    description: 'Modelagem de barba com toalha quente',
+    payout: 25,
+  },
+  {
+    id: 's3',
+    name: 'Corte + Barba',
+    description: 'Combo completo',
+    payout: 50,
+  },
+  {
+    id: 's4',
+    name: 'Acabamento',
+    description: 'Pézinho e contornos',
+    payout: 15,
   },
 ]
 
@@ -57,7 +80,7 @@ const INITIAL_EMPLOYEES: Employee[] = [
     pix: '123.456.789-00',
     email: 'ana@airbnb.com',
     password: '123',
-    quantities: { 15: 10, 20: 5 },
+    quantities: { s1: 5, s2: 3 },
     paidAmount: 100,
     status: 'partial',
     lastUpdated: new Date().toISOString(),
@@ -68,21 +91,48 @@ const INITIAL_EMPLOYEES: Employee[] = [
     pix: 'ana.silva@email.com',
     email: 'carlos@airbnb.com',
     password: '123',
-    quantities: {},
+    quantities: { s3: 2 },
     paidAmount: 0,
     status: 'open',
     lastUpdated: new Date().toISOString(),
   },
+]
+
+const INITIAL_PRODUCTS: Product[] = [
   {
-    id: '3',
-    name: 'Mariana Santos',
-    pix: '11999998888',
-    email: 'mariana@airbnb.com',
-    password: '123',
-    quantities: {},
-    paidAmount: 0,
-    status: 'open',
-    lastUpdated: new Date().toISOString(),
+    id: 'p1',
+    name: 'Shampoo Mentolado',
+    brand: 'FreshMen',
+    type: 'Cabelo',
+  },
+  {
+    id: 'p2',
+    name: 'Óleo para Barba',
+    brand: 'Barbudo',
+    type: 'Barba',
+  },
+  {
+    id: 'p3',
+    name: 'Pomada Modeladora',
+    brand: 'StyleFix',
+    type: 'Finalização',
+  },
+]
+
+const INITIAL_CUSTOMERS: Customer[] = [
+  {
+    id: 'c1',
+    name: 'Roberto Santos',
+    email: 'roberto@email.com',
+    phone: '(11) 99999-1111',
+    birthday: new Date('1990-05-15'),
+  },
+  {
+    id: 'c2',
+    name: 'Julia Lima',
+    email: 'julia@email.com',
+    phone: '(11) 98888-2222',
+    birthday: new Date('1995-10-20'),
   },
 ]
 
@@ -92,12 +142,11 @@ export function DataProvider({ children }: { children: ReactNode }) {
   const [transactions, setTransactions] =
     useState<Transaction[]>(INITIAL_TRANSACTIONS)
   const [employees, setEmployees] = useState<Employee[]>(INITIAL_EMPLOYEES)
+  const [products, setProducts] = useState<Product[]>(INITIAL_PRODUCTS)
+  const [customers, setCustomers] = useState<Customer[]>(INITIAL_CUSTOMERS)
+  const [services, setServices] = useState<Service[]>(INITIAL_SERVICES)
 
   const addTransaction = (transaction: Transaction) => {
-    // Recalculate balance logic needs to happen in the component or here.
-    // For simplicity, we assume the component passes correct data or we just append.
-    // In a real app, we would recalculate everything.
-    // Here we just append. The Index page logic recalculates derived balances for display.
     setTransactions((prev) => [...prev, transaction])
   }
 
@@ -111,15 +160,69 @@ export function DataProvider({ children }: { children: ReactNode }) {
     )
   }
 
+  const addProduct = (product: Product) => {
+    setProducts((prev) => [...prev, product])
+  }
+
+  const updateProduct = (id: string, data: Partial<Product>) => {
+    setProducts((prev) =>
+      prev.map((p) => (p.id === id ? { ...p, ...data } : p)),
+    )
+  }
+
+  const deleteProduct = (id: string) => {
+    setProducts((prev) => prev.filter((p) => p.id !== id))
+  }
+
+  const addCustomer = (customer: Customer) => {
+    setCustomers((prev) => [...prev, customer])
+  }
+
+  const updateCustomer = (id: string, data: Partial<Customer>) => {
+    setCustomers((prev) =>
+      prev.map((c) => (c.id === id ? { ...c, ...data } : c)),
+    )
+  }
+
+  const deleteCustomer = (id: string) => {
+    setCustomers((prev) => prev.filter((c) => c.id !== id))
+  }
+
+  const addService = (service: Service) => {
+    setServices((prev) => [...prev, service])
+  }
+
+  const updateService = (id: string, data: Partial<Service>) => {
+    setServices((prev) =>
+      prev.map((s) => (s.id === id ? { ...s, ...data } : s)),
+    )
+  }
+
+  const deleteService = (id: string) => {
+    setServices((prev) => prev.filter((s) => s.id !== id))
+  }
+
   return createElement(
     DataContext.Provider,
     {
       value: {
         transactions,
         employees,
+        products,
+        customers,
+        services,
         addTransaction,
         addEmployee,
         updateEmployee,
+        addProduct,
+        updateProduct,
+        deleteProduct,
+        addCustomer,
+        updateCustomer,
+        deleteCustomer,
+        addService,
+        updateService,
+        deleteService,
       },
     },
     children,
