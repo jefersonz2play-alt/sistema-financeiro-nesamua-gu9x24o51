@@ -17,15 +17,19 @@ export default function EmployeeDashboard() {
     return employees.find((emp) => emp.id === user?.id)
   }, [employees, user])
 
-  if (!employeeData) {
-    return <div className="p-8 text-center">Carregando dados...</div>
-  }
+  const quantities = useMemo(() => {
+    return employeeData?.quantities || {}
+  }, [employeeData])
 
   const totalReceivable = useMemo(() => {
     return SERVICE_PRICES.reduce((total, price) => {
-      return total + price * (employeeData.quantities[price] || 0)
+      return total + price * (quantities[price] || 0)
     }, 0)
-  }, [employeeData.quantities])
+  }, [quantities])
+
+  if (!employeeData) {
+    return <div className="p-8 text-center">Carregando dados...</div>
+  }
 
   const lastUpdated = employeeData.lastUpdated
     ? new Date(employeeData.lastUpdated)

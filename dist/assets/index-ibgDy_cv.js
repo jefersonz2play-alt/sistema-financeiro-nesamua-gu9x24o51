@@ -36963,15 +36963,18 @@ function EmployeeDashboard() {
 	const employeeData = (0, import_react.useMemo)(() => {
 		return employees.find((emp) => emp.id === user?.id);
 	}, [employees, user]);
+	const quantities = (0, import_react.useMemo)(() => {
+		return employeeData?.quantities || {};
+	}, [employeeData]);
+	const totalReceivable = (0, import_react.useMemo)(() => {
+		return SERVICE_PRICES.reduce((total, price) => {
+			return total + price * (quantities[price] || 0);
+		}, 0);
+	}, [quantities]);
 	if (!employeeData) return /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
 		className: "p-8 text-center",
 		children: "Carregando dados..."
 	});
-	const totalReceivable = (0, import_react.useMemo)(() => {
-		return SERVICE_PRICES.reduce((total, price) => {
-			return total + price * (employeeData.quantities[price] || 0);
-		}, 0);
-	}, [employeeData.quantities]);
 	const lastUpdated = employeeData.lastUpdated ? new Date(employeeData.lastUpdated) : /* @__PURE__ */ new Date();
 	return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
 		className: "space-y-6 pb-10",
@@ -38012,4 +38015,4 @@ var App = () => /* @__PURE__ */ (0, import_jsx_runtime.jsx)(BrowserRouter, {
 var App_default = App;
 (0, import_client.createRoot)(document.getElementById("root")).render(/* @__PURE__ */ (0, import_jsx_runtime.jsx)(App_default, {}));
 
-//# sourceMappingURL=index-DZGifTgw.js.map
+//# sourceMappingURL=index-ibgDy_cv.js.map
