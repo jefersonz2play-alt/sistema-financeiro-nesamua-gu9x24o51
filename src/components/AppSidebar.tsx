@@ -6,6 +6,7 @@ import {
   Package,
   Scissors,
   UserCheck,
+  CalendarClock,
 } from 'lucide-react'
 import {
   Sidebar,
@@ -35,6 +36,11 @@ export function AppSidebar() {
       title: 'Fluxo de Caixa',
       url: '/',
       icon: ArrowLeftRight,
+    },
+    {
+      title: 'Agendamentos',
+      url: '/appointments',
+      icon: CalendarClock,
     },
     {
       title: 'Pagamentos',

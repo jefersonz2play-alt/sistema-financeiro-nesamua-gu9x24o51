@@ -32,6 +32,8 @@ export default function Layout() {
         return 'Catálogo de Serviços'
       case '/products':
         return 'Controle de Estoque'
+      case '/appointments':
+        return 'Agenda de Serviços'
       default:
         return 'Sistema Financeiro NesaMua'
     }

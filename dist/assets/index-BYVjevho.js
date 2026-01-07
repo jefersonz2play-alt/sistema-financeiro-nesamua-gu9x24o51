@@ -18883,6 +18883,100 @@ var ArrowLeftRight = createLucideIcon("arrow-left-right", [
 		key: "h6l3hr"
 	}]
 ]);
+var Banknote = createLucideIcon("banknote", [
+	["rect", {
+		width: "20",
+		height: "12",
+		x: "2",
+		y: "6",
+		rx: "2",
+		key: "9lu3g6"
+	}],
+	["circle", {
+		cx: "12",
+		cy: "12",
+		r: "2",
+		key: "1c9p78"
+	}],
+	["path", {
+		d: "M6 12h.01M18 12h.01",
+		key: "113zkx"
+	}]
+]);
+var CalendarClock = createLucideIcon("calendar-clock", [
+	["path", {
+		d: "M16 14v2.2l1.6 1",
+		key: "fo4ql5"
+	}],
+	["path", {
+		d: "M16 2v4",
+		key: "4m81vk"
+	}],
+	["path", {
+		d: "M21 7.5V6a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h3.5",
+		key: "1osxxc"
+	}],
+	["path", {
+		d: "M3 10h5",
+		key: "r794hk"
+	}],
+	["path", {
+		d: "M8 2v4",
+		key: "1cmpym"
+	}],
+	["circle", {
+		cx: "16",
+		cy: "16",
+		r: "6",
+		key: "qoo3c4"
+	}]
+]);
+var CalendarDays = createLucideIcon("calendar-days", [
+	["path", {
+		d: "M8 2v4",
+		key: "1cmpym"
+	}],
+	["path", {
+		d: "M16 2v4",
+		key: "4m81vk"
+	}],
+	["rect", {
+		width: "18",
+		height: "18",
+		x: "3",
+		y: "4",
+		rx: "2",
+		key: "1hopcy"
+	}],
+	["path", {
+		d: "M3 10h18",
+		key: "8toen8"
+	}],
+	["path", {
+		d: "M8 14h.01",
+		key: "6423bh"
+	}],
+	["path", {
+		d: "M12 14h.01",
+		key: "1etili"
+	}],
+	["path", {
+		d: "M16 14h.01",
+		key: "1gbofw"
+	}],
+	["path", {
+		d: "M8 18h.01",
+		key: "lrp35t"
+	}],
+	["path", {
+		d: "M12 18h.01",
+		key: "mhygvu"
+	}],
+	["path", {
+		d: "M16 18h.01",
+		key: "kzsmim"
+	}]
+]);
 var Calendar = createLucideIcon("calendar", [
 	["path", {
 		d: "M8 2v4",
@@ -18984,6 +19078,15 @@ var CircleCheck = createLucideIcon("circle-check", [["circle", {
 	d: "m9 12 2 2 4-4",
 	key: "dzmm74"
 }]]);
+var Clock = createLucideIcon("clock", [["path", {
+	d: "M12 6v6l4 2",
+	key: "mmk7yg"
+}], ["circle", {
+	cx: "12",
+	cy: "12",
+	r: "10",
+	key: "1mglay"
+}]]);
 var Copy = createLucideIcon("copy", [["rect", {
 	width: "14",
 	height: "14",
@@ -19076,6 +19179,13 @@ var LayoutDashboard = createLucideIcon("layout-dashboard", [
 		key: "ldoo1y"
 	}]
 ]);
+var Link$1 = createLucideIcon("link", [["path", {
+	d: "M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71",
+	key: "1cjeqo"
+}], ["path", {
+	d: "M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71",
+	key: "19qd67"
+}]]);
 var LoaderCircle = createLucideIcon("loader-circle", [["path", {
 	d: "M21 12a9 9 0 1 1-6.219-8.56",
 	key: "13zald"
@@ -19185,6 +19295,18 @@ var Search = createLucideIcon("search", [["path", {
 	cy: "11",
 	r: "8",
 	key: "4ej97u"
+}]]);
+var Smartphone = createLucideIcon("smartphone", [["rect", {
+	width: "14",
+	height: "20",
+	x: "5",
+	y: "2",
+	rx: "2",
+	ry: "2",
+	key: "1yt0o3"
+}], ["path", {
+	d: "M12 18h.01",
+	key: "mhygvu"
 }]]);
 var Target = createLucideIcon("target", [
 	["circle", {
@@ -24216,14 +24338,16 @@ var INITIAL_TRANSACTIONS = [{
 	employeeId: "1",
 	employeePayment: 150,
 	itemId: "s1",
-	itemType: "service"
+	itemType: "service",
+	paymentMethod: "pix"
 }, {
 	id: "2",
 	date: "2023-10-26",
 	description: "Pagamento de Fornecedor (Cabelo)",
 	type: "exit",
 	amount: 120,
-	balanceAfter: 230
+	balanceAfter: 230,
+	paymentMethod: "money"
 }];
 var INITIAL_SERVICES = [
 	{
@@ -24277,6 +24401,15 @@ var INITIAL_PRODUCTS = [
 		price: 15
 	}
 ];
+var INITIAL_APPOINTMENTS = [{
+	id: "a1",
+	customerId: "c1",
+	employeeId: "1",
+	serviceId: "s1",
+	date: (/* @__PURE__ */ new Date()).toISOString(),
+	status: "scheduled",
+	notes: "Cliente prefere atendimento à tarde."
+}];
 var DataContext = (0, import_react.createContext)(void 0);
 function DataProvider({ children }) {
 	const [transactions, setTransactions] = (0, import_react.useState)(INITIAL_TRANSACTIONS);
@@ -24284,6 +24417,7 @@ function DataProvider({ children }) {
 	const [products, setProducts] = (0, import_react.useState)(INITIAL_PRODUCTS);
 	const [customers, setCustomers] = (0, import_react.useState)(INITIAL_CUSTOMERS);
 	const [services, setServices] = (0, import_react.useState)(INITIAL_SERVICES);
+	const [appointments, setAppointments] = (0, import_react.useState)(INITIAL_APPOINTMENTS);
 	const [monthlyGoal, setMonthlyGoal] = (0, import_react.useState)(1e4);
 	const addTransaction = (transaction) => {
 		setTransactions((prev) => [...prev, transaction]);
@@ -24316,7 +24450,8 @@ function DataProvider({ children }) {
 			type: "exit",
 			amount,
 			balanceAfter: 0,
-			employeeId: id
+			employeeId: id,
+			paymentMethod: "pix"
 		});
 	};
 	const addProduct = (product) => {
@@ -24355,12 +24490,25 @@ function DataProvider({ children }) {
 	const deleteService = (id) => {
 		setServices((prev) => prev.filter((s$2) => s$2.id !== id));
 	};
+	const addAppointment = (appointment) => {
+		setAppointments((prev) => [...prev, appointment]);
+	};
+	const updateAppointment = (id, data) => {
+		setAppointments((prev) => prev.map((a$1) => a$1.id === id ? {
+			...a$1,
+			...data
+		} : a$1));
+	};
+	const deleteAppointment = (id) => {
+		setAppointments((prev) => prev.filter((a$1) => a$1.id !== id));
+	};
 	return (0, import_react.createElement)(DataContext.Provider, { value: {
 		transactions,
 		employees,
 		products,
 		customers,
 		services,
+		appointments,
 		monthlyGoal,
 		setMonthlyGoal,
 		addTransaction,
@@ -24375,7 +24523,10 @@ function DataProvider({ children }) {
 		deleteCustomer,
 		addService,
 		updateService,
-		deleteService
+		deleteService,
+		addAppointment,
+		updateAppointment,
+		deleteAppointment
 	} }, children);
 }
 function useDataStore() {
@@ -24383,6 +24534,34 @@ function useDataStore() {
 	if (!context) throw new Error("useDataStore must be used within a DataProvider");
 	return context;
 }
+var getPaymentMethodLabel = (method) => {
+	switch (method) {
+		case "money": return {
+			label: "Dinheiro",
+			icon: Banknote
+		};
+		case "pix": return {
+			label: "PIX",
+			icon: Smartphone
+		};
+		case "link": return {
+			label: "Link",
+			icon: Link$1
+		};
+		case "debit_card": return {
+			label: "Débito",
+			icon: CreditCard
+		};
+		case "credit_card": return {
+			label: "Crédito",
+			icon: CreditCard
+		};
+		default: return {
+			label: "-",
+			icon: null
+		};
+	}
+};
 function TransactionTable({ transactions }) {
 	const { customers, employees } = useDataStore();
 	const getCustomerName = (id) => {
@@ -24415,6 +24594,7 @@ function TransactionTable({ transactions }) {
 						/* @__PURE__ */ (0, import_jsx_runtime.jsx)(TableHead, { children: "Descrição" }),
 						/* @__PURE__ */ (0, import_jsx_runtime.jsx)(TableHead, { children: "Cliente" }),
 						/* @__PURE__ */ (0, import_jsx_runtime.jsx)(TableHead, { children: "Funcionário" }),
+						/* @__PURE__ */ (0, import_jsx_runtime.jsx)(TableHead, { children: "Pagamento" }),
 						/* @__PURE__ */ (0, import_jsx_runtime.jsx)(TableHead, {
 							className: "w-[100px]",
 							children: "Tipo"
@@ -24429,49 +24609,63 @@ function TransactionTable({ transactions }) {
 						})
 					] })
 				}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)(TableBody, { children: transactions.length === 0 ? /* @__PURE__ */ (0, import_jsx_runtime.jsx)(TableRow, { children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(TableCell, {
-					colSpan: 7,
+					colSpan: 8,
 					className: "h-24 text-center text-muted-foreground",
 					children: "Nenhuma movimentação encontrada para este período."
-				}) }) : transactions.map((transaction) => /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(TableRow, {
-					className: "hover:bg-muted/20 transition-colors",
-					children: [
-						/* @__PURE__ */ (0, import_jsx_runtime.jsx)(TableCell, {
-							className: "font-medium text-muted-foreground whitespace-nowrap",
-							children: formatDate(transaction.date)
-						}),
-						/* @__PURE__ */ (0, import_jsx_runtime.jsx)(TableCell, {
-							className: "font-medium",
-							children: transaction.description
-						}),
-						/* @__PURE__ */ (0, import_jsx_runtime.jsx)(TableCell, {
-							className: "text-sm",
-							children: getCustomerName(transaction.customerId)
-						}),
-						/* @__PURE__ */ (0, import_jsx_runtime.jsx)(TableCell, {
-							className: "text-sm",
-							children: getEmployeeName(transaction.employeeId)
-						}),
-						/* @__PURE__ */ (0, import_jsx_runtime.jsx)(TableCell, { children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Badge, {
-							variant: "secondary",
-							className: transaction.type === "entry" ? "bg-emerald-100 text-emerald-800 hover:bg-emerald-200 border-none" : "bg-rose-100 text-rose-800 hover:bg-rose-200 border-none",
-							children: transaction.type === "entry" ? /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("span", {
-								className: "flex items-center gap-1",
-								children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(CircleArrowUp, { className: "w-3 h-3" }), " Entrada"]
-							}) : /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("span", {
-								className: "flex items-center gap-1",
-								children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(CircleArrowDown, { className: "w-3 h-3" }), " Saída"]
+				}) }) : transactions.map((transaction) => {
+					const payment = getPaymentMethodLabel(transaction.paymentMethod);
+					const PaymentIcon = payment.icon;
+					return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(TableRow, {
+						className: "hover:bg-muted/20 transition-colors",
+						children: [
+							/* @__PURE__ */ (0, import_jsx_runtime.jsx)(TableCell, {
+								className: "font-medium text-muted-foreground whitespace-nowrap",
+								children: formatDate(transaction.date)
+							}),
+							/* @__PURE__ */ (0, import_jsx_runtime.jsx)(TableCell, {
+								className: "font-medium",
+								children: transaction.description
+							}),
+							/* @__PURE__ */ (0, import_jsx_runtime.jsx)(TableCell, {
+								className: "text-sm",
+								children: getCustomerName(transaction.customerId)
+							}),
+							/* @__PURE__ */ (0, import_jsx_runtime.jsx)(TableCell, {
+								className: "text-sm",
+								children: getEmployeeName(transaction.employeeId)
+							}),
+							/* @__PURE__ */ (0, import_jsx_runtime.jsx)(TableCell, { children: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+								className: "flex flex-col",
+								children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("span", {
+									className: "flex items-center gap-1 text-sm text-foreground/80",
+									children: [PaymentIcon && /* @__PURE__ */ (0, import_jsx_runtime.jsx)(PaymentIcon, { className: "w-3 h-3 text-muted-foreground" }), payment.label]
+								}), transaction.cardFee ? /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("span", {
+									className: "text-[10px] text-red-400",
+									children: ["Taxa: ", formatCurrency(transaction.cardFee)]
+								}) : null]
+							}) }),
+							/* @__PURE__ */ (0, import_jsx_runtime.jsx)(TableCell, { children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Badge, {
+								variant: "secondary",
+								className: transaction.type === "entry" ? "bg-emerald-100 text-emerald-800 hover:bg-emerald-200 border-none" : "bg-rose-100 text-rose-800 hover:bg-rose-200 border-none",
+								children: transaction.type === "entry" ? /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("span", {
+									className: "flex items-center gap-1",
+									children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(CircleArrowUp, { className: "w-3 h-3" }), " Entrada"]
+								}) : /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("span", {
+									className: "flex items-center gap-1",
+									children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(CircleArrowDown, { className: "w-3 h-3" }), " Saída"]
+								})
+							}) }),
+							/* @__PURE__ */ (0, import_jsx_runtime.jsxs)(TableCell, {
+								className: transaction.type === "entry" ? "text-emerald-600 text-right font-medium" : "text-rose-600 text-right font-medium",
+								children: [transaction.type === "exit" ? "-" : "+", formatCurrency(transaction.amount)]
+							}),
+							/* @__PURE__ */ (0, import_jsx_runtime.jsx)(TableCell, {
+								className: "text-right font-semibold text-muted-foreground",
+								children: formatCurrency(transaction.balanceAfter)
 							})
-						}) }),
-						/* @__PURE__ */ (0, import_jsx_runtime.jsxs)(TableCell, {
-							className: transaction.type === "entry" ? "text-emerald-600 text-right font-medium" : "text-rose-600 text-right font-medium",
-							children: [transaction.type === "exit" ? "-" : "+", formatCurrency(transaction.amount)]
-						}),
-						/* @__PURE__ */ (0, import_jsx_runtime.jsx)(TableCell, {
-							className: "text-right font-semibold text-muted-foreground",
-							children: formatCurrency(transaction.balanceAfter)
-						})
-					]
-				}, transaction.id)) })] })
+						]
+					}, transaction.id);
+				}) })] })
 			})
 		})]
 	});
@@ -36426,6 +36620,14 @@ var formSchema = object({
 		"other"
 	]),
 	date: date({ required_error: "Selecione uma data." }),
+	paymentMethod: _enum([
+		"money",
+		"pix",
+		"link",
+		"debit_card",
+		"credit_card"
+	], { required_error: "Selecione a forma de pagamento." }),
+	cardFee: string().optional(),
 	customerId: string().optional(),
 	employeeId: string().optional(),
 	employeePayment: string().optional(),
@@ -36443,6 +36645,8 @@ function AddTransactionDialog({ onAdd }) {
 			type: "entry",
 			category: "service",
 			date: /* @__PURE__ */ new Date(),
+			paymentMethod: "money",
+			cardFee: "",
 			customerId: void 0,
 			employeeId: void 0,
 			employeePayment: "",
@@ -36454,6 +36658,7 @@ function AddTransactionDialog({ onAdd }) {
 	const watchCategory = form.watch("category");
 	const watchItemId = form.watch("itemId");
 	const watchQuantity = form.watch("quantity");
+	const watchPaymentMethod = form.watch("paymentMethod");
 	(0, import_react.useEffect)(() => {
 		if (watchCategory === "product" && watchItemId && watchQuantity) {
 			const product = products.find((p) => p.id === watchItemId);
@@ -36513,7 +36718,9 @@ function AddTransactionDialog({ onAdd }) {
 			employeePayment: values.employeePayment ? Number(values.employeePayment) : 0,
 			itemId: values.itemId,
 			itemType: values.category === "other" ? void 0 : values.category,
-			quantity: values.quantity ? Number(values.quantity) : void 0
+			quantity: values.quantity ? Number(values.quantity) : void 0,
+			paymentMethod: values.paymentMethod,
+			cardFee: values.cardFee ? Number(values.cardFee) : void 0
 		});
 		form.reset({
 			description: "",
@@ -36522,10 +36729,13 @@ function AddTransactionDialog({ onAdd }) {
 			category: "service",
 			date: /* @__PURE__ */ new Date(),
 			quantity: "1",
-			employeePayment: ""
+			employeePayment: "",
+			paymentMethod: "money",
+			cardFee: ""
 		});
 		setOpen(false);
 	}
+	const showCardFee = watchPaymentMethod === "credit_card" || watchPaymentMethod === "debit_card";
 	return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(Dialog, {
 		open,
 		onOpenChange: setOpen,
@@ -36536,8 +36746,8 @@ function AddTransactionDialog({ onAdd }) {
 				children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Plus, { className: "w-5 h-5" }), "Nova Movimentação"]
 			})
 		}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(DialogContent, {
-			className: "sm:max-w-[500px] rounded-xl max-h-[90vh] overflow-y-auto",
-			children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)(DialogHeader, { children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(DialogTitle, { children: "Nova Movimentação" }), /* @__PURE__ */ (0, import_jsx_runtime.jsx)(DialogDescription, { children: "Registre entradas ou saídas." })] }), /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Form, {
+			className: "sm:max-w-[600px] rounded-xl max-h-[90vh] overflow-y-auto",
+			children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)(DialogHeader, { children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(DialogTitle, { children: "Nova Movimentação" }), /* @__PURE__ */ (0, import_jsx_runtime.jsx)(DialogDescription, { children: "Registre entradas ou saídas e especifique a forma de pagamento." })] }), /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Form, {
 				...form,
 				children: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("form", {
 					onSubmit: form.handleSubmit(onSubmit),
@@ -36704,52 +36914,102 @@ function AddTransactionDialog({ onAdd }) {
 									}) }),
 									/* @__PURE__ */ (0, import_jsx_runtime.jsx)(FormMessage, {})
 								] })
-							}), watchType === "entry" && watchCategory === "service" && /* @__PURE__ */ (0, import_jsx_runtime.jsx)(FormField, {
+							}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)(FormField, {
 								control: form.control,
-								name: "employeePayment",
+								name: "date",
+								render: ({ field }) => /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(FormItem, {
+									className: "flex flex-col",
+									children: [
+										/* @__PURE__ */ (0, import_jsx_runtime.jsx)(FormLabel, { children: "Data" }),
+										/* @__PURE__ */ (0, import_jsx_runtime.jsxs)(Popover, { children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(PopoverTrigger, {
+											asChild: true,
+											children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(FormControl, { children: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(Button, {
+												variant: "outline",
+												className: cn("w-full pl-3 text-left font-normal", !field.value && "text-muted-foreground"),
+												children: [field.value ? format(field.value, "PPP", { locale: ptBR }) : /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { children: "Selecione uma data" }), /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Calendar, { className: "ml-auto h-4 w-4 opacity-50" })]
+											}) })
+										}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)(PopoverContent, {
+											className: "w-auto p-0",
+											align: "start",
+											children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Calendar$1, {
+												mode: "single",
+												selected: field.value,
+												onSelect: field.onChange,
+												initialFocus: true
+											})
+										})] }),
+										/* @__PURE__ */ (0, import_jsx_runtime.jsx)(FormMessage, {})
+									]
+								})
+							})]
+						}),
+						watchType === "entry" && watchCategory === "service" && /* @__PURE__ */ (0, import_jsx_runtime.jsx)(FormField, {
+							control: form.control,
+							name: "employeePayment",
+							render: ({ field }) => /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(FormItem, { children: [
+								/* @__PURE__ */ (0, import_jsx_runtime.jsx)(FormLabel, { children: "Repasse Funcionário (R$)" }),
+								/* @__PURE__ */ (0, import_jsx_runtime.jsx)(FormControl, { children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Input, {
+									placeholder: "0.00",
+									type: "number",
+									step: "0.01",
+									...field
+								}) }),
+								/* @__PURE__ */ (0, import_jsx_runtime.jsx)(FormDescription, {
+									className: "text-xs",
+									children: "Comissão do profissional."
+								}),
+								/* @__PURE__ */ (0, import_jsx_runtime.jsx)(FormMessage, {})
+							] })
+						}),
+						/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+							className: "grid grid-cols-2 gap-4",
+							children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(FormField, {
+								control: form.control,
+								name: "paymentMethod",
 								render: ({ field }) => /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(FormItem, { children: [
-									/* @__PURE__ */ (0, import_jsx_runtime.jsx)(FormLabel, { children: "Repasse (R$)" }),
+									/* @__PURE__ */ (0, import_jsx_runtime.jsx)(FormLabel, { children: "Forma de Pagamento" }),
+									/* @__PURE__ */ (0, import_jsx_runtime.jsxs)(Select, {
+										onValueChange: field.onChange,
+										defaultValue: field.value,
+										children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(FormControl, { children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(SelectTrigger, { children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(SelectValue, { placeholder: "Selecione" }) }) }), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(SelectContent, { children: [
+											/* @__PURE__ */ (0, import_jsx_runtime.jsx)(SelectItem, {
+												value: "money",
+												children: "Dinheiro"
+											}),
+											/* @__PURE__ */ (0, import_jsx_runtime.jsx)(SelectItem, {
+												value: "pix",
+												children: "PIX"
+											}),
+											/* @__PURE__ */ (0, import_jsx_runtime.jsx)(SelectItem, {
+												value: "link",
+												children: "Link"
+											}),
+											/* @__PURE__ */ (0, import_jsx_runtime.jsx)(SelectItem, {
+												value: "debit_card",
+												children: "Cartão Débito"
+											}),
+											/* @__PURE__ */ (0, import_jsx_runtime.jsx)(SelectItem, {
+												value: "credit_card",
+												children: "Cartão Crédito"
+											})
+										] })]
+									}),
+									/* @__PURE__ */ (0, import_jsx_runtime.jsx)(FormMessage, {})
+								] })
+							}), showCardFee && /* @__PURE__ */ (0, import_jsx_runtime.jsx)(FormField, {
+								control: form.control,
+								name: "cardFee",
+								render: ({ field }) => /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(FormItem, { children: [
+									/* @__PURE__ */ (0, import_jsx_runtime.jsx)(FormLabel, { children: "Taxa do Cartão (R$)" }),
 									/* @__PURE__ */ (0, import_jsx_runtime.jsx)(FormControl, { children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Input, {
 										placeholder: "0.00",
 										type: "number",
 										step: "0.01",
 										...field
 									}) }),
-									/* @__PURE__ */ (0, import_jsx_runtime.jsx)(FormDescription, {
-										className: "text-xs",
-										children: "Comissão funcionário."
-									}),
 									/* @__PURE__ */ (0, import_jsx_runtime.jsx)(FormMessage, {})
 								] })
 							})]
-						}),
-						/* @__PURE__ */ (0, import_jsx_runtime.jsx)(FormField, {
-							control: form.control,
-							name: "date",
-							render: ({ field }) => /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(FormItem, {
-								className: "flex flex-col",
-								children: [
-									/* @__PURE__ */ (0, import_jsx_runtime.jsx)(FormLabel, { children: "Data" }),
-									/* @__PURE__ */ (0, import_jsx_runtime.jsxs)(Popover, { children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(PopoverTrigger, {
-										asChild: true,
-										children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(FormControl, { children: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(Button, {
-											variant: "outline",
-											className: cn("w-full pl-3 text-left font-normal", !field.value && "text-muted-foreground"),
-											children: [field.value ? format(field.value, "PPP", { locale: ptBR }) : /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { children: "Selecione uma data" }), /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Calendar, { className: "ml-auto h-4 w-4 opacity-50" })]
-										}) })
-									}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)(PopoverContent, {
-										className: "w-auto p-0",
-										align: "start",
-										children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Calendar$1, {
-											mode: "single",
-											selected: field.value,
-											onSelect: field.onChange,
-											initialFocus: true
-										})
-									})] }),
-									/* @__PURE__ */ (0, import_jsx_runtime.jsx)(FormMessage, {})
-								]
-							})
 						}),
 						/* @__PURE__ */ (0, import_jsx_runtime.jsx)(DialogFooter, {
 							className: "pt-4",
@@ -37204,7 +37464,7 @@ var require_use_sync_external_store_shim_development = /* @__PURE__ */ __commonJ
 				var cachedValue = getSnapshot();
 				objectIs(value, cachedValue) || (console.error("The result of getSnapshot should be cached to avoid an infinite loop"), didWarnUncachedGetSnapshot = !0);
 			}
-			cachedValue = useState$13({ inst: {
+			cachedValue = useState$14({ inst: {
 				value,
 				getSnapshot
 			} });
@@ -37241,7 +37501,7 @@ var require_use_sync_external_store_shim_development = /* @__PURE__ */ __commonJ
 			return getSnapshot();
 		}
 		"undefined" !== typeof __REACT_DEVTOOLS_GLOBAL_HOOK__ && "function" === typeof __REACT_DEVTOOLS_GLOBAL_HOOK__.registerInternalModuleStart && __REACT_DEVTOOLS_GLOBAL_HOOK__.registerInternalModuleStart(Error());
-		var React$30 = require_react(), objectIs = "function" === typeof Object.is ? Object.is : is, useState$13 = React$30.useState, useEffect$5 = React$30.useEffect, useLayoutEffect$2 = React$30.useLayoutEffect, useDebugValue = React$30.useDebugValue, didWarnOld18Alpha = !1, didWarnUncachedGetSnapshot = !1, shim = "undefined" === typeof window || "undefined" === typeof window.document || "undefined" === typeof window.document.createElement ? useSyncExternalStore$1 : useSyncExternalStore$2;
+		var React$30 = require_react(), objectIs = "function" === typeof Object.is ? Object.is : is, useState$14 = React$30.useState, useEffect$5 = React$30.useEffect, useLayoutEffect$2 = React$30.useLayoutEffect, useDebugValue = React$30.useDebugValue, didWarnOld18Alpha = !1, didWarnUncachedGetSnapshot = !1, shim = "undefined" === typeof window || "undefined" === typeof window.document || "undefined" === typeof window.document.createElement ? useSyncExternalStore$1 : useSyncExternalStore$2;
 		exports.useSyncExternalStore = void 0 !== React$30.useSyncExternalStore ? React$30.useSyncExternalStore : shim;
 		"undefined" !== typeof __REACT_DEVTOOLS_GLOBAL_HOOK__ && "function" === typeof __REACT_DEVTOOLS_GLOBAL_HOOK__.registerInternalModuleStop && __REACT_DEVTOOLS_GLOBAL_HOOK__.registerInternalModuleStop(Error());
 	})();
@@ -38911,6 +39171,298 @@ function Services() {
 		]
 	});
 }
+var appointmentSchema = object({
+	customerId: string().min(1, "Selecione um cliente"),
+	serviceId: string().min(1, "Selecione um serviço"),
+	employeeId: string().min(1, "Selecione um profissional"),
+	date: date({ required_error: "Selecione a data" }),
+	time: string().regex(/^([0-1]?[0-9]|2[0-3]):[0-5][0-9]$/, "Hora inválida"),
+	notes: string().optional()
+});
+function Appointments() {
+	const { appointments, addAppointment, deleteAppointment, customers, services, employees } = useDataStore();
+	const { toast: toast$2 } = useToast();
+	const [isDialogOpen, setIsDialogOpen] = (0, import_react.useState)(false);
+	const form = useForm({
+		resolver: a(appointmentSchema),
+		defaultValues: {
+			customerId: "",
+			serviceId: "",
+			employeeId: "",
+			date: /* @__PURE__ */ new Date(),
+			time: "09:00",
+			notes: ""
+		}
+	});
+	const onSubmit = (values) => {
+		const dateTime = new Date(values.date);
+		const [hours, minutes] = values.time.split(":").map(Number);
+		dateTime.setHours(hours, minutes, 0, 0);
+		addAppointment({
+			id: Math.random().toString(36).substr(2, 9),
+			customerId: values.customerId,
+			serviceId: values.serviceId,
+			employeeId: values.employeeId,
+			date: dateTime.toISOString(),
+			status: "scheduled",
+			notes: values.notes
+		});
+		toast$2({
+			title: "Agendamento Criado",
+			description: "O horário foi reservado com sucesso."
+		});
+		setIsDialogOpen(false);
+		form.reset();
+	};
+	const handleDelete = (id) => {
+		deleteAppointment(id);
+		toast$2({
+			title: "Agendamento Cancelado",
+			description: "O agendamento foi removido da agenda."
+		});
+	};
+	const sortedAppointments = [...appointments].sort((a$1, b$1) => new Date(a$1.date).getTime() - new Date(b$1.date).getTime());
+	const getCustomer = (id) => customers.find((c) => c.id === id);
+	const getService = (id) => services.find((s$2) => s$2.id === id);
+	const getEmployee = (id) => employees.find((e) => e.id === id);
+	return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+		className: "space-y-6",
+		children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+			className: "flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4",
+			children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("h1", {
+				className: "text-3xl font-bold tracking-tight text-foreground flex items-center gap-2",
+				children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(CalendarDays, { className: "h-8 w-8 text-primary" }), "Agendamentos"]
+			}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
+				className: "text-muted-foreground mt-2",
+				children: "Gerencie a agenda de serviços e atendimentos."
+			})] }), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(Dialog, {
+				open: isDialogOpen,
+				onOpenChange: setIsDialogOpen,
+				children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(DialogTrigger, {
+					asChild: true,
+					children: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(Button, {
+						className: "rounded-full shadow-lg",
+						children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Plus, { className: "w-4 h-4 mr-2" }), "Novo Agendamento"]
+					})
+				}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(DialogContent, {
+					className: "sm:max-w-[500px]",
+					children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)(DialogHeader, { children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(DialogTitle, { children: "Novo Agendamento" }), /* @__PURE__ */ (0, import_jsx_runtime.jsx)(DialogDescription, { children: "Preencha os dados para agendar um novo serviço." })] }), /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Form, {
+						...form,
+						children: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("form", {
+							onSubmit: form.handleSubmit(onSubmit),
+							className: "space-y-4",
+							children: [
+								/* @__PURE__ */ (0, import_jsx_runtime.jsx)(FormField, {
+									control: form.control,
+									name: "customerId",
+									render: ({ field }) => /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(FormItem, { children: [
+										/* @__PURE__ */ (0, import_jsx_runtime.jsx)(FormLabel, { children: "Cliente" }),
+										/* @__PURE__ */ (0, import_jsx_runtime.jsxs)(Select, {
+											onValueChange: field.onChange,
+											defaultValue: field.value,
+											children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(FormControl, { children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(SelectTrigger, { children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(SelectValue, { placeholder: "Selecione o cliente" }) }) }), /* @__PURE__ */ (0, import_jsx_runtime.jsx)(SelectContent, { children: customers.map((c) => /* @__PURE__ */ (0, import_jsx_runtime.jsx)(SelectItem, {
+												value: c.id,
+												children: c.name
+											}, c.id)) })]
+										}),
+										/* @__PURE__ */ (0, import_jsx_runtime.jsx)(FormMessage, {})
+									] })
+								}),
+								/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+									className: "grid grid-cols-2 gap-4",
+									children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(FormField, {
+										control: form.control,
+										name: "serviceId",
+										render: ({ field }) => /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(FormItem, { children: [
+											/* @__PURE__ */ (0, import_jsx_runtime.jsx)(FormLabel, { children: "Serviço" }),
+											/* @__PURE__ */ (0, import_jsx_runtime.jsxs)(Select, {
+												onValueChange: field.onChange,
+												defaultValue: field.value,
+												children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(FormControl, { children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(SelectTrigger, { children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(SelectValue, { placeholder: "Selecione" }) }) }), /* @__PURE__ */ (0, import_jsx_runtime.jsx)(SelectContent, { children: services.map((s$2) => /* @__PURE__ */ (0, import_jsx_runtime.jsx)(SelectItem, {
+													value: s$2.id,
+													children: s$2.name
+												}, s$2.id)) })]
+											}),
+											/* @__PURE__ */ (0, import_jsx_runtime.jsx)(FormMessage, {})
+										] })
+									}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)(FormField, {
+										control: form.control,
+										name: "employeeId",
+										render: ({ field }) => /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(FormItem, { children: [
+											/* @__PURE__ */ (0, import_jsx_runtime.jsx)(FormLabel, { children: "Profissional" }),
+											/* @__PURE__ */ (0, import_jsx_runtime.jsxs)(Select, {
+												onValueChange: field.onChange,
+												defaultValue: field.value,
+												children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(FormControl, { children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(SelectTrigger, { children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(SelectValue, { placeholder: "Selecione" }) }) }), /* @__PURE__ */ (0, import_jsx_runtime.jsx)(SelectContent, { children: employees.map((e) => /* @__PURE__ */ (0, import_jsx_runtime.jsx)(SelectItem, {
+													value: e.id,
+													children: e.name
+												}, e.id)) })]
+											}),
+											/* @__PURE__ */ (0, import_jsx_runtime.jsx)(FormMessage, {})
+										] })
+									})]
+								}),
+								/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+									className: "grid grid-cols-2 gap-4",
+									children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(FormField, {
+										control: form.control,
+										name: "date",
+										render: ({ field }) => /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(FormItem, {
+											className: "flex flex-col",
+											children: [
+												/* @__PURE__ */ (0, import_jsx_runtime.jsx)(FormLabel, { children: "Data" }),
+												/* @__PURE__ */ (0, import_jsx_runtime.jsxs)(Popover, { children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(PopoverTrigger, {
+													asChild: true,
+													children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(FormControl, { children: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(Button, {
+														variant: "outline",
+														className: cn("w-full pl-3 text-left font-normal", !field.value && "text-muted-foreground"),
+														children: [field.value ? format(field.value, "dd/MM/yyyy") : /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { children: "Selecione" }), /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Calendar, { className: "ml-auto h-4 w-4 opacity-50" })]
+													}) })
+												}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)(PopoverContent, {
+													className: "w-auto p-0",
+													align: "start",
+													children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Calendar$1, {
+														mode: "single",
+														selected: field.value,
+														onSelect: field.onChange,
+														disabled: (date$3) => date$3 < /* @__PURE__ */ new Date("1900-01-01"),
+														initialFocus: true
+													})
+												})] }),
+												/* @__PURE__ */ (0, import_jsx_runtime.jsx)(FormMessage, {})
+											]
+										})
+									}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)(FormField, {
+										control: form.control,
+										name: "time",
+										render: ({ field }) => /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(FormItem, { children: [
+											/* @__PURE__ */ (0, import_jsx_runtime.jsx)(FormLabel, { children: "Horário" }),
+											/* @__PURE__ */ (0, import_jsx_runtime.jsx)(FormControl, { children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Input, {
+												type: "time",
+												...field
+											}) }),
+											/* @__PURE__ */ (0, import_jsx_runtime.jsx)(FormMessage, {})
+										] })
+									})]
+								}),
+								/* @__PURE__ */ (0, import_jsx_runtime.jsx)(FormField, {
+									control: form.control,
+									name: "notes",
+									render: ({ field }) => /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(FormItem, { children: [
+										/* @__PURE__ */ (0, import_jsx_runtime.jsx)(FormLabel, { children: "Observações" }),
+										/* @__PURE__ */ (0, import_jsx_runtime.jsx)(FormControl, { children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Textarea, {
+											placeholder: "Detalhes adicionais...",
+											...field
+										}) }),
+										/* @__PURE__ */ (0, import_jsx_runtime.jsx)(FormMessage, {})
+									] })
+								}),
+								/* @__PURE__ */ (0, import_jsx_runtime.jsx)(DialogFooter, {
+									className: "pt-4",
+									children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Button, {
+										type: "submit",
+										className: "w-full",
+										children: "Agendar"
+									})
+								})
+							]
+						})
+					})]
+				})]
+			})]
+		}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+			className: "grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6",
+			children: sortedAppointments.length === 0 ? /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+				className: "col-span-full text-center py-12 text-muted-foreground",
+				children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(CalendarDays, { className: "w-12 h-12 mx-auto mb-4 opacity-20" }), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", { children: "Nenhum agendamento encontrado." })]
+			}) : sortedAppointments.map((apt) => {
+				const customer = getCustomer(apt.customerId);
+				const service = getService(apt.serviceId);
+				const employee = getEmployee(apt.employeeId);
+				const dateObj = new Date(apt.date);
+				return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(Card, {
+					className: "shadow-subtle border-none hover:shadow-md transition-shadow relative overflow-hidden",
+					children: [
+						/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { className: "absolute left-0 top-0 bottom-0 w-1 bg-primary" }),
+						/* @__PURE__ */ (0, import_jsx_runtime.jsxs)(CardHeader, {
+							className: "pb-2",
+							children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+								className: "flex justify-between items-start",
+								children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(CardTitle, {
+									className: "text-base font-semibold",
+									children: service?.name || "Serviço Removido"
+								}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Button, {
+									variant: "ghost",
+									size: "icon",
+									className: "h-6 w-6 text-muted-foreground hover:text-destructive",
+									onClick: () => handleDelete(apt.id),
+									children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Trash2, { className: "w-4 h-4" })
+								})]
+							}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(CardDescription, {
+								className: "flex items-center gap-1",
+								children: [
+									/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Clock, { className: "w-3 h-3" }),
+									format(dateObj, "dd 'de' MMMM", { locale: ptBR }),
+									" às",
+									" ",
+									format(dateObj, "HH:mm")
+								]
+							})]
+						}),
+						/* @__PURE__ */ (0, import_jsx_runtime.jsxs)(CardContent, {
+							className: "space-y-4",
+							children: [
+								/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+									className: "flex items-center gap-3",
+									children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)(Avatar, {
+										className: "h-8 w-8 border border-border",
+										children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(AvatarImage, { src: `https://img.usecurling.com/ppl/thumbnail?gender=female&seed=${apt.customerId}` }), /* @__PURE__ */ (0, import_jsx_runtime.jsx)(AvatarFallback, { children: "C" })]
+									}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+										className: "text-sm",
+										children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
+											className: "font-medium leading-none",
+											children: customer?.name || "Cliente Removido"
+										}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
+											className: "text-xs text-muted-foreground",
+											children: "Cliente"
+										})]
+									})]
+								}),
+								/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+									className: "flex items-center gap-3",
+									children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)(Avatar, {
+										className: "h-8 w-8 border border-border",
+										children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(AvatarImage, { src: `https://img.usecurling.com/ppl/thumbnail?gender=female&seed=${apt.employeeId}` }), /* @__PURE__ */ (0, import_jsx_runtime.jsx)(AvatarFallback, { children: "P" })]
+									}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+										className: "text-sm",
+										children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
+											className: "font-medium leading-none",
+											children: employee?.name || "Profissional Removido"
+										}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
+											className: "text-xs text-muted-foreground",
+											children: "Profissional"
+										})]
+									})]
+								}),
+								apt.notes && /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+									className: "bg-secondary/30 p-2 rounded-md",
+									children: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("p", {
+										className: "text-xs text-muted-foreground italic",
+										children: [
+											"\"",
+											apt.notes,
+											"\""
+										]
+									})
+								})
+							]
+						})
+					]
+				}, apt.id);
+			})
+		})]
+	});
+}
 function Login() {
 	const [email$1, setEmail] = (0, import_react.useState)("");
 	const [password, setPassword] = (0, import_react.useState)("");
@@ -39551,6 +40103,11 @@ function AppSidebar() {
 			icon: ArrowLeftRight
 		},
 		{
+			title: "Agendamentos",
+			url: "/appointments",
+			icon: CalendarClock
+		},
+		{
 			title: "Pagamentos",
 			url: "/payments",
 			icon: CreditCard
@@ -39640,6 +40197,7 @@ function Layout() {
 			case "/customers": return "Gestão de Clientes";
 			case "/services": return "Catálogo de Serviços";
 			case "/products": return "Controle de Estoque";
+			case "/appointments": return "Agenda de Serviços";
 			default: return "Sistema Financeiro NesaMua";
 		}
 	};
@@ -39771,6 +40329,13 @@ var App = () => /* @__PURE__ */ (0, import_jsx_runtime.jsx)(BrowserRouter, {
 						})
 					}),
 					/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Route, {
+						path: "/appointments",
+						element: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(ProtectedRoute, {
+							allowedRoles: ["manager"],
+							children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Appointments, {})
+						})
+					}),
+					/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Route, {
 						path: "/employees/new",
 						element: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(ProtectedRoute, {
 							allowedRoles: ["manager"],
@@ -39796,4 +40361,4 @@ var App = () => /* @__PURE__ */ (0, import_jsx_runtime.jsx)(BrowserRouter, {
 var App_default = App;
 (0, import_client.createRoot)(document.getElementById("root")).render(/* @__PURE__ */ (0, import_jsx_runtime.jsx)(App_default, {}));
 
-//# sourceMappingURL=index-BQoyxR_K.js.map
+//# sourceMappingURL=index-BYVjevho.js.map

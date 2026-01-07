@@ -2,6 +2,13 @@ import { TransactionType } from '@/components/cash-flow/TransactionTable'
 
 export type { TransactionType }
 
+export type PaymentMethod =
+  | 'money'
+  | 'pix'
+  | 'link'
+  | 'debit_card'
+  | 'credit_card'
+
 export interface Transaction {
   id: string
   date: string
@@ -15,6 +22,18 @@ export interface Transaction {
   itemId?: string // Linked product or service ID
   itemType?: 'product' | 'service' // Type of item
   quantity?: number // Quantity sold (for products)
+  paymentMethod?: PaymentMethod
+  cardFee?: number
+}
+
+export interface Appointment {
+  id: string
+  customerId: string
+  serviceId: string
+  employeeId: string
+  date: string // ISO string for date and time
+  status: 'scheduled' | 'completed' | 'cancelled'
+  notes?: string
 }
 
 export interface Employee {

@@ -5,7 +5,14 @@ import {
   ReactNode,
   createElement,
 } from 'react'
-import { Transaction, Employee, Product, Customer, Service } from '@/types'
+import {
+  Transaction,
+  Employee,
+  Product,
+  Customer,
+  Service,
+  Appointment,
+} from '@/types'
 
 interface DataContextType {
   transactions: Transaction[]
@@ -13,6 +20,7 @@ interface DataContextType {
   products: Product[]
   customers: Customer[]
   services: Service[]
+  appointments: Appointment[]
   monthlyGoal: number
   setMonthlyGoal: (goal: number) => void
   addTransaction: (transaction: Transaction) => void
@@ -28,6 +36,9 @@ interface DataContextType {
   addService: (service: Service) => void
   updateService: (id: string, data: Partial<Service>) => void
   deleteService: (id: string) => void
+  addAppointment: (appointment: Appointment) => void
+  updateAppointment: (id: string, data: Partial<Appointment>) => void
+  deleteAppointment: (id: string) => void
 }
 
 const INITIAL_EMPLOYEES: Employee[] = [
@@ -87,6 +98,7 @@ const INITIAL_TRANSACTIONS: Transaction[] = [
     employeePayment: 150.0,
     itemId: 's1',
     itemType: 'service',
+    paymentMethod: 'pix',
   },
   {
     id: '2',
@@ -95,6 +107,7 @@ const INITIAL_TRANSACTIONS: Transaction[] = [
     type: 'exit',
     amount: 120.0,
     balanceAfter: 230.0,
+    paymentMethod: 'money',
   },
 ]
 
@@ -152,6 +165,18 @@ const INITIAL_PRODUCTS: Product[] = [
   },
 ]
 
+const INITIAL_APPOINTMENTS: Appointment[] = [
+  {
+    id: 'a1',
+    customerId: 'c1',
+    employeeId: '1',
+    serviceId: 's1',
+    date: new Date().toISOString(),
+    status: 'scheduled',
+    notes: 'Cliente prefere atendimento à tarde.',
+  },
+]
+
 const DataContext = createContext<DataContextType | undefined>(undefined)
 
 export function DataProvider({ children }: { children: ReactNode }) {
@@ -161,6 +186,8 @@ export function DataProvider({ children }: { children: ReactNode }) {
   const [products, setProducts] = useState<Product[]>(INITIAL_PRODUCTS)
   const [customers, setCustomers] = useState<Customer[]>(INITIAL_CUSTOMERS)
   const [services, setServices] = useState<Service[]>(INITIAL_SERVICES)
+  const [appointments, setAppointments] =
+    useState<Appointment[]>(INITIAL_APPOINTMENTS)
   const [monthlyGoal, setMonthlyGoal] = useState<number>(10000)
 
   const addTransaction = (transaction: Transaction) => {
@@ -213,6 +240,7 @@ export function DataProvider({ children }: { children: ReactNode }) {
       amount: amount,
       balanceAfter: 0, // Calculated later
       employeeId: id,
+      paymentMethod: 'pix',
     }
 
     addTransaction(transaction)
@@ -260,6 +288,20 @@ export function DataProvider({ children }: { children: ReactNode }) {
     setServices((prev) => prev.filter((s) => s.id !== id))
   }
 
+  const addAppointment = (appointment: Appointment) => {
+    setAppointments((prev) => [...prev, appointment])
+  }
+
+  const updateAppointment = (id: string, data: Partial<Appointment>) => {
+    setAppointments((prev) =>
+      prev.map((a) => (a.id === id ? { ...a, ...data } : a)),
+    )
+  }
+
+  const deleteAppointment = (id: string) => {
+    setAppointments((prev) => prev.filter((a) => a.id !== id))
+  }
+
   return createElement(
     DataContext.Provider,
     {
@@ -269,6 +311,7 @@ export function DataProvider({ children }: { children: ReactNode }) {
         products,
         customers,
         services,
+        appointments,
         monthlyGoal,
         setMonthlyGoal,
         addTransaction,
@@ -284,6 +327,9 @@ export function DataProvider({ children }: { children: ReactNode }) {
         addService,
         updateService,
         deleteService,
+        addAppointment,
+        updateAppointment,
+        deleteAppointment,
       },
     },
     children,

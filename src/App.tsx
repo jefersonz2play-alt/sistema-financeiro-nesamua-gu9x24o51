@@ -9,6 +9,7 @@ import RegisterEmployee from './pages/RegisterEmployee'
 import Products from './pages/Products'
 import Customers from './pages/Customers'
 import Services from './pages/Services'
+import Appointments from './pages/Appointments'
 import Login from './pages/Login'
 import NotFound from './pages/NotFound'
 import Layout from './components/Layout'
@@ -73,6 +74,14 @@ const App = () => (
                 element={
                   <ProtectedRoute allowedRoles={['manager']}>
                     <Services />
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path="/appointments"
+                element={
+                  <ProtectedRoute allowedRoles={['manager']}>
+                    <Appointments />
                   </ProtectedRoute>
                 }
               />

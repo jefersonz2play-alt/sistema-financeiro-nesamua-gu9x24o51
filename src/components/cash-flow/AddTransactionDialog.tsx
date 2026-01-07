@@ -41,7 +41,7 @@ import {
 import { Calendar } from '@/components/ui/calendar'
 import { cn } from '@/lib/utils'
 import useDataStore from '@/stores/useDataStore'
-import { Transaction } from '@/types'
+import { Transaction, PaymentMethod } from '@/types'
 
 const formSchema = z.object({
   description: z.string().min(2, {
@@ -57,6 +57,10 @@ const formSchema = z.object({
   date: z.date({
     required_error: 'Selecione uma data.',
   }),
+  paymentMethod: z.enum(['money', 'pix', 'link', 'debit_card', 'credit_card'], {
+    required_error: 'Selecione a forma de pagamento.',
+  }),
+  cardFee: z.string().optional(),
   customerId: z.string().optional(),
   employeeId: z.string().optional(),
   employeePayment: z.string().optional(),
@@ -80,6 +84,8 @@ export function AddTransactionDialog({ onAdd }: AddTransactionDialogProps) {
       type: 'entry',
       category: 'service',
       date: new Date(),
+      paymentMethod: 'money',
+      cardFee: '',
       customerId: undefined,
       employeeId: undefined,
       employeePayment: '',
@@ -92,6 +98,7 @@ export function AddTransactionDialog({ onAdd }: AddTransactionDialogProps) {
   const watchCategory = form.watch('category')
   const watchItemId = form.watch('itemId')
   const watchQuantity = form.watch('quantity')
+  const watchPaymentMethod = form.watch('paymentMethod')
 
   // Auto-fill product info
   useEffect(() => {
@@ -160,6 +167,8 @@ export function AddTransactionDialog({ onAdd }: AddTransactionDialogProps) {
           ? undefined
           : (values.category as 'product' | 'service'),
       quantity: values.quantity ? Number(values.quantity) : undefined,
+      paymentMethod: values.paymentMethod as PaymentMethod,
+      cardFee: values.cardFee ? Number(values.cardFee) : undefined,
     }
 
     onAdd(newTransaction)
@@ -171,9 +180,14 @@ export function AddTransactionDialog({ onAdd }: AddTransactionDialogProps) {
       date: new Date(),
       quantity: '1',
       employeePayment: '',
+      paymentMethod: 'money',
+      cardFee: '',
     })
     setOpen(false)
   }
+
+  const showCardFee =
+    watchPaymentMethod === 'credit_card' || watchPaymentMethod === 'debit_card'
 
   return (
     <Dialog open={open} onOpenChange={setOpen}>
@@ -183,10 +197,12 @@ export function AddTransactionDialog({ onAdd }: AddTransactionDialogProps) {
           Nova Movimentação
         </Button>
       </DialogTrigger>
-      <DialogContent className="sm:max-w-[500px] rounded-xl max-h-[90vh] overflow-y-auto">
+      <DialogContent className="sm:max-w-[600px] rounded-xl max-h-[90vh] overflow-y-auto">
         <DialogHeader>
           <DialogTitle>Nova Movimentação</DialogTitle>
-          <DialogDescription>Registre entradas ou saídas.</DialogDescription>
+          <DialogDescription>
+            Registre entradas ou saídas e especifique a forma de pagamento.
+          </DialogDescription>
         </DialogHeader>
         <Form {...form}>
           <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
@@ -412,13 +428,110 @@ export function AddTransactionDialog({ onAdd }: AddTransactionDialogProps) {
                 )}
               />
 
-              {watchType === 'entry' && watchCategory === 'service' && (
+              <FormField
+                control={form.control}
+                name="date"
+                render={({ field }) => (
+                  <FormItem className="flex flex-col">
+                    <FormLabel>Data</FormLabel>
+                    <Popover>
+                      <PopoverTrigger asChild>
+                        <FormControl>
+                          <Button
+                            variant={'outline'}
+                            className={cn(
+                              'w-full pl-3 text-left font-normal',
+                              !field.value && 'text-muted-foreground',
+                            )}
+                          >
+                            {field.value ? (
+                              format(field.value, 'PPP', { locale: ptBR })
+                            ) : (
+                              <span>Selecione uma data</span>
+                            )}
+                            <CalendarIcon className="ml-auto h-4 w-4 opacity-50" />
+                          </Button>
+                        </FormControl>
+                      </PopoverTrigger>
+                      <PopoverContent className="w-auto p-0" align="start">
+                        <Calendar
+                          mode="single"
+                          selected={field.value}
+                          onSelect={field.onChange}
+                          initialFocus
+                        />
+                      </PopoverContent>
+                    </Popover>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+            </div>
+
+            {watchType === 'entry' && watchCategory === 'service' && (
+              <FormField
+                control={form.control}
+                name="employeePayment"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Repasse Funcionário (R$)</FormLabel>
+                    <FormControl>
+                      <Input
+                        placeholder="0.00"
+                        type="number"
+                        step="0.01"
+                        {...field}
+                      />
+                    </FormControl>
+                    <FormDescription className="text-xs">
+                      Comissão do profissional.
+                    </FormDescription>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+            )}
+
+            <div className="grid grid-cols-2 gap-4">
+              <FormField
+                control={form.control}
+                name="paymentMethod"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Forma de Pagamento</FormLabel>
+                    <Select
+                      onValueChange={field.onChange}
+                      defaultValue={field.value}
+                    >
+                      <FormControl>
+                        <SelectTrigger>
+                          <SelectValue placeholder="Selecione" />
+                        </SelectTrigger>
+                      </FormControl>
+                      <SelectContent>
+                        <SelectItem value="money">Dinheiro</SelectItem>
+                        <SelectItem value="pix">PIX</SelectItem>
+                        <SelectItem value="link">Link</SelectItem>
+                        <SelectItem value="debit_card">
+                          Cartão Débito
+                        </SelectItem>
+                        <SelectItem value="credit_card">
+                          Cartão Crédito
+                        </SelectItem>
+                      </SelectContent>
+                    </Select>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+
+              {showCardFee && (
                 <FormField
                   control={form.control}
-                  name="employeePayment"
+                  name="cardFee"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>Repasse (R$)</FormLabel>
+                      <FormLabel>Taxa do Cartão (R$)</FormLabel>
                       <FormControl>
                         <Input
                           placeholder="0.00"
@@ -427,9 +540,6 @@ export function AddTransactionDialog({ onAdd }: AddTransactionDialogProps) {
                           {...field}
                         />
                       </FormControl>
-                      <FormDescription className="text-xs">
-                        Comissão funcionário.
-                      </FormDescription>
                       <FormMessage />
                     </FormItem>
                   )}
@@ -437,44 +547,6 @@ export function AddTransactionDialog({ onAdd }: AddTransactionDialogProps) {
               )}
             </div>
 
-            <FormField
-              control={form.control}
-              name="date"
-              render={({ field }) => (
-                <FormItem className="flex flex-col">
-                  <FormLabel>Data</FormLabel>
-                  <Popover>
-                    <PopoverTrigger asChild>
-                      <FormControl>
-                        <Button
-                          variant={'outline'}
-                          className={cn(
-                            'w-full pl-3 text-left font-normal',
-                            !field.value && 'text-muted-foreground',
-                          )}
-                        >
-                          {field.value ? (
-                            format(field.value, 'PPP', { locale: ptBR })
-                          ) : (
-                            <span>Selecione uma data</span>
-                          )}
-                          <CalendarIcon className="ml-auto h-4 w-4 opacity-50" />
-                        </Button>
-                      </FormControl>
-                    </PopoverTrigger>
-                    <PopoverContent className="w-auto p-0" align="start">
-                      <Calendar
-                        mode="single"
-                        selected={field.value}
-                        onSelect={field.onChange}
-                        initialFocus
-                      />
-                    </PopoverContent>
-                  </Popover>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
             <DialogFooter className="pt-4">
               <Button type="submit" className="w-full rounded-full">
                 Registrar Movimentação
