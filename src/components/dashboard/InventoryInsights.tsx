@@ -7,27 +7,34 @@ import { Link } from 'react-router-dom'
 interface InventoryInsightsProps {
   products: Product[]
   transactions: Transaction[]
-  timeRange?: string
+  startDate: string
+  endDate: string
 }
 
 export function InventoryInsights({
   products,
   transactions,
-  timeRange = '30',
+  startDate,
+  endDate,
 }: InventoryInsightsProps) {
   const totalSold = useMemo(() => {
     return transactions
-      .filter((t) => t.type === 'entry' && t.itemType === 'product')
+      .filter(
+        (t) =>
+          t.type === 'entry' &&
+          t.itemType === 'product' &&
+          t.date >= startDate &&
+          t.date <= endDate,
+      )
       .reduce((sum, t) => sum + (t.quantity || 0), 0)
-  }, [transactions])
+  }, [transactions, startDate, endDate])
 
   const totalInStock = useMemo(() => {
     return products.reduce((sum, p) => sum + p.stock, 0)
   }, [products])
 
   const agingStock = useMemo(() => {
-    const thirtyDaysAgo = new Date()
-    thirtyDaysAgo.setDate(thirtyDaysAgo.getDate() - 30)
+    // Items with no sales in the selected period
     const recentProductIds = new Set(
       transactions
         .filter(
@@ -35,19 +42,20 @@ export function InventoryInsights({
             t.type === 'entry' &&
             t.itemType === 'product' &&
             t.itemId &&
-            new Date(t.date) >= thirtyDaysAgo,
+            t.date >= startDate &&
+            t.date <= endDate,
         )
         .map((t) => t.itemId),
     )
     return products.filter(
       (p) => p.stock > 0 && !recentProductIds.has(p.id) && p.id,
     )
-  }, [products, transactions])
+  }, [products, transactions, startDate, endDate])
 
   return (
     <div className="grid gap-6 grid-cols-1 md:grid-cols-3">
       <Link
-        to={`/reports/sales?days=${timeRange}`}
+        to={`/reports/sales?startDate=${startDate}&endDate=${endDate}`}
         className="block transition-transform hover:scale-105"
       >
         <Card className="shadow-subtle border-none h-full cursor-pointer hover:shadow-lg transition-shadow bg-blue-500/10 hover:bg-blue-500/20 border-l-4 border-l-blue-500">
@@ -64,7 +72,7 @@ export function InventoryInsights({
               {totalSold} un.
             </div>
             <p className="text-xs text-muted-foreground mt-1">
-              Total histórico de vendas
+              Vendas no período selecionado
             </p>
             <p className="text-[10px] text-blue-400 font-medium mt-2">
               Ver Detalhes &rarr;
@@ -106,7 +114,7 @@ export function InventoryInsights({
             {agingStock.length} itens
           </div>
           <p className="text-xs text-muted-foreground mt-1">
-            Sem vendas nos últimos 30 dias
+            Sem vendas neste período
           </p>
           {agingStock.length > 0 && (
             <div className="mt-2 text-xs text-muted-foreground/80 truncate">

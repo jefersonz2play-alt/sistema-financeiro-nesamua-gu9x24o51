@@ -54,7 +54,7 @@ const formSchema = z
     type: z.enum(['entry', 'exit'], {
       required_error: 'Selecione o tipo de movimentação.',
     }),
-    category: z.enum(['service', 'product', 'other']),
+    category: z.enum(['service', 'product', 'bonus', 'other']),
     date: z.date({
       required_error: 'Selecione uma data.',
     }),
@@ -97,6 +97,15 @@ const formSchema = z
             path: ['itemId'],
           })
         }
+      }
+    } else if (data.type === 'exit') {
+      // Bonus requirements
+      if (data.category === 'bonus' && !data.employeeId) {
+        ctx.addIssue({
+          code: z.ZodIssueCode.custom,
+          message: 'Selecione o funcionário para o bônus.',
+          path: ['employeeId'],
+        })
       }
     }
 
@@ -186,7 +195,7 @@ export function AddTransactionDialog({ onAdd }: AddTransactionDialogProps) {
       itemType:
         values.category === 'other'
           ? undefined
-          : (values.category as 'product' | 'service'),
+          : (values.category as 'product' | 'service' | 'bonus'),
       quantity: values.quantity ? Number(values.quantity) : undefined,
       paymentMethod: values.paymentMethod as PaymentMethod,
       cardFee: values.cardFee ? Number(values.cardFee) : undefined,
@@ -235,7 +244,15 @@ export function AddTransactionDialog({ onAdd }: AddTransactionDialogProps) {
                   <FormItem>
                     <FormLabel>Tipo</FormLabel>
                     <Select
-                      onValueChange={field.onChange}
+                      onValueChange={(val) => {
+                        field.onChange(val)
+                        // Reset category based on type
+                        if (val === 'entry') {
+                          form.setValue('category', 'service')
+                        } else {
+                          form.setValue('category', 'other')
+                        }
+                      }}
                       defaultValue={field.value}
                     >
                       <FormControl>
@@ -259,20 +276,27 @@ export function AddTransactionDialog({ onAdd }: AddTransactionDialogProps) {
                 render={({ field }) => (
                   <FormItem>
                     <FormLabel>Categoria</FormLabel>
-                    <Select
-                      onValueChange={field.onChange}
-                      defaultValue={field.value}
-                      disabled={watchType === 'exit'}
-                    >
+                    <Select onValueChange={field.onChange} value={field.value}>
                       <FormControl>
                         <SelectTrigger>
                           <SelectValue placeholder="Selecione" />
                         </SelectTrigger>
                       </FormControl>
                       <SelectContent>
-                        <SelectItem value="service">Serviço</SelectItem>
-                        <SelectItem value="product">Venda Produto</SelectItem>
-                        <SelectItem value="other">Outro</SelectItem>
+                        {watchType === 'entry' ? (
+                          <>
+                            <SelectItem value="service">Serviço</SelectItem>
+                            <SelectItem value="product">
+                              Venda Produto
+                            </SelectItem>
+                            <SelectItem value="other">Outro</SelectItem>
+                          </>
+                        ) : (
+                          <>
+                            <SelectItem value="bonus">Bônus</SelectItem>
+                            <SelectItem value="other">Outro</SelectItem>
+                          </>
+                        )}
                       </SelectContent>
                     </Select>
                     <FormMessage />
@@ -356,35 +380,45 @@ export function AddTransactionDialog({ onAdd }: AddTransactionDialogProps) {
               />
             )}
 
-            {watchType === 'entry' && watchCategory === 'service' && (
-              <div className="grid grid-cols-2 gap-4">
-                <FormField
-                  control={form.control}
-                  name="customerId"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>Cliente</FormLabel>
-                      <Select
-                        onValueChange={field.onChange}
-                        defaultValue={field.value}
-                      >
-                        <FormControl>
-                          <SelectTrigger>
-                            <SelectValue placeholder="Selecione..." />
-                          </SelectTrigger>
-                        </FormControl>
-                        <SelectContent>
-                          {customers.map((c) => (
-                            <SelectItem key={c.id} value={c.id}>
-                              {c.name}
-                            </SelectItem>
-                          ))}
-                        </SelectContent>
-                      </Select>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
+            {/* Show Employee/Customer selection for Services OR Bonus */}
+            {(watchCategory === 'service' || watchCategory === 'bonus') && (
+              <div
+                className={
+                  watchCategory === 'bonus'
+                    ? 'grid grid-cols-1'
+                    : 'grid grid-cols-2 gap-4'
+                }
+              >
+                {watchCategory === 'service' && (
+                  <FormField
+                    control={form.control}
+                    name="customerId"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Cliente</FormLabel>
+                        <Select
+                          onValueChange={field.onChange}
+                          defaultValue={field.value}
+                        >
+                          <FormControl>
+                            <SelectTrigger>
+                              <SelectValue placeholder="Selecione..." />
+                            </SelectTrigger>
+                          </FormControl>
+                          <SelectContent>
+                            {customers.map((c) => (
+                              <SelectItem key={c.id} value={c.id}>
+                                {c.name}
+                              </SelectItem>
+                            ))}
+                          </SelectContent>
+                        </Select>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                )}
+
                 <FormField
                   control={form.control}
                   name="employeeId"

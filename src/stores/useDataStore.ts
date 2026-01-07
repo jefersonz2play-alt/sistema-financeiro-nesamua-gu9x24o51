@@ -88,7 +88,7 @@ const INITIAL_CUSTOMERS: Customer[] = [
 const INITIAL_TRANSACTIONS: Transaction[] = [
   {
     id: '1',
-    date: '2023-10-25',
+    date: '2026-01-05',
     description: 'Tranças Box Braids',
     type: 'entry',
     amount: 350.0,
@@ -102,7 +102,7 @@ const INITIAL_TRANSACTIONS: Transaction[] = [
   },
   {
     id: '2',
-    date: '2023-10-26',
+    date: '2026-01-06',
     description: 'Pagamento de Fornecedor (Cabelo)',
     type: 'exit',
     amount: 120.0,

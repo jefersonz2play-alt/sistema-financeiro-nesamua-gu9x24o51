@@ -9,89 +9,65 @@ import {
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import { Progress } from '@/components/ui/progress'
 import { Employee, Transaction } from '@/types'
-import { TrendingDown, TrendingUp, Minus, ExternalLink } from 'lucide-react'
+import { ExternalLink } from 'lucide-react'
 import { Link } from 'react-router-dom'
 import { Button } from '@/components/ui/button'
+import { formatCurrency } from '@/lib/utils'
 
 interface EmployeePerformanceProps {
   employees: Employee[]
   transactions: Transaction[]
-  timeRange?: string
+  startDate: string
+  endDate: string
 }
 
 export function EmployeePerformance({
   employees,
   transactions,
-  timeRange = '30',
+  startDate,
+  endDate,
 }: EmployeePerformanceProps) {
   const stats = useMemo(() => {
-    const now = new Date()
-    const currentMonth = now.getMonth()
-    const currentYear = now.getFullYear()
-
-    const lastMonthDate = new Date()
-    lastMonthDate.setMonth(lastMonthDate.getMonth() - 1)
-    const previousMonth = lastMonthDate.getMonth()
-    const previousMonthYear = lastMonthDate.getFullYear()
-
     const employeeStats = employees.map((emp) => {
-      // Calculate Current Month Count
-      const currentMonthCount = transactions.filter((t) => {
-        const tDate = new Date(t.date)
+      // Filter transactions for this employee in the period
+      const empTransactions = transactions.filter((t) => {
         return (
           t.employeeId === emp.id &&
           t.type === 'entry' &&
-          tDate.getMonth() === currentMonth &&
-          tDate.getFullYear() === currentYear
+          t.date >= startDate &&
+          t.date <= endDate
         )
-      }).length
+      })
 
-      // Calculate Previous Month Count
-      const prevMonthCount = transactions.filter((t) => {
-        const tDate = new Date(t.date)
-        return (
-          t.employeeId === emp.id &&
-          t.type === 'entry' &&
-          tDate.getMonth() === previousMonth &&
-          tDate.getFullYear() === previousMonthYear
-        )
-      }).length
-
-      // Calculate Growth
-      let growth = 0
-      if (prevMonthCount > 0) {
-        growth = ((currentMonthCount - prevMonthCount) / prevMonthCount) * 100
-      } else if (currentMonthCount > 0) {
-        growth = 100 // Assume 100% growth if started from 0
-      }
+      const count = empTransactions.length
+      const totalRevenue = empTransactions.reduce((sum, t) => sum + t.amount, 0)
+      const avgTicket = count > 0 ? totalRevenue / count : 0
 
       return {
         ...emp,
-        currentMonthCount,
-        prevMonthCount,
-        growth,
+        count,
+        totalRevenue,
+        avgTicket,
       }
     })
 
-    // Sort by current month performance
-    return employeeStats.sort(
-      (a, b) => b.currentMonthCount - a.currentMonthCount,
-    )
-  }, [employees, transactions])
+    // Sort by Total Revenue
+    return employeeStats.sort((a, b) => b.totalRevenue - a.totalRevenue)
+  }, [employees, transactions, startDate, endDate])
 
-  const maxCount = Math.max(...stats.map((s) => s.currentMonthCount), 1)
+  const maxRevenue = Math.max(...stats.map((s) => s.totalRevenue), 1)
 
   return (
     <Card className="shadow-subtle border-none h-full">
       <CardHeader className="flex flex-row items-start justify-between">
         <div>
           <CardTitle className="text-lg">Desempenho da Equipe</CardTitle>
-          <CardDescription>
-            Atendimentos realizados no mês atual vs anterior.
-          </CardDescription>
+          <CardDescription>Resultados no período selecionado.</CardDescription>
         </div>
         <Button variant="ghost" size="icon" asChild className="h-8 w-8">
-          <Link to={`/reports/employees?days=${timeRange}`}>
+          <Link
+            to={`/reports/employees?startDate=${startDate}&endDate=${endDate}`}
+          >
             <ExternalLink className="w-4 h-4 text-muted-foreground" />
           </Link>
         </Button>
@@ -109,35 +85,25 @@ export function EmployeePerformance({
                 </Avatar>
                 <div>
                   <p className="text-sm font-medium leading-none">{emp.name}</p>
-                  <p className="text-xs text-muted-foreground mt-1">
-                    {emp.currentMonthCount} atendimentos
-                  </p>
+                  <div className="flex gap-2 mt-1">
+                    <p className="text-xs text-muted-foreground">
+                      {emp.count} atendimentos
+                    </p>
+                    <span className="text-xs text-muted-foreground">•</span>
+                    <p className="text-xs text-muted-foreground">
+                      Ticket Médio: {formatCurrency(emp.avgTicket)}
+                    </p>
+                  </div>
                 </div>
               </div>
               <div className="flex flex-col items-end">
-                <div className="flex items-center gap-1 text-xs font-medium">
-                  {emp.growth > 0 ? (
-                    <span className="text-emerald-600 flex items-center">
-                      <TrendingUp className="w-3 h-3 mr-1" />+
-                      {emp.growth.toFixed(0)}%
-                    </span>
-                  ) : emp.growth < 0 ? (
-                    <span className="text-rose-600 flex items-center">
-                      <TrendingDown className="w-3 h-3 mr-1" />
-                      {emp.growth.toFixed(0)}%
-                    </span>
-                  ) : (
-                    <span className="text-muted-foreground flex items-center">
-                      <Minus className="w-3 h-3 mr-1" />
-                      0%
-                    </span>
-                  )}
+                <div className="text-sm font-bold text-foreground">
+                  {formatCurrency(emp.totalRevenue)}
                 </div>
-                <p className="text-[10px] text-muted-foreground">vs mês ant.</p>
               </div>
             </div>
             <Progress
-              value={(emp.currentMonthCount / maxCount) * 100}
+              value={(emp.totalRevenue / maxRevenue) * 100}
               className="h-2"
             />
           </div>

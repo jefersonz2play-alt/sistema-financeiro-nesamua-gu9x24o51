@@ -20,7 +20,7 @@ export interface Transaction {
   employeeId?: string // Linked employee
   employeePayment?: number // Payment allocated to employee
   itemId?: string // Linked product or service ID
-  itemType?: 'product' | 'service' // Type of item
+  itemType?: 'product' | 'service' | 'bonus' // Type of item
   quantity?: number // Quantity sold (for products)
   paymentMethod?: PaymentMethod
   cardFee?: number

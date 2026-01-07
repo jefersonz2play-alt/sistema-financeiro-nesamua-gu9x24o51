@@ -1,48 +1,36 @@
 import { useMemo, useState } from 'react'
-import {
-  LayoutDashboard,
-  Calendar as CalendarIcon,
-  TrendingUp,
-} from 'lucide-react'
-import { format, subDays } from 'date-fns'
-import { ptBR } from 'date-fns/locale'
+import { LayoutDashboard, Calendar as CalendarIcon } from 'lucide-react'
 import { Link } from 'react-router-dom'
 
-import { Button } from '@/components/ui/button'
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from '@/components/ui/card'
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from '@/components/ui/select'
+import { Input } from '@/components/ui/input'
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import useDataStore from '@/stores/useDataStore'
 import { InventoryInsights } from '@/components/dashboard/InventoryInsights'
 import { EmployeePerformance } from '@/components/dashboard/EmployeePerformance'
 import { ProductMargins } from '@/components/dashboard/ProductMargins'
-import { cn } from '@/lib/utils'
+import { FinancialOverview } from '@/components/dashboard/FinancialOverview'
 
 export default function ManagerDashboard() {
   const { transactions, products, employees } = useDataStore()
-  const [timeRange, setTimeRange] = useState('30')
+  const [startDate, setStartDate] = useState('2026-01-01')
+  const [endDate, setEndDate] = useState(new Date().toISOString().split('T')[0])
 
   const dailyAverage = useMemo(() => {
-    const days = parseInt(timeRange)
-    const cutoffDate = subDays(new Date(), days)
+    // Count days between start and end
+    const start = new Date(startDate)
+    const end = new Date(endDate)
+    const days = Math.max(
+      1,
+      Math.ceil((end.getTime() - start.getTime()) / (1000 * 60 * 60 * 24)),
+    )
+
     const filteredTransactions = transactions.filter(
-      (t) => t.type === 'entry' && new Date(t.date) >= cutoffDate,
+      (t) => t.type === 'entry' && t.date >= startDate && t.date <= endDate,
     )
     const totalCount = filteredTransactions.length
-    const avg = days > 0 ? totalCount / days : 0
+    const avg = totalCount / days
     return avg.toFixed(1)
-  }, [transactions, timeRange])
+  }, [transactions, startDate, endDate])
 
   return (
     <div className="space-y-8 pb-10">
@@ -56,26 +44,37 @@ export default function ManagerDashboard() {
             Acompanhe indicadores chave de performance do negócio.
           </p>
         </div>
-        <div className="flex items-center gap-2 bg-card p-1 rounded-lg border border-border shadow-sm">
-          <CalendarIcon className="w-4 h-4 text-muted-foreground ml-2" />
-          <Select value={timeRange} onValueChange={setTimeRange}>
-            <SelectTrigger className="w-[140px] border-none shadow-none h-8 focus:ring-0 bg-transparent text-foreground">
-              <SelectValue placeholder="Período" />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value="7">Últimos 7 dias</SelectItem>
-              <SelectItem value="15">Últimos 15 dias</SelectItem>
-              <SelectItem value="30">Últimos 30 dias</SelectItem>
-              <SelectItem value="60">Últimos 60 dias</SelectItem>
-              <SelectItem value="90">Últimos 90 dias</SelectItem>
-            </SelectContent>
-          </Select>
+
+        <div className="flex flex-col sm:flex-row items-end sm:items-center gap-2 bg-card p-2 rounded-lg border border-border shadow-sm">
+          <div className="flex items-center gap-2">
+            <CalendarIcon className="w-4 h-4 text-muted-foreground" />
+            <Input
+              type="date"
+              value={startDate}
+              onChange={(e) => setStartDate(e.target.value)}
+              className="h-8 w-auto border-none bg-transparent shadow-none focus-visible:ring-0"
+            />
+            <span className="text-muted-foreground">-</span>
+            <Input
+              type="date"
+              value={endDate}
+              onChange={(e) => setEndDate(e.target.value)}
+              className="h-8 w-auto border-none bg-transparent shadow-none focus-visible:ring-0"
+            />
+          </div>
         </div>
       </div>
 
+      <FinancialOverview
+        transactions={transactions}
+        products={products}
+        startDate={startDate}
+        endDate={endDate}
+      />
+
       <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
         <Link
-          to={`/reports/attendance?days=${timeRange}`}
+          to={`/reports/attendance?startDate=${startDate}&endDate=${endDate}`}
           className="block transition-transform hover:scale-105"
         >
           <Card className="shadow-subtle border-none md:col-span-1 bg-gradient-to-br from-primary to-primary/80 text-primary-foreground h-full cursor-pointer hover:shadow-lg transition-shadow">
@@ -90,7 +89,7 @@ export default function ManagerDashboard() {
                 <span className="text-sm opacity-80">atendimentos/dia</span>
               </div>
               <p className="text-xs mt-2 opacity-70">
-                Baseado nos últimos {timeRange} dias. Clique para detalhes.
+                Neste período selecionado.
               </p>
             </CardContent>
           </Card>
@@ -100,7 +99,8 @@ export default function ManagerDashboard() {
           <InventoryInsights
             products={products}
             transactions={transactions}
-            timeRange={timeRange}
+            startDate={startDate}
+            endDate={endDate}
           />
         </div>
       </div>
@@ -110,7 +110,8 @@ export default function ManagerDashboard() {
           <EmployeePerformance
             employees={employees}
             transactions={transactions}
-            timeRange={timeRange}
+            startDate={startDate}
+            endDate={endDate}
           />
         </div>
         <div className="space-y-6">

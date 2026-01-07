@@ -22,11 +22,24 @@ export default function EmployeeReport() {
   const navigate = useNavigate()
   const { transactions, employees, services } = useDataStore()
 
-  const days = parseInt(searchParams.get('days') || '30')
-  const cutoffDate = subDays(new Date(), days)
+  const startParam = searchParams.get('startDate')
+  const endParam = searchParams.get('endDate')
+
+  const { start, end } = useMemo(() => {
+    if (startParam && endParam) {
+      return { start: new Date(startParam), end: new Date(endParam) }
+    }
+    const days = parseInt(searchParams.get('days') || '30')
+    const endDate = new Date()
+    const startDate = subDays(endDate, days)
+    return { start: startDate, end: endDate }
+  }, [startParam, endParam, searchParams])
 
   // Group transactions by Employee
   const reportData = useMemo(() => {
+    const startDateStr = start.toISOString().split('T')[0]
+    const endDateStr = end.toISOString().split('T')[0]
+
     return employees
       .map((emp) => {
         const empTransactions = transactions
@@ -35,7 +48,8 @@ export default function EmployeeReport() {
               t.employeeId === emp.id &&
               t.type === 'entry' &&
               t.itemType === 'service' &&
-              new Date(t.date) >= cutoffDate,
+              t.date >= startDateStr &&
+              t.date <= endDateStr,
           )
           .sort(
             (a, b) => new Date(b.date).getTime() - new Date(a.date).getTime(),
@@ -49,16 +63,19 @@ export default function EmployeeReport() {
           (sum, t) => sum + (t.employeePayment || 0),
           0,
         )
+        const avgTicket =
+          empTransactions.length > 0 ? totalRevenue / empTransactions.length : 0
 
         return {
           employee: emp,
           transactions: empTransactions,
           totalRevenue,
           totalCommission,
+          avgTicket,
         }
       })
       .filter((data) => data.transactions.length > 0)
-  }, [employees, transactions, cutoffDate])
+  }, [employees, transactions, start, end])
 
   const getServiceName = (id?: string) =>
     services.find((s) => s.id === id)?.name || 'Serviço'
@@ -85,8 +102,8 @@ export default function EmployeeReport() {
               Relatório de Desempenho da Equipe
             </CardTitle>
             <p className="text-muted-foreground mt-1">
-              Período: Últimos {days} dias ({format(cutoffDate, 'dd/MM/yyyy')}{' '}
-              até {format(new Date(), 'dd/MM/yyyy')})
+              Período: {format(start, 'dd/MM/yyyy')} até{' '}
+              {format(end, 'dd/MM/yyyy')}
             </p>
           </div>
         </CardHeader>
@@ -98,7 +115,13 @@ export default function EmployeeReport() {
             </div>
           ) : (
             reportData.map(
-              ({ employee, transactions, totalRevenue, totalCommission }) => (
+              ({
+                employee,
+                transactions,
+                totalRevenue,
+                totalCommission,
+                avgTicket,
+              }) => (
                 <div key={employee.id} className="space-y-4 page-break">
                   <div className="bg-muted/30 p-4 rounded-lg flex flex-col md:flex-row justify-between items-start md:items-center">
                     <div>
@@ -113,6 +136,12 @@ export default function EmployeeReport() {
                           Atendimentos
                         </p>
                         <p className="font-bold">{transactions.length}</p>
+                      </div>
+                      <div className="text-right">
+                        <p className="text-xs text-muted-foreground uppercase">
+                          Ticket Médio
+                        </p>
+                        <p className="font-bold">{formatCurrency(avgTicket)}</p>
                       </div>
                       <div className="text-right">
                         <p className="text-xs text-muted-foreground uppercase">

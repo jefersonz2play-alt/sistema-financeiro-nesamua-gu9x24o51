@@ -20,34 +20,52 @@ import { formatCurrency } from '@/lib/utils'
 export default function AttendanceReport() {
   const [searchParams] = useSearchParams()
   const navigate = useNavigate()
-  const { transactions, customers, employees, services } = useDataStore()
+  const { transactions, services } = useDataStore()
 
-  const days = parseInt(searchParams.get('days') || '30')
-  const cutoffDate = subDays(new Date(), days)
+  const startParam = searchParams.get('startDate')
+  const endParam = searchParams.get('endDate')
+
+  const { start, end } = useMemo(() => {
+    if (startParam && endParam) {
+      return { start: new Date(startParam), end: new Date(endParam) }
+    }
+    const days = parseInt(searchParams.get('days') || '30')
+    const endDate = new Date()
+    const startDate = subDays(endDate, days)
+    return { start: startDate, end: endDate }
+  }, [startParam, endParam, searchParams])
 
   const filteredTransactions = useMemo(() => {
+    const startDateStr = start.toISOString().split('T')[0]
+    const endDateStr = end.toISOString().split('T')[0]
+
     return transactions
       .filter((t) => {
-        const tDate = new Date(t.date)
-        // Filter for Service Entries in the date range
         return (
-          t.type === 'entry' && t.itemType === 'service' && tDate >= cutoffDate
+          t.type === 'entry' &&
+          t.itemType === 'service' &&
+          t.date >= startDateStr &&
+          t.date <= endDateStr
         )
       })
       .sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime())
-  }, [transactions, cutoffDate])
+  }, [transactions, start, end])
 
-  const getCustomerName = (id?: string) =>
-    customers.find((c) => c.id === id)?.name || 'N/A'
-  const getEmployeeName = (id?: string) =>
-    employees.find((e) => e.id === id)?.name || 'N/A'
   const getServiceName = (id?: string) =>
-    services.find((s) => s.id === id)?.name || id || 'Serviço'
+    services.find((s) => s.id === id)?.name || 'Serviço Removido'
 
+  // Calculations
   const totalRevenue = filteredTransactions.reduce(
     (sum, t) => sum + t.amount,
     0,
   )
+  const totalAttended = filteredTransactions.length
+  const dailyAverage =
+    totalAttended /
+    Math.max(
+      1,
+      Math.ceil((end.getTime() - start.getTime()) / (1000 * 60 * 60 * 24)),
+    )
 
   const handlePrint = () => {
     window.print()
@@ -72,23 +90,25 @@ export default function AttendanceReport() {
                 Relatório de Atendimentos
               </CardTitle>
               <p className="text-muted-foreground mt-1">
-                Período: Últimos {days} dias ({format(cutoffDate, 'dd/MM/yyyy')}{' '}
-                até {format(new Date(), 'dd/MM/yyyy')})
+                Período: {format(start, 'dd/MM/yyyy')} até{' '}
+                {format(end, 'dd/MM/yyyy')}
               </p>
             </div>
-            <div className="text-right">
-              <p className="text-sm text-muted-foreground">
-                Total de Atendimentos
-              </p>
-              <p className="text-2xl font-bold">
-                {filteredTransactions.length}
-              </p>
-            </div>
-            <div className="text-right">
-              <p className="text-sm text-muted-foreground">Faturamento Total</p>
-              <p className="text-2xl font-bold text-emerald-600">
-                {formatCurrency(totalRevenue)}
-              </p>
+            <div className="flex gap-8">
+              <div className="text-right">
+                <p className="text-sm text-muted-foreground">Total Realizado</p>
+                <p className="text-2xl font-bold">{totalAttended}</p>
+              </div>
+              <div className="text-right">
+                <p className="text-sm text-muted-foreground">Média Diária</p>
+                <p className="text-2xl font-bold">{dailyAverage.toFixed(1)}</p>
+              </div>
+              <div className="text-right">
+                <p className="text-sm text-muted-foreground">Faturamento</p>
+                <p className="text-2xl font-bold text-emerald-600">
+                  {formatCurrency(totalRevenue)}
+                </p>
+              </div>
             </div>
           </div>
         </CardHeader>
@@ -97,9 +117,8 @@ export default function AttendanceReport() {
             <TableHeader>
               <TableRow>
                 <TableHead>Data</TableHead>
-                <TableHead>Cliente</TableHead>
                 <TableHead>Serviço</TableHead>
-                <TableHead>Profissional</TableHead>
+                <TableHead>Descrição</TableHead>
                 <TableHead className="text-right">Valor</TableHead>
               </TableRow>
             </TableHeader>
@@ -107,7 +126,7 @@ export default function AttendanceReport() {
               {filteredTransactions.length === 0 ? (
                 <TableRow>
                   <TableCell
-                    colSpan={5}
+                    colSpan={4}
                     className="text-center py-8 text-muted-foreground"
                   >
                     Nenhum atendimento encontrado no período.
@@ -117,14 +136,17 @@ export default function AttendanceReport() {
                 filteredTransactions.map((t) => (
                   <TableRow key={t.id}>
                     <TableCell>
-                      {format(new Date(t.date), 'dd/MM/yyyy', { locale: ptBR })}
+                      {format(new Date(t.date), 'dd/MM/yyyy', {
+                        locale: ptBR,
+                      })}
                     </TableCell>
                     <TableCell className="font-medium">
-                      {getCustomerName(t.customerId)}
+                      {getServiceName(t.itemId)}
                     </TableCell>
-                    <TableCell>{getServiceName(t.itemId)}</TableCell>
-                    <TableCell>{getEmployeeName(t.employeeId)}</TableCell>
-                    <TableCell className="text-right">
+                    <TableCell className="text-muted-foreground text-xs max-w-[250px] truncate">
+                      {t.description}
+                    </TableCell>
+                    <TableCell className="text-right font-medium">
                       {formatCurrency(t.amount)}
                     </TableCell>
                   </TableRow>

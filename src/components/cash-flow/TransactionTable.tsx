@@ -16,6 +16,7 @@ import {
   Banknote,
   Smartphone,
   Link as LinkIcon,
+  Sparkles,
 } from 'lucide-react'
 import { Transaction, PaymentMethod } from '@/types'
 import useDataStore from '@/stores/useDataStore'
@@ -99,6 +100,7 @@ export function TransactionTable({ transactions }: TransactionTableProps) {
                   const PaymentIcon = payment.icon
                   const fee = transaction.cardFee || 0
                   const isEntry = transaction.type === 'entry'
+                  const isBonus = transaction.itemType === 'bonus'
                   const grossAmount = transaction.amount
                   const netAmount = isEntry ? grossAmount - fee : grossAmount
 
@@ -111,7 +113,18 @@ export function TransactionTable({ transactions }: TransactionTableProps) {
                         {formatDate(transaction.date)}
                       </TableCell>
                       <TableCell className="font-medium text-foreground">
-                        {transaction.description}
+                        <div className="flex items-center gap-2">
+                          {transaction.description}
+                          {isBonus && (
+                            <Badge
+                              variant="outline"
+                              className="text-amber-500 border-amber-500/30 bg-amber-500/10 text-[10px] h-5 px-1.5 gap-1"
+                            >
+                              <Sparkles className="w-2.5 h-2.5" />
+                              Bônus
+                            </Badge>
+                          )}
+                        </div>
                       </TableCell>
                       <TableCell className="text-sm">
                         {getCustomerName(transaction.customerId)}

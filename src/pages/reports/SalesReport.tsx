@@ -22,20 +22,34 @@ export default function SalesReport() {
   const navigate = useNavigate()
   const { transactions, products } = useDataStore()
 
-  const days = parseInt(searchParams.get('days') || '30')
-  const cutoffDate = subDays(new Date(), days)
+  const startParam = searchParams.get('startDate')
+  const endParam = searchParams.get('endDate')
+
+  const { start, end } = useMemo(() => {
+    if (startParam && endParam) {
+      return { start: new Date(startParam), end: new Date(endParam) }
+    }
+    const days = parseInt(searchParams.get('days') || '30')
+    const endDate = new Date()
+    const startDate = subDays(endDate, days)
+    return { start: startDate, end: endDate }
+  }, [startParam, endParam, searchParams])
 
   const filteredTransactions = useMemo(() => {
+    const startDateStr = start.toISOString().split('T')[0]
+    const endDateStr = end.toISOString().split('T')[0]
+
     return transactions
       .filter((t) => {
-        const tDate = new Date(t.date)
-        // Filter for Product Sales in the date range
         return (
-          t.type === 'entry' && t.itemType === 'product' && tDate >= cutoffDate
+          t.type === 'entry' &&
+          t.itemType === 'product' &&
+          t.date >= startDateStr &&
+          t.date <= endDateStr
         )
       })
       .sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime())
-  }, [transactions, cutoffDate])
+  }, [transactions, start, end])
 
   const getProductName = (id?: string) =>
     products.find((p) => p.id === id)?.name || 'Produto Removido'
@@ -72,8 +86,8 @@ export default function SalesReport() {
                 Relatório de Vendas
               </CardTitle>
               <p className="text-muted-foreground mt-1">
-                Período: Últimos {days} dias ({format(cutoffDate, 'dd/MM/yyyy')}{' '}
-                até {format(new Date(), 'dd/MM/yyyy')})
+                Período: {format(start, 'dd/MM/yyyy')} até{' '}
+                {format(end, 'dd/MM/yyyy')}
               </p>
             </div>
             <div className="text-right">
