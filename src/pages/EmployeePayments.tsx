@@ -22,7 +22,6 @@ export default function EmployeePayments() {
     useDataStore()
   const [selectedEmployeeId, setSelectedEmployeeId] = useState<string>('')
 
-  // Local state for editing before saving
   const [quantities, setQuantities] = useState<Record<string, number>>({})
   const [paidAmount, setPaidAmount] = useState(0)
   const [status, setStatus] = useState<'paid' | 'partial' | 'open'>('open')
@@ -36,14 +35,12 @@ export default function EmployeePayments() {
     [employees, selectedEmployeeId],
   )
 
-  // Select first employee on load
   useEffect(() => {
     if (employees.length > 0 && !selectedEmployeeId) {
       setSelectedEmployeeId(employees[0].id)
     }
   }, [employees, selectedEmployeeId])
 
-  // Sync local state with selected employee
   useEffect(() => {
     if (selectedEmployee) {
       setQuantities(selectedEmployee.quantities || {})
@@ -61,14 +58,12 @@ export default function EmployeePayments() {
     setQuantities((prev) => ({ ...prev, [serviceId]: quantity }))
   }
 
-  // Calculate commissions from static quantities
   const commissionFromQuantities = useMemo(() => {
     return services.reduce((total, service) => {
       return total + service.payout * (quantities[service.id] || 0)
     }, 0)
   }, [quantities, services])
 
-  // Calculate commissions from linked transactions
   const commissionFromTransactions = useMemo(() => {
     if (!selectedEmployeeId) return 0
     return transactions
@@ -76,21 +71,17 @@ export default function EmployeePayments() {
       .reduce((sum, t) => sum + (t.employeePayment || 0), 0)
   }, [transactions, selectedEmployeeId])
 
-  // Total Receivable is sum of both methods (Manual Quantities + Transaction Records)
   const totalReceivable = commissionFromQuantities + commissionFromTransactions
 
   const handleSave = () => {
     if (!selectedEmployeeId) return
-
     updateEmployee(selectedEmployeeId, {
       quantities,
-      paidAmount, // Should this be updated manually here? Maybe just sync quantities
-      status, // Status might be manually updated too
+      paidAmount,
+      status,
       lastUpdated: new Date().toISOString(),
     })
-
     setLastUpdated(new Date())
-
     toast({
       title: 'Dados Salvos',
       description: `As informações de ${selectedEmployee?.name} foram atualizadas.`,
@@ -100,7 +91,6 @@ export default function EmployeePayments() {
   const handleConfirmPayment = () => {
     if (!selectedEmployeeId) return
     const amountToPay = totalReceivable - paidAmount
-
     if (amountToPay <= 0) {
       toast({
         title: 'Nada a pagar',
@@ -109,13 +99,9 @@ export default function EmployeePayments() {
       })
       return
     }
-
     payEmployee(selectedEmployeeId, amountToPay)
-
-    // Local update to reflect changes immediately
     setPaidAmount((prev) => prev + amountToPay)
     setStatus('paid')
-
     toast({
       title: 'Pagamento Realizado',
       description: `O pagamento de ${formatCurrency(amountToPay)} foi registrado e o gasto lançado no caixa.`,
@@ -142,8 +128,7 @@ export default function EmployeePayments() {
 
   return (
     <div className="space-y-6 pb-10">
-      {/* Top Bar - Employee Selector */}
-      <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 bg-white p-6 rounded-xl shadow-subtle">
+      <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 bg-card p-6 rounded-xl shadow-subtle border border-border/50">
         <div className="w-full md:w-1/3">
           <label className="text-sm font-medium text-muted-foreground mb-2 block">
             Selecione o Funcionário
@@ -152,7 +137,7 @@ export default function EmployeePayments() {
             value={selectedEmployeeId}
             onValueChange={setSelectedEmployeeId}
           >
-            <SelectTrigger className="w-full h-11">
+            <SelectTrigger className="w-full h-11 bg-secondary/30">
               <SelectValue placeholder="Selecione..." />
             </SelectTrigger>
             <SelectContent>
@@ -168,7 +153,7 @@ export default function EmployeePayments() {
           <Button
             onClick={handleSave}
             variant="outline"
-            className="rounded-full px-6"
+            className="rounded-full px-6 border-primary/20 hover:bg-primary/10 hover:text-primary"
           >
             <Save className="w-4 h-4 mr-2" />
             Salvar Rascunho
@@ -184,12 +169,11 @@ export default function EmployeePayments() {
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-        {/* Left Column - Employee Info & Notes */}
         <div className="space-y-6 lg:col-span-1">
           {selectedEmployee && (
-            <Card className="shadow-subtle border-none bg-gradient-to-br from-white to-gray-50">
+            <Card className="shadow-subtle border-none bg-card">
               <CardHeader className="flex flex-row items-center gap-4">
-                <Avatar className="w-16 h-16 border-4 border-white shadow-md">
+                <Avatar className="w-16 h-16 border-4 border-secondary shadow-md">
                   <AvatarImage
                     src={`https://img.usecurling.com/ppl/medium?gender=female&seed=${selectedEmployee.id}`}
                   />
@@ -227,14 +211,14 @@ export default function EmployeePayments() {
             </Card>
           )}
 
-          <Card className="shadow-subtle border-none h-full">
+          <Card className="shadow-subtle border-none h-full bg-card">
             <CardHeader>
               <CardTitle className="text-lg">Observações</CardTitle>
             </CardHeader>
             <CardContent>
               <Textarea
                 placeholder="Observações sobre este pagamento..."
-                className="min-h-[150px] resize-none bg-muted/20 focus:bg-white transition-colors"
+                className="min-h-[150px] resize-none bg-secondary/20 focus:bg-card transition-colors border-border/50"
                 value={notes}
                 onChange={(e) => setNotes(e.target.value)}
               />
@@ -242,7 +226,6 @@ export default function EmployeePayments() {
           </Card>
         </div>
 
-        {/* Right Column - Production & Summary */}
         <div className="space-y-6 lg:col-span-2">
           <FinancialSummary
             totalReceivable={totalReceivable}
@@ -254,7 +237,7 @@ export default function EmployeePayments() {
             readOnly={false}
           />
 
-          <Card className="shadow-subtle border-none mb-6">
+          <Card className="shadow-subtle border-none mb-6 bg-card">
             <CardHeader>
               <CardTitle className="text-lg font-semibold">
                 Origem dos Ganhos
@@ -262,19 +245,19 @@ export default function EmployeePayments() {
             </CardHeader>
             <CardContent>
               <div className="grid grid-cols-2 gap-4">
-                <div className="p-4 rounded-lg bg-secondary/30 border border-secondary">
+                <div className="p-4 rounded-lg bg-secondary/30 border border-border">
                   <span className="text-sm text-muted-foreground block mb-1">
                     Produção Manual (Quantidade)
                   </span>
-                  <span className="text-xl font-bold">
+                  <span className="text-xl font-bold text-foreground">
                     {formatCurrency(commissionFromQuantities)}
                   </span>
                 </div>
-                <div className="p-4 rounded-lg bg-secondary/30 border border-secondary">
+                <div className="p-4 rounded-lg bg-secondary/30 border border-border">
                   <span className="text-sm text-muted-foreground block mb-1">
                     Via Caixa (Movimentações)
                   </span>
-                  <span className="text-xl font-bold">
+                  <span className="text-xl font-bold text-foreground">
                     {formatCurrency(commissionFromTransactions)}
                   </span>
                 </div>

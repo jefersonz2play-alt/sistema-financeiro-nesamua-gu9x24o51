@@ -18,12 +18,12 @@ export function SummaryCards({
 
   return (
     <div className="grid gap-6 grid-cols-1 md:grid-cols-3">
-      <Card className="shadow-subtle hover:shadow-lg transition-shadow duration-300 border-none">
+      <Card className="shadow-subtle hover:shadow-lg transition-shadow duration-300 border-none bg-card">
         <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
           <CardTitle className="text-sm font-medium text-muted-foreground uppercase tracking-wider">
             Saldo Inicial
           </CardTitle>
-          <div className="h-8 w-8 rounded-full bg-secondary flex items-center justify-center">
+          <div className="h-8 w-8 rounded-full bg-primary/20 flex items-center justify-center">
             <DollarSign className="h-4 w-4 text-primary" />
           </div>
         </CardHeader>
@@ -37,13 +37,13 @@ export function SummaryCards({
         </CardContent>
       </Card>
 
-      <Card className="shadow-subtle hover:shadow-lg transition-shadow duration-300 border-none">
+      <Card className="shadow-subtle hover:shadow-lg transition-shadow duration-300 border-none bg-card">
         <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
           <CardTitle className="text-sm font-medium text-muted-foreground uppercase tracking-wider">
             Saldo Final
           </CardTitle>
           <div
-            className={`h-8 w-8 rounded-full flex items-center justify-center ${isPositive ? 'bg-green-100 text-green-600' : 'bg-red-100 text-red-600'}`}
+            className={`h-8 w-8 rounded-full flex items-center justify-center ${isPositive ? 'bg-emerald-500/20 text-emerald-500' : 'bg-red-500/20 text-red-500'}`}
           >
             {isPositive ? (
               <TrendingUp className="h-4 w-4" />
@@ -60,8 +60,8 @@ export function SummaryCards({
             <span
               className={
                 isPositive
-                  ? 'text-green-600 font-medium'
-                  : 'text-red-600 font-medium'
+                  ? 'text-emerald-500 font-medium'
+                  : 'text-red-500 font-medium'
               }
             >
               {isPositive ? '+' : ''}
@@ -72,13 +72,13 @@ export function SummaryCards({
         </CardContent>
       </Card>
 
-      <Card className="shadow-subtle hover:shadow-lg transition-shadow duration-300 border-none">
+      <Card className="shadow-subtle hover:shadow-lg transition-shadow duration-300 border-none bg-card">
         <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
           <CardTitle className="text-sm font-medium text-muted-foreground uppercase tracking-wider">
             Taxas de Cartão
           </CardTitle>
-          <div className="h-8 w-8 rounded-full bg-rose-100 flex items-center justify-center">
-            <CreditCard className="h-4 w-4 text-rose-600" />
+          <div className="h-8 w-8 rounded-full bg-rose-500/20 flex items-center justify-center">
+            <CreditCard className="h-4 w-4 text-rose-500" />
           </div>
         </CardHeader>
         <CardContent>

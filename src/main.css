@@ -4,64 +4,86 @@
 
 @layer base {
   :root {
-    --background: 0 0% 100%;
-    --foreground: 0 0% 3.9%;
-    --card: 0 0% 100%;
-    --card-foreground: 0 0% 3.9%;
-    --popover: 0 0% 100%;
-    --popover-foreground: 0 0% 3.9%;
-    --primary: 346 84% 61%;
-    --primary-foreground: 355.7 100% 97.3%;
-    --secondary: 240 4.8% 95.9%;
-    --secondary-foreground: 240 5.9% 10%;
-    --muted: 240 4.8% 95.9%;
-    --muted-foreground: 240 3.8% 46.1%;
-    --accent: 240 4.8% 95.9%;
-    --accent-foreground: 240 5.9% 10%;
-    --destructive: 0 84.2% 60.2%;
-    --destructive-foreground: 0 0% 98%;
-    --border: 240 5.9% 90%;
-    --input: 240 5.9% 90%;
-    --ring: 346 84% 61%;
+    /* Studio Nesamua Theme - Deep Teal & Coral Pink */
+    /* Background: Deep Teal #1A3C34 -> HSL(166, 40%, 17%) */
+    --background: 166 40% 17%;
+    --foreground: 0 0% 95%;
+
+    /* Card: Slightly lighter Teal #224A41 -> HSL(166, 37%, 21%) */
+    --card: 166 37% 21%;
+    --card-foreground: 0 0% 95%;
+
+    /* Popover matches card */
+    --popover: 166 37% 21%;
+    --popover-foreground: 0 0% 95%;
+
+    /* Primary: Coral/Salmon #EFA3A3 -> HSL(0, 70%, 79%) */
+    --primary: 0 70% 79%;
+    --primary-foreground: 166 40% 15%;
+
+    /* Secondary: Muted Teal for backgrounds */
+    --secondary: 166 30% 28%;
+    --secondary-foreground: 0 0% 95%;
+
+    /* Muted: Low contrast teal */
+    --muted: 166 30% 28%;
+    --muted-foreground: 166 15% 70%;
+
+    /* Accent: Interactive elements hover */
+    --accent: 166 30% 32%;
+    --accent-foreground: 0 0% 100%;
+
+    /* Destructive: Muted Red */
+    --destructive: 0 60% 45%;
+    --destructive-foreground: 0 0% 100%;
+
+    /* Border: Low contrast teal */
+    --border: 166 30% 35%;
+    --input: 166 30% 35%;
+    --ring: 0 70% 79%;
+
     --radius: 0.75rem;
-    --sidebar-background: 0 0% 98%;
-    --sidebar-foreground: 240 5.3% 26.1%;
-    --sidebar-primary: 240 5.9% 10%;
-    --sidebar-primary-foreground: 0 0% 98%;
-    --sidebar-accent: 240 4.8% 95.9%;
-    --sidebar-accent-foreground: 240 5.9% 10%;
-    --sidebar-border: 220 13% 91%;
-    --sidebar-ring: 217.2 91.2% 59.8%;
+
+    /* Sidebar: Darker Teal #15302A -> HSL(166, 40%, 14%) */
+    --sidebar-background: 166 40% 14%;
+    --sidebar-foreground: 166 10% 85%;
+    --sidebar-primary: 0 70% 79%;
+    --sidebar-primary-foreground: 166 40% 15%;
+    --sidebar-accent: 166 30% 24%;
+    --sidebar-accent-foreground: 0 0% 100%;
+    --sidebar-border: 166 30% 24%;
+    --sidebar-ring: 0 70% 79%;
   }
 
+  /* Force dark mode behavior since branding is dark */
   .dark {
-    --background: 240 10% 3.9%;
-    --foreground: 0 0% 98%;
-    --card: 240 10% 3.9%;
-    --card-foreground: 0 0% 98%;
-    --popover: 240 10% 3.9%;
-    --popover-foreground: 0 0% 98%;
-    --primary: 346 84% 61%;
-    --primary-foreground: 355.7 100% 97.3%;
-    --secondary: 240 3.7% 15.9%;
-    --secondary-foreground: 0 0% 98%;
-    --muted: 240 3.7% 15.9%;
-    --muted-foreground: 240 5% 64.9%;
-    --accent: 240 3.7% 15.9%;
-    --accent-foreground: 0 0% 98%;
-    --destructive: 0 62.8% 30.6%;
-    --destructive-foreground: 0 0% 98%;
-    --border: 240 3.7% 15.9%;
-    --input: 240 3.7% 15.9%;
-    --ring: 346 84% 61%;
-    --sidebar-background: 240 5.9% 10%;
-    --sidebar-foreground: 240 4.8% 95.9%;
-    --sidebar-primary: 224.3 76.3% 48%;
-    --sidebar-primary-foreground: 0 0% 100%;
-    --sidebar-accent: 240 3.7% 15.9%;
-    --sidebar-accent-foreground: 240 4.8% 95.9%;
-    --sidebar-border: 240 3.7% 15.9%;
-    --sidebar-ring: 217.2 91.2% 59.8%;
+    --background: 166 40% 17%;
+    --foreground: 0 0% 95%;
+    --card: 166 37% 21%;
+    --card-foreground: 0 0% 95%;
+    --popover: 166 37% 21%;
+    --popover-foreground: 0 0% 95%;
+    --primary: 0 70% 79%;
+    --primary-foreground: 166 40% 15%;
+    --secondary: 166 30% 28%;
+    --secondary-foreground: 0 0% 95%;
+    --muted: 166 30% 28%;
+    --muted-foreground: 166 15% 70%;
+    --accent: 166 30% 32%;
+    --accent-foreground: 0 0% 100%;
+    --destructive: 0 60% 45%;
+    --destructive-foreground: 0 0% 100%;
+    --border: 166 30% 35%;
+    --input: 166 30% 35%;
+    --ring: 0 70% 79%;
+    --sidebar-background: 166 40% 14%;
+    --sidebar-foreground: 166 10% 85%;
+    --sidebar-primary: 0 70% 79%;
+    --sidebar-primary-foreground: 166 40% 15%;
+    --sidebar-accent: 166 30% 24%;
+    --sidebar-accent-foreground: 0 0% 100%;
+    --sidebar-border: 166 30% 24%;
+    --sidebar-ring: 0 70% 79%;
   }
 }
 
@@ -76,7 +98,7 @@
 
 /* Custom Styles */
 .shadow-subtle {
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.03);
+  box-shadow: 0 4px 20px -2px rgba(0, 0, 0, 0.2);
 }
 
 .text-headline {
@@ -114,7 +136,6 @@
 }
 
 @media print {
-  /* Hide Sidebar and Header */
   aside,
   header,
   button,
@@ -124,7 +145,6 @@
     display: none !important;
   }
 
-  /* Reset Main Container styles */
   main {
     padding: 0 !important;
     margin: 0 !important;
@@ -134,12 +154,10 @@
     background: white !important;
   }
 
-  /* Ensure card borders are visible */
   .border {
     border: 1px solid #ddd !important;
   }
 
-  /* Ensure text is black */
   body,
   p,
   h1,
@@ -151,12 +169,10 @@
     text-shadow: none !important;
   }
 
-  /* Force page breaks if needed */
   .page-break {
     page-break-before: always;
   }
 
-  /* Hide shadows */
   .shadow-subtle,
   .shadow-md,
   .shadow-lg {

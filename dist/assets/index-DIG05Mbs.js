@@ -24288,14 +24288,14 @@ function SummaryCards({ initialBalance, finalBalance, totalFees }) {
 		className: "grid gap-6 grid-cols-1 md:grid-cols-3",
 		children: [
 			/* @__PURE__ */ (0, import_jsx_runtime.jsxs)(Card, {
-				className: "shadow-subtle hover:shadow-lg transition-shadow duration-300 border-none",
+				className: "shadow-subtle hover:shadow-lg transition-shadow duration-300 border-none bg-card",
 				children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)(CardHeader, {
 					className: "flex flex-row items-center justify-between space-y-0 pb-2",
 					children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(CardTitle, {
 						className: "text-sm font-medium text-muted-foreground uppercase tracking-wider",
 						children: "Saldo Inicial"
 					}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
-						className: "h-8 w-8 rounded-full bg-secondary flex items-center justify-center",
+						className: "h-8 w-8 rounded-full bg-primary/20 flex items-center justify-center",
 						children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(DollarSign, { className: "h-4 w-4 text-primary" })
 					})]
 				}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(CardContent, { children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
@@ -24307,14 +24307,14 @@ function SummaryCards({ initialBalance, finalBalance, totalFees }) {
 				})] })]
 			}),
 			/* @__PURE__ */ (0, import_jsx_runtime.jsxs)(Card, {
-				className: "shadow-subtle hover:shadow-lg transition-shadow duration-300 border-none",
+				className: "shadow-subtle hover:shadow-lg transition-shadow duration-300 border-none bg-card",
 				children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)(CardHeader, {
 					className: "flex flex-row items-center justify-between space-y-0 pb-2",
 					children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(CardTitle, {
 						className: "text-sm font-medium text-muted-foreground uppercase tracking-wider",
 						children: "Saldo Final"
 					}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
-						className: `h-8 w-8 rounded-full flex items-center justify-center ${isPositive ? "bg-green-100 text-green-600" : "bg-red-100 text-red-600"}`,
+						className: `h-8 w-8 rounded-full flex items-center justify-center ${isPositive ? "bg-emerald-500/20 text-emerald-500" : "bg-red-500/20 text-red-500"}`,
 						children: isPositive ? /* @__PURE__ */ (0, import_jsx_runtime.jsx)(TrendingUp, { className: "h-4 w-4" }) : /* @__PURE__ */ (0, import_jsx_runtime.jsx)(TrendingDown, { className: "h-4 w-4" })
 					})]
 				}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(CardContent, { children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
@@ -24324,7 +24324,7 @@ function SummaryCards({ initialBalance, finalBalance, totalFees }) {
 					className: "text-xs text-muted-foreground mt-1",
 					children: [
 						/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("span", {
-							className: isPositive ? "text-green-600 font-medium" : "text-red-600 font-medium",
+							className: isPositive ? "text-emerald-500 font-medium" : "text-red-500 font-medium",
 							children: [isPositive ? "+" : "", formatCurrency(difference)]
 						}),
 						" ",
@@ -24333,15 +24333,15 @@ function SummaryCards({ initialBalance, finalBalance, totalFees }) {
 				})] })]
 			}),
 			/* @__PURE__ */ (0, import_jsx_runtime.jsxs)(Card, {
-				className: "shadow-subtle hover:shadow-lg transition-shadow duration-300 border-none",
+				className: "shadow-subtle hover:shadow-lg transition-shadow duration-300 border-none bg-card",
 				children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)(CardHeader, {
 					className: "flex flex-row items-center justify-between space-y-0 pb-2",
 					children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(CardTitle, {
 						className: "text-sm font-medium text-muted-foreground uppercase tracking-wider",
 						children: "Taxas de Cartão"
 					}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
-						className: "h-8 w-8 rounded-full bg-rose-100 flex items-center justify-center",
-						children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(CreditCard, { className: "h-4 w-4 text-rose-600" })
+						className: "h-8 w-8 rounded-full bg-rose-500/20 flex items-center justify-center",
+						children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(CreditCard, { className: "h-4 w-4 text-rose-500" })
 					})]
 				}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(CardContent, { children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
 					className: "text-3xl font-bold text-foreground",
@@ -24708,9 +24708,9 @@ function TransactionTable({ transactions }) {
 		return employees.find((e) => e.id === id)?.name || "Func. Removido";
 	};
 	return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(Card, {
-		className: "shadow-subtle border-none overflow-hidden",
+		className: "shadow-subtle border-none overflow-hidden bg-card",
 		children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(CardHeader, {
-			className: "bg-white border-b border-border/50",
+			className: "bg-card border-b border-border/50",
 			children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(CardTitle, {
 				className: "text-lg font-semibold text-foreground",
 				children: "Movimentações Financeiras"
@@ -24763,14 +24763,14 @@ function TransactionTable({ transactions }) {
 					const grossAmount = transaction.amount;
 					const netAmount = isEntry ? grossAmount - fee : grossAmount;
 					return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(TableRow, {
-						className: "hover:bg-muted/20 transition-colors",
+						className: "hover:bg-muted/20 transition-colors border-border/50",
 						children: [
 							/* @__PURE__ */ (0, import_jsx_runtime.jsx)(TableCell, {
 								className: "font-medium text-muted-foreground whitespace-nowrap",
 								children: formatDate(transaction.date)
 							}),
 							/* @__PURE__ */ (0, import_jsx_runtime.jsx)(TableCell, {
-								className: "font-medium",
+								className: "font-medium text-foreground",
 								children: transaction.description
 							}),
 							/* @__PURE__ */ (0, import_jsx_runtime.jsx)(TableCell, {
@@ -24787,7 +24787,7 @@ function TransactionTable({ transactions }) {
 							}) }),
 							/* @__PURE__ */ (0, import_jsx_runtime.jsx)(TableCell, { children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Badge, {
 								variant: "secondary",
-								className: transaction.type === "entry" ? "bg-emerald-100 text-emerald-800 hover:bg-emerald-200 border-none" : "bg-rose-100 text-rose-800 hover:bg-rose-200 border-none",
+								className: transaction.type === "entry" ? "bg-emerald-500/20 text-emerald-400 border-none" : "bg-rose-500/20 text-rose-400 border-none",
 								children: transaction.type === "entry" ? /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("span", {
 									className: "flex items-center gap-1",
 									children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(CircleArrowUp, { className: "w-3 h-3" }), " Entrada"]
@@ -24805,7 +24805,7 @@ function TransactionTable({ transactions }) {
 								children: fee > 0 ? `- ${formatCurrency(fee)}` : "-"
 							}),
 							/* @__PURE__ */ (0, import_jsx_runtime.jsxs)(TableCell, {
-								className: transaction.type === "entry" ? "text-emerald-600 text-right font-medium" : "text-rose-600 text-right font-medium",
+								className: transaction.type === "entry" ? "text-emerald-400 text-right font-medium" : "text-rose-400 text-right font-medium",
 								children: [transaction.type === "exit" ? "-" : "+", formatCurrency(netAmount)]
 							}),
 							/* @__PURE__ */ (0, import_jsx_runtime.jsx)(TableCell, {
@@ -37361,7 +37361,7 @@ function GoalWidget({ currentRevenue }) {
 	const { monthlyGoal, setMonthlyGoal } = useDataStore();
 	const percentage = Math.min(currentRevenue / monthlyGoal * 100, 100);
 	return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(Card, {
-		className: "shadow-subtle border-none bg-white",
+		className: "shadow-subtle border-none bg-card",
 		children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)(CardHeader, {
 			className: "flex flex-row items-center justify-between pb-2",
 			children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)(CardTitle, {
@@ -37391,14 +37391,14 @@ function GoalWidget({ currentRevenue }) {
 							type: "number",
 							value: monthlyGoal,
 							onChange: (e) => setMonthlyGoal(Number(e.target.value)),
-							className: "h-8 w-24 pl-6 text-xs text-right border-none bg-secondary/50 focus:bg-white transition-colors"
+							className: "h-8 w-24 pl-6 text-xs text-right border-none bg-secondary/30 focus:bg-card transition-colors text-foreground"
 						})]
 					})]
 				})]
 			}),
 			/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Progress, {
 				value: percentage,
-				className: "h-2 bg-secondary"
+				className: "h-2 bg-secondary/50"
 			}),
 			/* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
 				className: "text-xs text-muted-foreground mt-2",
@@ -37586,7 +37586,7 @@ function Index() {
 				services
 			}),
 			/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-				className: "flex flex-col md:flex-row md:items-end gap-4 bg-white p-6 rounded-xl shadow-subtle",
+				className: "flex flex-col md:flex-row md:items-end gap-4 bg-card p-6 rounded-xl shadow-subtle border border-border/50",
 				children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
 					className: "flex-1 grid grid-cols-1 md:grid-cols-2 gap-4",
 					children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
@@ -37598,7 +37598,7 @@ function Index() {
 							type: "date",
 							value: startDate,
 							onChange: (e) => setStartDate(e.target.value),
-							className: "border-border/60"
+							className: "bg-secondary/50 border-border/60"
 						})]
 					}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
 						className: "space-y-2",
@@ -37609,24 +37609,24 @@ function Index() {
 							type: "date",
 							value: endDate,
 							onChange: (e) => setEndDate(e.target.value),
-							className: "border-border/60"
+							className: "bg-secondary/50 border-border/60"
 						})]
 					})]
 				}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(Button, {
-					className: "rounded-full px-8 bg-secondary text-secondary-foreground hover:bg-secondary/80 shadow-sm",
+					className: "rounded-full px-8 bg-primary text-primary-foreground hover:bg-primary/90 shadow-sm",
 					onClick: () => {},
 					children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Search, { className: "w-4 h-4 mr-2" }), "Filtrar Período"]
 				})]
 			}),
 			/* @__PURE__ */ (0, import_jsx_runtime.jsx)(TransactionTable, { transactions: filteredTransactions }),
 			/* @__PURE__ */ (0, import_jsx_runtime.jsxs)(Card, {
-				className: "shadow-subtle border-none",
+				className: "shadow-subtle border-none bg-card",
 				children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(CardHeader, { children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(CardTitle, {
-					className: "text-lg font-semibold",
+					className: "text-lg font-semibold text-foreground",
 					children: "Observações Gerais"
 				}) }), /* @__PURE__ */ (0, import_jsx_runtime.jsx)(CardContent, { children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Textarea, {
 					placeholder: "Digite aqui observações importantes sobre o caixa do dia...",
-					className: "min-h-[120px] resize-none bg-muted/20 border-border/50 focus:border-primary/50",
+					className: "min-h-[120px] resize-none bg-secondary/50 border-border/50 focus:border-primary/50 text-foreground placeholder:text-muted-foreground/70",
 					value: notes,
 					onChange: (e) => setNotes(e.target.value)
 				}) })]
@@ -37822,11 +37822,11 @@ var AvatarFallback = import_react.forwardRef(({ className, ...props }, ref) => /
 AvatarFallback.displayName = Fallback.displayName;
 function ProductionTable({ services, quantities, onQuantityChange, readOnly = false }) {
 	return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(Card, {
-		className: "shadow-subtle border-none overflow-hidden",
+		className: "shadow-subtle border-none overflow-hidden bg-card",
 		children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(CardHeader, {
-			className: "bg-white border-b border-border/50",
+			className: "bg-card border-b border-border/50",
 			children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(CardTitle, {
-				className: "text-lg font-semibold",
+				className: "text-lg font-semibold text-foreground",
 				children: "Produção por Serviço"
 			})
 		}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)(CardContent, {
@@ -37848,13 +37848,16 @@ function ProductionTable({ services, quantities, onQuantityChange, readOnly = fa
 						})
 					] })
 				}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)(TableBody, { children: services.map((service) => /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(TableRow, {
-					className: "hover:bg-muted/20 transition-colors",
+					className: "hover:bg-muted/20 transition-colors border-border/50",
 					children: [
 						/* @__PURE__ */ (0, import_jsx_runtime.jsx)(TableCell, {
 							className: "font-medium",
 							children: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
 								className: "flex flex-col",
-								children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { children: service.name }), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+								children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+									className: "text-foreground",
+									children: service.name
+								}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
 									className: "text-xs text-muted-foreground",
 									children: service.description
 								})]
@@ -37867,7 +37870,7 @@ function ProductionTable({ services, quantities, onQuantityChange, readOnly = fa
 						/* @__PURE__ */ (0, import_jsx_runtime.jsx)(TableCell, { children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Input, {
 							type: "number",
 							min: "0",
-							className: "w-full text-center",
+							className: "w-full text-center bg-secondary/30 border-input",
 							value: quantities[service.id] || "",
 							onChange: (e) => {
 								const val = parseInt(e.target.value) || 0;
@@ -37888,7 +37891,7 @@ function ProductionTable({ services, quantities, onQuantityChange, readOnly = fa
 function FinancialSummary({ totalReceivable, paidAmount, onPaidAmountChange, status, onStatusChange, lastUpdated, readOnly = false }) {
 	const openAmount = totalReceivable - paidAmount;
 	return /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Card, {
-		className: "shadow-subtle border-none bg-white",
+		className: "shadow-subtle border-none bg-card",
 		children: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(CardContent, {
 			className: "p-6 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6",
 			children: [
@@ -37914,7 +37917,7 @@ function FinancialSummary({ totalReceivable, paidAmount, onPaidAmountChange, sta
 							children: "R$"
 						}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Input, {
 							type: "number",
-							className: "pl-9 font-semibold text-lg",
+							className: "pl-9 font-semibold text-lg bg-secondary/30 border-input",
 							value: paidAmount,
 							onChange: (e) => onPaidAmountChange(Number(e.target.value)),
 							disabled: readOnly
@@ -37927,7 +37930,7 @@ function FinancialSummary({ totalReceivable, paidAmount, onPaidAmountChange, sta
 						className: "text-muted-foreground text-xs uppercase tracking-wider font-semibold",
 						children: "Valor em Aberto"
 					}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
-						className: `text-2xl font-bold ${openAmount > 0 ? "text-red-500" : "text-green-500"}`,
+						className: `text-2xl font-bold ${openAmount > 0 ? "text-red-400" : "text-emerald-400"}`,
 						children: formatCurrency(openAmount)
 					})]
 				}),
@@ -37943,7 +37946,7 @@ function FinancialSummary({ totalReceivable, paidAmount, onPaidAmountChange, sta
 							onValueChange: (v) => onStatusChange(v),
 							disabled: readOnly,
 							children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(SelectTrigger, {
-								className: status === "paid" ? "bg-green-100 border-green-200 text-green-800" : status === "partial" ? "bg-yellow-100 border-yellow-200 text-yellow-800" : "bg-red-100 border-red-200 text-red-800",
+								className: status === "paid" ? "bg-emerald-500/20 border-emerald-500/30 text-emerald-500" : status === "partial" ? "bg-amber-500/20 border-amber-500/30 text-amber-500" : "bg-red-500/20 border-red-500/30 text-red-500",
 								children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(SelectValue, {})
 							}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(SelectContent, { children: [
 								/* @__PURE__ */ (0, import_jsx_runtime.jsx)(SelectItem, {
@@ -37963,9 +37966,8 @@ function FinancialSummary({ totalReceivable, paidAmount, onPaidAmountChange, sta
 						/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("p", {
 							className: "text-[10px] text-muted-foreground text-right mt-1",
 							children: [
-								"Atualizado em: ",
+								"Atualizado: ",
 								lastUpdated.toLocaleDateString(),
-								" às",
 								" ",
 								lastUpdated.toLocaleTimeString()
 							]
@@ -38062,7 +38064,7 @@ function EmployeePayments() {
 	return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
 		className: "space-y-6 pb-10",
 		children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-			className: "flex flex-col md:flex-row justify-between items-start md:items-center gap-4 bg-white p-6 rounded-xl shadow-subtle",
+			className: "flex flex-col md:flex-row justify-between items-start md:items-center gap-4 bg-card p-6 rounded-xl shadow-subtle border border-border/50",
 			children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
 				className: "w-full md:w-1/3",
 				children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("label", {
@@ -38072,7 +38074,7 @@ function EmployeePayments() {
 					value: selectedEmployeeId,
 					onValueChange: setSelectedEmployeeId,
 					children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(SelectTrigger, {
-						className: "w-full h-11",
+						className: "w-full h-11 bg-secondary/30",
 						children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(SelectValue, { placeholder: "Selecione..." })
 					}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)(SelectContent, { children: employees.map((emp) => /* @__PURE__ */ (0, import_jsx_runtime.jsx)(SelectItem, {
 						value: emp.id,
@@ -38084,7 +38086,7 @@ function EmployeePayments() {
 				children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)(Button, {
 					onClick: handleSave,
 					variant: "outline",
-					className: "rounded-full px-6",
+					className: "rounded-full px-6 border-primary/20 hover:bg-primary/10 hover:text-primary",
 					children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Save, { className: "w-4 h-4 mr-2" }), "Salvar Rascunho"]
 				}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(Button, {
 					onClick: handleConfirmPayment,
@@ -38097,11 +38099,11 @@ function EmployeePayments() {
 			children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
 				className: "space-y-6 lg:col-span-1",
 				children: [selectedEmployee && /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(Card, {
-					className: "shadow-subtle border-none bg-gradient-to-br from-white to-gray-50",
+					className: "shadow-subtle border-none bg-card",
 					children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)(CardHeader, {
 						className: "flex flex-row items-center gap-4",
 						children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)(Avatar, {
-							className: "w-16 h-16 border-4 border-white shadow-md",
+							className: "w-16 h-16 border-4 border-secondary shadow-md",
 							children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(AvatarImage, { src: `https://img.usecurling.com/ppl/medium?gender=female&seed=${selectedEmployee.id}` }), /* @__PURE__ */ (0, import_jsx_runtime.jsx)(AvatarFallback, { children: selectedEmployee.name.substring(0, 2) })]
 						}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(CardTitle, {
 							className: "text-xl",
@@ -38130,13 +38132,13 @@ function EmployeePayments() {
 						})]
 					}) })]
 				}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(Card, {
-					className: "shadow-subtle border-none h-full",
+					className: "shadow-subtle border-none h-full bg-card",
 					children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(CardHeader, { children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(CardTitle, {
 						className: "text-lg",
 						children: "Observações"
 					}) }), /* @__PURE__ */ (0, import_jsx_runtime.jsx)(CardContent, { children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Textarea, {
 						placeholder: "Observações sobre este pagamento...",
-						className: "min-h-[150px] resize-none bg-muted/20 focus:bg-white transition-colors",
+						className: "min-h-[150px] resize-none bg-secondary/20 focus:bg-card transition-colors border-border/50",
 						value: notes,
 						onChange: (e) => setNotes(e.target.value)
 					}) })]
@@ -38154,28 +38156,28 @@ function EmployeePayments() {
 						readOnly: false
 					}),
 					/* @__PURE__ */ (0, import_jsx_runtime.jsxs)(Card, {
-						className: "shadow-subtle border-none mb-6",
+						className: "shadow-subtle border-none mb-6 bg-card",
 						children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(CardHeader, { children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(CardTitle, {
 							className: "text-lg font-semibold",
 							children: "Origem dos Ganhos"
 						}) }), /* @__PURE__ */ (0, import_jsx_runtime.jsx)(CardContent, { children: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
 							className: "grid grid-cols-2 gap-4",
 							children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-								className: "p-4 rounded-lg bg-secondary/30 border border-secondary",
+								className: "p-4 rounded-lg bg-secondary/30 border border-border",
 								children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
 									className: "text-sm text-muted-foreground block mb-1",
 									children: "Produção Manual (Quantidade)"
 								}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
-									className: "text-xl font-bold",
+									className: "text-xl font-bold text-foreground",
 									children: formatCurrency(commissionFromQuantities)
 								})]
 							}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-								className: "p-4 rounded-lg bg-secondary/30 border border-secondary",
+								className: "p-4 rounded-lg bg-secondary/30 border border-border",
 								children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
 									className: "text-sm text-muted-foreground block mb-1",
 									children: "Via Caixa (Movimentações)"
 								}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
-									className: "text-xl font-bold",
+									className: "text-xl font-bold text-foreground",
 									children: formatCurrency(commissionFromTransactions)
 								})]
 							})]
@@ -39706,15 +39708,15 @@ function InventoryInsights({ products, transactions, timeRange = "30" }) {
 				to: `/reports/sales?days=${timeRange}`,
 				className: "block transition-transform hover:scale-105",
 				children: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(Card, {
-					className: "shadow-subtle border-none h-full cursor-pointer hover:shadow-lg transition-shadow bg-blue-50/50 hover:bg-blue-50",
+					className: "shadow-subtle border-none h-full cursor-pointer hover:shadow-lg transition-shadow bg-blue-500/10 hover:bg-blue-500/20 border-l-4 border-l-blue-500",
 					children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)(CardHeader, {
 						className: "flex flex-row items-center justify-between pb-2",
 						children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(CardTitle, {
 							className: "text-sm font-medium text-muted-foreground uppercase tracking-wider",
 							children: "Total Vendido"
 						}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
-							className: "h-8 w-8 rounded-full bg-blue-100 flex items-center justify-center",
-							children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(ShoppingCart, { className: "h-4 w-4 text-blue-600" })
+							className: "h-8 w-8 rounded-full bg-blue-500/20 flex items-center justify-center",
+							children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(ShoppingCart, { className: "h-4 w-4 text-blue-500" })
 						})]
 					}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(CardContent, { children: [
 						/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
@@ -39726,25 +39728,25 @@ function InventoryInsights({ products, transactions, timeRange = "30" }) {
 							children: "Total histórico de vendas"
 						}),
 						/* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
-							className: "text-[10px] text-blue-600 font-medium mt-2",
+							className: "text-[10px] text-blue-400 font-medium mt-2",
 							children: "Ver Detalhes →"
 						})
 					] })]
 				})
 			}),
 			/* @__PURE__ */ (0, import_jsx_runtime.jsxs)(Card, {
-				className: "shadow-subtle border-none",
+				className: "shadow-subtle border-none bg-emerald-500/10 border-l-4 border-l-emerald-500",
 				children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)(CardHeader, {
 					className: "flex flex-row items-center justify-between pb-2",
 					children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(CardTitle, {
 						className: "text-sm font-medium text-muted-foreground uppercase tracking-wider",
 						children: "Em Estoque"
 					}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
-						className: "h-8 w-8 rounded-full bg-emerald-100 flex items-center justify-center",
-						children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Package, { className: "h-4 w-4 text-emerald-600" })
+						className: "h-8 w-8 rounded-full bg-emerald-500/20 flex items-center justify-center",
+						children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Package, { className: "h-4 w-4 text-emerald-500" })
 					})]
 				}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(CardContent, { children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-					className: "text-2xl font-bold",
+					className: "text-2xl font-bold text-foreground",
 					children: [totalInStock, " un."]
 				}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
 					className: "text-xs text-muted-foreground mt-1",
@@ -39752,19 +39754,19 @@ function InventoryInsights({ products, transactions, timeRange = "30" }) {
 				})] })]
 			}),
 			/* @__PURE__ */ (0, import_jsx_runtime.jsxs)(Card, {
-				className: "shadow-subtle border-none",
+				className: "shadow-subtle border-none bg-amber-500/10 border-l-4 border-l-amber-500",
 				children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)(CardHeader, {
 					className: "flex flex-row items-center justify-between pb-2",
 					children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(CardTitle, {
 						className: "text-sm font-medium text-muted-foreground uppercase tracking-wider",
 						children: "Estoque Parado"
 					}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
-						className: "h-8 w-8 rounded-full bg-amber-100 flex items-center justify-center",
-						children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(TriangleAlert, { className: "h-4 w-4 text-amber-600" })
+						className: "h-8 w-8 rounded-full bg-amber-500/20 flex items-center justify-center",
+						children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(TriangleAlert, { className: "h-4 w-4 text-amber-500" })
 					})]
 				}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(CardContent, { children: [
 					/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-						className: "text-2xl font-bold",
+						className: "text-2xl font-bold text-foreground",
 						children: [agingStock.length, " itens"]
 					}),
 					/* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
@@ -39986,15 +39988,15 @@ function ManagerDashboard() {
 					className: "text-3xl font-bold tracking-tight text-foreground flex items-center gap-2",
 					children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(LayoutDashboard, { className: "h-8 w-8 text-primary" }), "Visão Geral"]
 				}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
-					className: "text-muted-foreground mt-2",
+					className: "text-muted-foreground mt-1",
 					children: "Acompanhe indicadores chave de performance do negócio."
 				})] }), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-					className: "flex items-center gap-2 bg-white p-1 rounded-lg border border-border shadow-sm",
+					className: "flex items-center gap-2 bg-card p-1 rounded-lg border border-border shadow-sm",
 					children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Calendar, { className: "w-4 h-4 text-muted-foreground ml-2" }), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(Select, {
 						value: timeRange,
 						onValueChange: setTimeRange,
 						children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(SelectTrigger, {
-							className: "w-[140px] border-none shadow-none h-8 focus:ring-0",
+							className: "w-[140px] border-none shadow-none h-8 focus:ring-0 bg-transparent text-foreground",
 							children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(SelectValue, { placeholder: "Período" })
 						}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(SelectContent, { children: [
 							/* @__PURE__ */ (0, import_jsx_runtime.jsx)(SelectItem, {
@@ -40027,7 +40029,7 @@ function ManagerDashboard() {
 					to: `/reports/attendance?days=${timeRange}`,
 					className: "block transition-transform hover:scale-105",
 					children: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(Card, {
-						className: "shadow-subtle border-none md:col-span-1 bg-gradient-to-br from-primary/90 to-primary text-primary-foreground h-full cursor-pointer hover:shadow-lg transition-shadow",
+						className: "shadow-subtle border-none md:col-span-1 bg-gradient-to-br from-primary to-primary/80 text-primary-foreground h-full cursor-pointer hover:shadow-lg transition-shadow",
 						children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(CardHeader, {
 							className: "pb-2",
 							children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(CardTitle, {
@@ -40128,89 +40130,93 @@ function Login() {
 		}, 1e3);
 	};
 	return /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
-		className: "min-h-screen flex items-center justify-center bg-gray-50 px-4",
+		className: "min-h-screen flex items-center justify-center bg-background px-4",
 		children: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(Card, {
-			className: "w-full max-w-md shadow-lg border-none",
-			children: [
-				/* @__PURE__ */ (0, import_jsx_runtime.jsxs)(CardHeader, {
-					className: "space-y-1 text-center",
-					children: [
-						/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
-							className: "flex justify-center mb-4",
-							children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
-								className: "w-12 h-12 bg-primary rounded-full flex items-center justify-center",
-								children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)("svg", {
-									xmlns: "http://www.w3.org/2000/svg",
-									viewBox: "0 0 24 24",
-									fill: "none",
-									stroke: "currentColor",
-									strokeWidth: "2",
-									strokeLinecap: "round",
-									strokeLinejoin: "round",
-									className: "w-8 h-8 text-white",
-									children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)("path", { d: "M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5" })
-								})
+			className: "w-full max-w-md shadow-2xl border-border/50 bg-card",
+			children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)(CardHeader, {
+				className: "space-y-2 text-center pb-8",
+				children: [
+					/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+						className: "flex justify-center mb-4",
+						children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+							className: "w-16 h-16 bg-primary/20 rounded-full flex items-center justify-center border-2 border-primary",
+							children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)("img", {
+								src: "https://img.usecurling.com/i?q=braids&color=rose",
+								alt: "Logo",
+								className: "w-10 h-10 opacity-90"
 							})
-						}),
-						/* @__PURE__ */ (0, import_jsx_runtime.jsx)(CardTitle, {
-							className: "text-2xl font-bold tracking-tight text-foreground",
-							children: "Bem-vindo de volta"
-						}),
-						/* @__PURE__ */ (0, import_jsx_runtime.jsx)(CardDescription, { children: "Entre com suas credenciais para acessar o sistema" })
-					]
-				}),
-				/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("form", {
-					onSubmit: handleLogin,
-					children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)(CardContent, {
-						className: "space-y-4",
-						children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-							className: "space-y-2",
-							children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Label, {
-								htmlFor: "email",
-								children: "Email"
-							}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Input, {
-								id: "email",
-								type: "email",
-								placeholder: "nome@exemplo.com",
-								value: email$1,
-								onChange: (e) => setEmail(e.target.value),
-								required: true,
-								className: "h-11"
-							})]
-						}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-							className: "space-y-2",
-							children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
-								className: "flex items-center justify-between",
-								children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Label, {
-									htmlFor: "password",
-									children: "Senha"
-								})
-							}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Input, {
-								id: "password",
-								type: "password",
-								placeholder: "••••••••",
-								value: password,
-								onChange: (e) => setPassword(e.target.value),
-								required: true,
-								className: "h-11"
-							})]
+						})
+					}),
+					/* @__PURE__ */ (0, import_jsx_runtime.jsx)(CardTitle, {
+						className: "text-3xl font-display font-bold tracking-tight text-foreground",
+						children: "Studio Nesamua"
+					}),
+					/* @__PURE__ */ (0, import_jsx_runtime.jsx)(CardDescription, {
+						className: "text-muted-foreground text-base",
+						children: "Sistema Financeiro & Gestão"
+					})
+				]
+			}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("form", {
+				onSubmit: handleLogin,
+				children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)(CardContent, {
+					className: "space-y-4",
+					children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+						className: "space-y-2",
+						children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Label, {
+							htmlFor: "email",
+							className: "text-foreground",
+							children: "Email"
+						}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Input, {
+							id: "email",
+							type: "email",
+							placeholder: "nome@exemplo.com",
+							value: email$1,
+							onChange: (e) => setEmail(e.target.value),
+							required: true,
+							className: "h-11 bg-secondary/50 border-input focus:border-primary"
 						})]
-					}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)(CardFooter, { children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Button, {
+					}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+						className: "space-y-2",
+						children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+							className: "flex items-center justify-between",
+							children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Label, {
+								htmlFor: "password",
+								className: "text-foreground",
+								children: "Senha"
+							})
+						}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Input, {
+							id: "password",
+							type: "password",
+							placeholder: "••••••••",
+							value: password,
+							onChange: (e) => setPassword(e.target.value),
+							required: true,
+							className: "h-11 bg-secondary/50 border-input focus:border-primary"
+						})]
+					})]
+				}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(CardFooter, {
+					className: "flex flex-col gap-4 pt-2",
+					children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Button, {
 						type: "submit",
-						className: "w-full h-11 text-base font-medium rounded-lg",
+						className: "w-full h-12 text-base font-bold rounded-lg shadow-lg shadow-primary/20 hover:shadow-primary/30 transition-all",
 						disabled: isLoading,
-						children: isLoading ? /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(import_jsx_runtime.Fragment, { children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(LoaderCircle, { className: "mr-2 h-4 w-4 animate-spin" }), "Entrando..."] }) : "Entrar"
-					}) })]
-				}),
-				/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-					className: "text-center p-6 pt-0 text-sm text-muted-foreground",
-					children: [
-						/* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", { children: "Credenciais Demo:" }),
-						/* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", { children: "Admin: admin@airbnb.com / admin" }),
-						/* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", { children: "Func: ana@airbnb.com / 123" })
-					]
-				})
-			]
+						children: isLoading ? /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(import_jsx_runtime.Fragment, { children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(LoaderCircle, { className: "mr-2 h-4 w-4 animate-spin" }), "Entrando..."] }) : "Acessar Sistema"
+					}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+						className: "text-center text-sm text-muted-foreground/60 space-y-1",
+						children: [
+							/* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", { children: "Credenciais Demo:" }),
+							/* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
+								className: "font-mono text-xs",
+								children: "Admin: admin@airbnb.com / admin"
+							}),
+							/* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
+								className: "font-mono text-xs",
+								children: "Func: ana@airbnb.com / 123"
+							})
+						]
+					})]
+				})]
+			})]
 		})
 	});
 }
@@ -40763,41 +40769,44 @@ function AppSidebar() {
 		collapsible: "icon",
 		children: [
 			/* @__PURE__ */ (0, import_jsx_runtime.jsx)(SidebarHeader, {
-				className: "h-20 flex items-center justify-center border-b border-white/10",
+				className: "h-24 flex items-center justify-center border-b border-sidebar-border bg-sidebar-background/50",
 				children: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
 					className: "flex items-center gap-3 w-full px-2 overflow-hidden",
 					children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
-						className: "flex-shrink-0 w-10 h-10 rounded-full bg-white flex items-center justify-center overflow-hidden",
+						className: "flex-shrink-0 w-12 h-12 rounded-full border-2 border-primary/20 flex items-center justify-center overflow-hidden bg-white/5",
 						children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)("img", {
 							src: "https://img.usecurling.com/i?q=braids&color=rose",
 							alt: "NesaMua Logo",
-							className: "w-8 h-8 object-cover"
+							className: "w-8 h-8 object-cover opacity-90"
 						})
 					}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-						className: cn("flex flex-col transition-all duration-200", isCollapsed ? "w-0 opacity-0" : "w-auto opacity-100"),
+						className: cn("flex flex-col transition-all duration-300", isCollapsed ? "w-0 opacity-0 translate-x-4" : "w-auto opacity-100 translate-x-0"),
 						children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
-							className: "font-bold text-lg text-white leading-tight whitespace-nowrap",
-							children: "Studio NesaMua"
+							className: "font-display font-bold text-xl text-primary leading-none tracking-tight",
+							children: "Nesamua"
 						}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
-							className: "text-xs text-white/70 whitespace-nowrap",
-							children: "Sistema Financeiro"
+							className: "text-xs text-sidebar-foreground/60 tracking-wider uppercase mt-1",
+							children: "Tranças Afro"
 						})]
 					})]
 				})
 			}),
 			/* @__PURE__ */ (0, import_jsx_runtime.jsx)(SidebarContent, { children: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(SidebarGroup, { children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(SidebarGroupLabel, {
-				className: "text-white/50",
+				className: "text-sidebar-foreground/40 mt-2",
 				children: "Menu Principal"
 			}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)(SidebarGroupContent, { children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(SidebarMenu, { children: items.map((item) => /* @__PURE__ */ (0, import_jsx_runtime.jsx)(SidebarMenuItem, { children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(SidebarMenuButton, {
 				asChild: true,
 				isActive: location.pathname === item.url,
 				tooltip: item.title,
 				size: "lg",
-				className: "text-white/80 hover:text-white hover:bg-white/10 data-[active=true]:bg-primary data-[active=true]:text-primary-foreground transition-all",
+				className: "text-sidebar-foreground/80 hover:text-primary hover:bg-sidebar-accent data-[active=true]:bg-primary data-[active=true]:text-primary-foreground transition-all duration-200",
 				children: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(Link, {
 					to: item.url,
 					className: "flex items-center gap-3",
-					children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(item.icon, { className: cn("w-5 h-5") }), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { children: item.title })]
+					children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(item.icon, { className: cn("w-5 h-5", location.pathname === item.url && "text-primary-foreground") }), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+						className: "font-medium",
+						children: item.title
+					})]
 				})
 			}) }, item.title)) }) })] }) }),
 			/* @__PURE__ */ (0, import_jsx_runtime.jsx)(SidebarRail, {})
@@ -41399,4 +41408,4 @@ var App = () => /* @__PURE__ */ (0, import_jsx_runtime.jsx)(BrowserRouter, {
 var App_default = App;
 (0, import_client.createRoot)(document.getElementById("root")).render(/* @__PURE__ */ (0, import_jsx_runtime.jsx)(App_default, {}));
 
-//# sourceMappingURL=index-BWCCPPQm.js.map
+//# sourceMappingURL=index-DIG05Mbs.js.map

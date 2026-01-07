@@ -25,9 +25,9 @@ export function ProductionTable({
   readOnly = false,
 }: ProductionTableProps) {
   return (
-    <Card className="shadow-subtle border-none overflow-hidden">
-      <CardHeader className="bg-white border-b border-border/50">
-        <CardTitle className="text-lg font-semibold">
+    <Card className="shadow-subtle border-none overflow-hidden bg-card">
+      <CardHeader className="bg-card border-b border-border/50">
+        <CardTitle className="text-lg font-semibold text-foreground">
           Produção por Serviço
         </CardTitle>
       </CardHeader>
@@ -46,11 +46,11 @@ export function ProductionTable({
               {services.map((service) => (
                 <TableRow
                   key={service.id}
-                  className="hover:bg-muted/20 transition-colors"
+                  className="hover:bg-muted/20 transition-colors border-border/50"
                 >
                   <TableCell className="font-medium">
                     <div className="flex flex-col">
-                      <span>{service.name}</span>
+                      <span className="text-foreground">{service.name}</span>
                       <span className="text-xs text-muted-foreground">
                         {service.description}
                       </span>
@@ -63,7 +63,7 @@ export function ProductionTable({
                     <Input
                       type="number"
                       min="0"
-                      className="w-full text-center"
+                      className="w-full text-center bg-secondary/30 border-input"
                       value={quantities[service.id] || ''}
                       onChange={(e) => {
                         const val = parseInt(e.target.value) || 0

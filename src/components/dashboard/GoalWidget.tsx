@@ -15,7 +15,7 @@ export function GoalWidget({ currentRevenue }: GoalWidgetProps) {
   const percentage = Math.min((currentRevenue / monthlyGoal) * 100, 100)
 
   return (
-    <Card className="shadow-subtle border-none bg-white">
+    <Card className="shadow-subtle border-none bg-card">
       <CardHeader className="flex flex-row items-center justify-between pb-2">
         <CardTitle className="text-sm font-medium text-muted-foreground uppercase tracking-wider flex items-center gap-2">
           <Target className="w-4 h-4 text-primary" />
@@ -40,12 +40,12 @@ export function GoalWidget({ currentRevenue }: GoalWidgetProps) {
                 type="number"
                 value={monthlyGoal}
                 onChange={(e) => setMonthlyGoal(Number(e.target.value))}
-                className="h-8 w-24 pl-6 text-xs text-right border-none bg-secondary/50 focus:bg-white transition-colors"
+                className="h-8 w-24 pl-6 text-xs text-right border-none bg-secondary/30 focus:bg-card transition-colors text-foreground"
               />
             </div>
           </div>
         </div>
-        <Progress value={percentage} className="h-2 bg-secondary" />
+        <Progress value={percentage} className="h-2 bg-secondary/50" />
         <p className="text-xs text-muted-foreground mt-2">
           {currentRevenue >= monthlyGoal
             ? 'Parabéns! Meta atingida!'

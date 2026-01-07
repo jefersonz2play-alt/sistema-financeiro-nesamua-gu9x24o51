@@ -32,7 +32,7 @@ export function FinancialSummary({
   const openAmount = totalReceivable - paidAmount
 
   return (
-    <Card className="shadow-subtle border-none bg-white">
+    <Card className="shadow-subtle border-none bg-card">
       <CardContent className="p-6 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
         <div className="space-y-2">
           <Label className="text-muted-foreground text-xs uppercase tracking-wider font-semibold">
@@ -53,7 +53,7 @@ export function FinancialSummary({
             </span>
             <Input
               type="number"
-              className="pl-9 font-semibold text-lg"
+              className="pl-9 font-semibold text-lg bg-secondary/30 border-input"
               value={paidAmount}
               onChange={(e) => onPaidAmountChange(Number(e.target.value))}
               disabled={readOnly}
@@ -66,7 +66,7 @@ export function FinancialSummary({
             Valor em Aberto
           </Label>
           <div
-            className={`text-2xl font-bold ${openAmount > 0 ? 'text-red-500' : 'text-green-500'}`}
+            className={`text-2xl font-bold ${openAmount > 0 ? 'text-red-400' : 'text-emerald-400'}`}
           >
             {formatCurrency(openAmount)}
           </div>
@@ -84,10 +84,10 @@ export function FinancialSummary({
             <SelectTrigger
               className={
                 status === 'paid'
-                  ? 'bg-green-100 border-green-200 text-green-800'
+                  ? 'bg-emerald-500/20 border-emerald-500/30 text-emerald-500'
                   : status === 'partial'
-                    ? 'bg-yellow-100 border-yellow-200 text-yellow-800'
-                    : 'bg-red-100 border-red-200 text-red-800'
+                    ? 'bg-amber-500/20 border-amber-500/30 text-amber-500'
+                    : 'bg-red-500/20 border-red-500/30 text-red-500'
               }
             >
               <SelectValue />
@@ -99,7 +99,7 @@ export function FinancialSummary({
             </SelectContent>
           </Select>
           <p className="text-[10px] text-muted-foreground text-right mt-1">
-            Atualizado em: {lastUpdated.toLocaleDateString()} às{' '}
+            Atualizado: {lastUpdated.toLocaleDateString()}{' '}
             {lastUpdated.toLocaleTimeString()}
           </p>
         </div>

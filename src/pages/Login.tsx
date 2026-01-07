@@ -77,36 +77,31 @@ export default function Login() {
   }
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-50 px-4">
-      <Card className="w-full max-w-md shadow-lg border-none">
-        <CardHeader className="space-y-1 text-center">
+    <div className="min-h-screen flex items-center justify-center bg-background px-4">
+      <Card className="w-full max-w-md shadow-2xl border-border/50 bg-card">
+        <CardHeader className="space-y-2 text-center pb-8">
           <div className="flex justify-center mb-4">
-            <div className="w-12 h-12 bg-primary rounded-full flex items-center justify-center">
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                strokeWidth="2"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                className="w-8 h-8 text-white"
-              >
-                <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5" />
-              </svg>
+            <div className="w-16 h-16 bg-primary/20 rounded-full flex items-center justify-center border-2 border-primary">
+              <img
+                src="https://img.usecurling.com/i?q=braids&color=rose"
+                alt="Logo"
+                className="w-10 h-10 opacity-90"
+              />
             </div>
           </div>
-          <CardTitle className="text-2xl font-bold tracking-tight text-foreground">
-            Bem-vindo de volta
+          <CardTitle className="text-3xl font-display font-bold tracking-tight text-foreground">
+            Studio Nesamua
           </CardTitle>
-          <CardDescription>
-            Entre com suas credenciais para acessar o sistema
+          <CardDescription className="text-muted-foreground text-base">
+            Sistema Financeiro & Gestão
           </CardDescription>
         </CardHeader>
         <form onSubmit={handleLogin}>
           <CardContent className="space-y-4">
             <div className="space-y-2">
-              <Label htmlFor="email">Email</Label>
+              <Label htmlFor="email" className="text-foreground">
+                Email
+              </Label>
               <Input
                 id="email"
                 type="email"
@@ -114,12 +109,14 @@ export default function Login() {
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 required
-                className="h-11"
+                className="h-11 bg-secondary/50 border-input focus:border-primary"
               />
             </div>
             <div className="space-y-2">
               <div className="flex items-center justify-between">
-                <Label htmlFor="password">Senha</Label>
+                <Label htmlFor="password" className="text-foreground">
+                  Senha
+                </Label>
               </div>
               <Input
                 id="password"
@@ -128,14 +125,14 @@ export default function Login() {
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 required
-                className="h-11"
+                className="h-11 bg-secondary/50 border-input focus:border-primary"
               />
             </div>
           </CardContent>
-          <CardFooter>
+          <CardFooter className="flex flex-col gap-4 pt-2">
             <Button
               type="submit"
-              className="w-full h-11 text-base font-medium rounded-lg"
+              className="w-full h-12 text-base font-bold rounded-lg shadow-lg shadow-primary/20 hover:shadow-primary/30 transition-all"
               disabled={isLoading}
             >
               {isLoading ? (
@@ -144,16 +141,18 @@ export default function Login() {
                   Entrando...
                 </>
               ) : (
-                'Entrar'
+                'Acessar Sistema'
               )}
             </Button>
+            <div className="text-center text-sm text-muted-foreground/60 space-y-1">
+              <p>Credenciais Demo:</p>
+              <p className="font-mono text-xs">
+                Admin: admin@airbnb.com / admin
+              </p>
+              <p className="font-mono text-xs">Func: ana@airbnb.com / 123</p>
+            </div>
           </CardFooter>
         </form>
-        <div className="text-center p-6 pt-0 text-sm text-muted-foreground">
-          <p>Credenciais Demo:</p>
-          <p>Admin: admin@airbnb.com / admin</p>
-          <p>Func: ana@airbnb.com / 123</p>
-        </div>
       </Card>
     </div>
   )

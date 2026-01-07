@@ -33,19 +33,14 @@ export default function ManagerDashboard() {
   const { transactions, products, employees } = useDataStore()
   const [timeRange, setTimeRange] = useState('30')
 
-  // Calculate Daily Averages
   const dailyAverage = useMemo(() => {
     const days = parseInt(timeRange)
     const cutoffDate = subDays(new Date(), days)
-
     const filteredTransactions = transactions.filter(
       (t) => t.type === 'entry' && new Date(t.date) >= cutoffDate,
     )
-
     const totalCount = filteredTransactions.length
-    // Prevent division by zero if range is 0 (unlikely)
     const avg = days > 0 ? totalCount / days : 0
-
     return avg.toFixed(1)
   }, [transactions, timeRange])
 
@@ -57,14 +52,14 @@ export default function ManagerDashboard() {
             <LayoutDashboard className="h-8 w-8 text-primary" />
             Visão Geral
           </h1>
-          <p className="text-muted-foreground mt-2">
+          <p className="text-muted-foreground mt-1">
             Acompanhe indicadores chave de performance do negócio.
           </p>
         </div>
-        <div className="flex items-center gap-2 bg-white p-1 rounded-lg border border-border shadow-sm">
+        <div className="flex items-center gap-2 bg-card p-1 rounded-lg border border-border shadow-sm">
           <CalendarIcon className="w-4 h-4 text-muted-foreground ml-2" />
           <Select value={timeRange} onValueChange={setTimeRange}>
-            <SelectTrigger className="w-[140px] border-none shadow-none h-8 focus:ring-0">
+            <SelectTrigger className="w-[140px] border-none shadow-none h-8 focus:ring-0 bg-transparent text-foreground">
               <SelectValue placeholder="Período" />
             </SelectTrigger>
             <SelectContent>
@@ -78,13 +73,12 @@ export default function ManagerDashboard() {
         </div>
       </div>
 
-      {/* Top Metrics Row */}
       <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
         <Link
           to={`/reports/attendance?days=${timeRange}`}
           className="block transition-transform hover:scale-105"
         >
-          <Card className="shadow-subtle border-none md:col-span-1 bg-gradient-to-br from-primary/90 to-primary text-primary-foreground h-full cursor-pointer hover:shadow-lg transition-shadow">
+          <Card className="shadow-subtle border-none md:col-span-1 bg-gradient-to-br from-primary to-primary/80 text-primary-foreground h-full cursor-pointer hover:shadow-lg transition-shadow">
             <CardHeader className="pb-2">
               <CardTitle className="text-sm font-medium uppercase tracking-wider opacity-90">
                 Média Diária
@@ -102,7 +96,6 @@ export default function ManagerDashboard() {
           </Card>
         </Link>
 
-        {/* Inventory Summary */}
         <div className="md:col-span-3">
           <InventoryInsights
             products={products}
@@ -112,9 +105,7 @@ export default function ManagerDashboard() {
         </div>
       </div>
 
-      {/* Main Content Grid */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 h-full">
-        {/* Left Column: Employee Performance */}
         <div className="space-y-6">
           <EmployeePerformance
             employees={employees}
@@ -122,8 +113,6 @@ export default function ManagerDashboard() {
             timeRange={timeRange}
           />
         </div>
-
-        {/* Right Column: Product Margins */}
         <div className="space-y-6">
           <ProductMargins products={products} />
         </div>

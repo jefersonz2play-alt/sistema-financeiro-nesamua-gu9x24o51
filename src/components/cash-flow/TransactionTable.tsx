@@ -21,9 +21,6 @@ import { Transaction, PaymentMethod } from '@/types'
 import useDataStore from '@/stores/useDataStore'
 
 export type TransactionType = 'entry' | 'exit'
-
-// Re-exporting Transaction from types to maintain compatibility if imported elsewhere,
-// or just use the one from types directly in this file.
 export type { Transaction }
 
 interface TransactionTableProps {
@@ -61,8 +58,8 @@ export function TransactionTable({ transactions }: TransactionTableProps) {
   }
 
   return (
-    <Card className="shadow-subtle border-none overflow-hidden">
-      <CardHeader className="bg-white border-b border-border/50">
+    <Card className="shadow-subtle border-none overflow-hidden bg-card">
+      <CardHeader className="bg-card border-b border-border/50">
         <CardTitle className="text-lg font-semibold text-foreground">
           Movimentações Financeiras
         </CardTitle>
@@ -108,12 +105,12 @@ export function TransactionTable({ transactions }: TransactionTableProps) {
                   return (
                     <TableRow
                       key={transaction.id}
-                      className="hover:bg-muted/20 transition-colors"
+                      className="hover:bg-muted/20 transition-colors border-border/50"
                     >
                       <TableCell className="font-medium text-muted-foreground whitespace-nowrap">
                         {formatDate(transaction.date)}
                       </TableCell>
-                      <TableCell className="font-medium">
+                      <TableCell className="font-medium text-foreground">
                         {transaction.description}
                       </TableCell>
                       <TableCell className="text-sm">
@@ -135,8 +132,8 @@ export function TransactionTable({ transactions }: TransactionTableProps) {
                           variant="secondary"
                           className={
                             transaction.type === 'entry'
-                              ? 'bg-emerald-100 text-emerald-800 hover:bg-emerald-200 border-none'
-                              : 'bg-rose-100 text-rose-800 hover:bg-rose-200 border-none'
+                              ? 'bg-emerald-500/20 text-emerald-400 border-none'
+                              : 'bg-rose-500/20 text-rose-400 border-none'
                           }
                         >
                           {transaction.type === 'entry' ? (
@@ -159,8 +156,8 @@ export function TransactionTable({ transactions }: TransactionTableProps) {
                       <TableCell
                         className={
                           transaction.type === 'entry'
-                            ? 'text-emerald-600 text-right font-medium'
-                            : 'text-rose-600 text-right font-medium'
+                            ? 'text-emerald-400 text-right font-medium'
+                            : 'text-rose-400 text-right font-medium'
                         }
                       >
                         {transaction.type === 'exit' ? '-' : '+'}
