@@ -7,6 +7,7 @@ import {
   Scissors,
   UserCheck,
   CalendarClock,
+  PieChart,
 } from 'lucide-react'
 import {
   Sidebar,
@@ -32,6 +33,11 @@ export function AppSidebar() {
   const isCollapsed = state === 'collapsed'
 
   const managerItems = [
+    {
+      title: 'Dashboard',
+      url: '/admin-dashboard',
+      icon: PieChart,
+    },
     {
       title: 'Fluxo de Caixa',
       url: '/',

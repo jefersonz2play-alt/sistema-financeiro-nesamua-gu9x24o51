@@ -61,7 +61,8 @@ export interface Product {
   brand: string
   type: string
   stock: number
-  price?: number
+  price?: number // Sale Price
+  purchasePrice?: number // Cost Price
 }
 
 export interface Customer {

@@ -10,6 +10,7 @@ import Products from './pages/Products'
 import Customers from './pages/Customers'
 import Services from './pages/Services'
 import Appointments from './pages/Appointments'
+import ManagerDashboard from './pages/ManagerDashboard'
 import Login from './pages/Login'
 import NotFound from './pages/NotFound'
 import Layout from './components/Layout'
@@ -42,6 +43,14 @@ const App = () => (
                 element={
                   <ProtectedRoute allowedRoles={['manager']}>
                     <Index />
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path="/admin-dashboard"
+                element={
+                  <ProtectedRoute allowedRoles={['manager']}>
+                    <ManagerDashboard />
                   </ProtectedRoute>
                 }
               />

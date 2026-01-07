@@ -27,7 +27,6 @@ import {
   DialogFooter,
   DialogHeader,
   DialogTitle,
-  DialogTrigger,
 } from '@/components/ui/dialog'
 import {
   Form,
@@ -51,6 +50,7 @@ import {
 import { useToast } from '@/hooks/use-toast'
 import useDataStore from '@/stores/useDataStore'
 import { Product } from '@/types'
+import { formatCurrency } from '@/lib/utils'
 
 const productSchema = z.object({
   name: z.string().min(2, 'Nome deve ter pelo menos 2 caracteres'),
@@ -60,6 +60,7 @@ const productSchema = z.object({
     message: 'O estoque deve ser um número válido.',
   }),
   price: z.string().optional(),
+  purchasePrice: z.string().optional(),
 })
 
 export default function Products() {
@@ -76,6 +77,7 @@ export default function Products() {
       type: '',
       stock: '0',
       price: '',
+      purchasePrice: '',
     },
   })
 
@@ -88,6 +90,9 @@ export default function Products() {
         type: product.type,
         stock: product.stock.toString(),
         price: product.price ? product.price.toString() : '',
+        purchasePrice: product.purchasePrice
+          ? product.purchasePrice.toString()
+          : '',
       })
     } else {
       setEditingProduct(null)
@@ -97,6 +102,7 @@ export default function Products() {
         type: '',
         stock: '0',
         price: '',
+        purchasePrice: '',
       })
     }
     setIsDialogOpen(true)
@@ -109,6 +115,9 @@ export default function Products() {
       type: values.type,
       stock: Number(values.stock),
       price: values.price ? Number(values.price) : undefined,
+      purchasePrice: values.purchasePrice
+        ? Number(values.purchasePrice)
+        : undefined,
     }
 
     if (editingProduct) {
@@ -174,6 +183,8 @@ export default function Products() {
                 <TableHead>Marca</TableHead>
                 <TableHead>Tipo</TableHead>
                 <TableHead>Estoque</TableHead>
+                <TableHead>Custo</TableHead>
+                <TableHead>Venda</TableHead>
                 <TableHead className="text-right">Ações</TableHead>
               </TableRow>
             </TableHeader>
@@ -181,7 +192,7 @@ export default function Products() {
               {products.length === 0 ? (
                 <TableRow>
                   <TableCell
-                    colSpan={5}
+                    colSpan={7}
                     className="text-center py-8 text-muted-foreground"
                   >
                     Nenhum produto cadastrado.
@@ -207,6 +218,14 @@ export default function Products() {
                       >
                         {product.stock} un.
                       </span>
+                    </TableCell>
+                    <TableCell className="text-muted-foreground text-sm">
+                      {product.purchasePrice
+                        ? formatCurrency(product.purchasePrice)
+                        : '-'}
+                    </TableCell>
+                    <TableCell className="font-medium">
+                      {product.price ? formatCurrency(product.price) : '-'}
                     </TableCell>
                     <TableCell className="text-right">
                       <div className="flex justify-end gap-2">
@@ -254,13 +273,13 @@ export default function Products() {
       </Card>
 
       <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
-        <DialogContent className="sm:max-w-[425px]">
+        <DialogContent className="sm:max-w-[550px]">
           <DialogHeader>
             <DialogTitle>
               {editingProduct ? 'Editar Produto' : 'Novo Produto'}
             </DialogTitle>
             <DialogDescription>
-              Preencha os detalhes do produto e estoque abaixo.
+              Preencha os detalhes do produto, estoque e preços abaixo.
             </DialogDescription>
           </DialogHeader>
           <Form {...form}>
@@ -306,7 +325,8 @@ export default function Products() {
                   )}
                 />
               </div>
-              <div className="grid grid-cols-2 gap-4">
+
+              <div className="grid grid-cols-3 gap-4">
                 <FormField
                   control={form.control}
                   name="stock"
@@ -322,10 +342,28 @@ export default function Products() {
                 />
                 <FormField
                   control={form.control}
+                  name="purchasePrice"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Valor Compra</FormLabel>
+                      <FormControl>
+                        <Input
+                          placeholder="0.00"
+                          type="number"
+                          step="0.01"
+                          {...field}
+                        />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+                <FormField
+                  control={form.control}
                   name="price"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>Preço (Opcional)</FormLabel>
+                      <FormLabel>Valor Venda</FormLabel>
                       <FormControl>
                         <Input
                           placeholder="0.00"

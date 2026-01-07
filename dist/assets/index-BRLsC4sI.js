@@ -19017,6 +19017,13 @@ var ChartColumn = createLucideIcon("chart-column", [
 		key: "17ska0"
 	}]
 ]);
+var ChartPie = createLucideIcon("chart-pie", [["path", {
+	d: "M21 12c.552 0 1.005-.449.95-.998a10 10 0 0 0-8.953-8.951c-.55-.055-.998.398-.998.95v8a1 1 0 0 0 1 1z",
+	key: "pzmjnu"
+}], ["path", {
+	d: "M21.21 15.89A10 10 0 1 1 8 2.83",
+	key: "k2fpak"
+}]]);
 var Check = createLucideIcon("check", [["path", {
 	d: "M20 6 9 17l-5-5",
 	key: "1gmf2c"
@@ -19204,6 +19211,10 @@ var LogOut = createLucideIcon("log-out", [
 		key: "1uf3rs"
 	}]
 ]);
+var Minus = createLucideIcon("minus", [["path", {
+	d: "M5 12h14",
+	key: "1ays0h"
+}]]);
 var Package = createLucideIcon("package", [
 	["path", {
 		d: "M11 21.73a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73z",
@@ -19296,6 +19307,24 @@ var Search = createLucideIcon("search", [["path", {
 	r: "8",
 	key: "4ej97u"
 }]]);
+var ShoppingCart = createLucideIcon("shopping-cart", [
+	["circle", {
+		cx: "8",
+		cy: "21",
+		r: "1",
+		key: "jimo8o"
+	}],
+	["circle", {
+		cx: "19",
+		cy: "21",
+		r: "1",
+		key: "13723u"
+	}],
+	["path", {
+		d: "M2.05 2.05h2l2.66 12.42a2 2 0 0 0 2 1.58h9.78a2 2 0 0 0 1.95-1.57l1.65-7.43H5.12",
+		key: "9zh506"
+	}]
+]);
 var Smartphone = createLucideIcon("smartphone", [["rect", {
 	width: "14",
 	height: "20",
@@ -19364,6 +19393,20 @@ var TrendingUp = createLucideIcon("trending-up", [["path", {
 	d: "m22 7-8.5 8.5-5-5L2 17",
 	key: "1t1m79"
 }]]);
+var TriangleAlert = createLucideIcon("triangle-alert", [
+	["path", {
+		d: "m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3",
+		key: "wmoenq"
+	}],
+	["path", {
+		d: "M12 9v4",
+		key: "juzpu7"
+	}],
+	["path", {
+		d: "M12 17h.01",
+		key: "p32p05"
+	}]
+]);
 var UserCheck = createLucideIcon("user-check", [
 	["path", {
 		d: "m16 11 2 2 4-4",
@@ -24404,7 +24447,8 @@ var INITIAL_PRODUCTS = [
 		brand: "Ser Mulher",
 		type: "Fibra",
 		stock: 50,
-		price: 35
+		price: 35,
+		purchasePrice: 18
 	},
 	{
 		id: "p2",
@@ -24412,7 +24456,8 @@ var INITIAL_PRODUCTS = [
 		brand: "Arvensis",
 		type: "Finalizador",
 		stock: 20,
-		price: 45
+		price: 45,
+		purchasePrice: 25
 	},
 	{
 		id: "p3",
@@ -24420,7 +24465,8 @@ var INITIAL_PRODUCTS = [
 		brand: "Acessórios",
 		type: "Decoração",
 		stock: 100,
-		price: 15
+		price: 15,
+		purchasePrice: 2.5
 	}
 ];
 var INITIAL_APPOINTMENTS = [{
@@ -31138,6 +31184,9 @@ function isSameYear(laterDate, earlierDate, options$1) {
 	const [laterDate_, earlierDate_] = normalizeDates(options$1?.in, laterDate, earlierDate);
 	return laterDate_.getFullYear() === earlierDate_.getFullYear();
 }
+function subDays(date$3, amount, options$1) {
+	return addDays(date$3, -amount, options$1);
+}
 function setMonth(date$3, month, options$1) {
 	const _date$1 = toDate(date$3, options$1?.in);
 	const year = _date$1.getFullYear();
@@ -37539,7 +37588,7 @@ var require_use_sync_external_store_shim_development = /* @__PURE__ */ __commonJ
 				var cachedValue = getSnapshot();
 				objectIs(value, cachedValue) || (console.error("The result of getSnapshot should be cached to avoid an infinite loop"), didWarnUncachedGetSnapshot = !0);
 			}
-			cachedValue = useState$14({ inst: {
+			cachedValue = useState$15({ inst: {
 				value,
 				getSnapshot
 			} });
@@ -37576,7 +37625,7 @@ var require_use_sync_external_store_shim_development = /* @__PURE__ */ __commonJ
 			return getSnapshot();
 		}
 		"undefined" !== typeof __REACT_DEVTOOLS_GLOBAL_HOOK__ && "function" === typeof __REACT_DEVTOOLS_GLOBAL_HOOK__.registerInternalModuleStart && __REACT_DEVTOOLS_GLOBAL_HOOK__.registerInternalModuleStart(Error());
-		var React$30 = require_react(), objectIs = "function" === typeof Object.is ? Object.is : is, useState$14 = React$30.useState, useEffect$5 = React$30.useEffect, useLayoutEffect$2 = React$30.useLayoutEffect, useDebugValue = React$30.useDebugValue, didWarnOld18Alpha = !1, didWarnUncachedGetSnapshot = !1, shim = "undefined" === typeof window || "undefined" === typeof window.document || "undefined" === typeof window.document.createElement ? useSyncExternalStore$1 : useSyncExternalStore$2;
+		var React$30 = require_react(), objectIs = "function" === typeof Object.is ? Object.is : is, useState$15 = React$30.useState, useEffect$5 = React$30.useEffect, useLayoutEffect$2 = React$30.useLayoutEffect, useDebugValue = React$30.useDebugValue, didWarnOld18Alpha = !1, didWarnUncachedGetSnapshot = !1, shim = "undefined" === typeof window || "undefined" === typeof window.document || "undefined" === typeof window.document.createElement ? useSyncExternalStore$1 : useSyncExternalStore$2;
 		exports.useSyncExternalStore = void 0 !== React$30.useSyncExternalStore ? React$30.useSyncExternalStore : shim;
 		"undefined" !== typeof __REACT_DEVTOOLS_GLOBAL_HOOK__ && "function" === typeof __REACT_DEVTOOLS_GLOBAL_HOOK__.registerInternalModuleStop && __REACT_DEVTOOLS_GLOBAL_HOOK__.registerInternalModuleStop(Error());
 	})();
@@ -38521,7 +38570,8 @@ var productSchema = object({
 	brand: string().min(2, "Marca deve ter pelo menos 2 caracteres"),
 	type: string().min(2, "Tipo deve ter pelo menos 2 caracteres"),
 	stock: string().refine((val) => !isNaN(Number(val)) && Number(val) >= 0, { message: "O estoque deve ser um número válido." }),
-	price: string().optional()
+	price: string().optional(),
+	purchasePrice: string().optional()
 });
 function Products() {
 	const { products, addProduct, updateProduct, deleteProduct } = useDataStore();
@@ -38535,7 +38585,8 @@ function Products() {
 			brand: "",
 			type: "",
 			stock: "0",
-			price: ""
+			price: "",
+			purchasePrice: ""
 		}
 	});
 	const handleOpenDialog = (product) => {
@@ -38546,7 +38597,8 @@ function Products() {
 				brand: product.brand,
 				type: product.type,
 				stock: product.stock.toString(),
-				price: product.price ? product.price.toString() : ""
+				price: product.price ? product.price.toString() : "",
+				purchasePrice: product.purchasePrice ? product.purchasePrice.toString() : ""
 			});
 		} else {
 			setEditingProduct(null);
@@ -38555,7 +38607,8 @@ function Products() {
 				brand: "",
 				type: "",
 				stock: "0",
-				price: ""
+				price: "",
+				purchasePrice: ""
 			});
 		}
 		setIsDialogOpen(true);
@@ -38566,7 +38619,8 @@ function Products() {
 			brand: values.brand,
 			type: values.type,
 			stock: Number(values.stock),
-			price: values.price ? Number(values.price) : void 0
+			price: values.price ? Number(values.price) : void 0,
+			purchasePrice: values.purchasePrice ? Number(values.purchasePrice) : void 0
 		};
 		if (editingProduct) {
 			updateProduct(editingProduct.id, productData);
@@ -38617,12 +38671,14 @@ function Products() {
 					/* @__PURE__ */ (0, import_jsx_runtime.jsx)(TableHead, { children: "Marca" }),
 					/* @__PURE__ */ (0, import_jsx_runtime.jsx)(TableHead, { children: "Tipo" }),
 					/* @__PURE__ */ (0, import_jsx_runtime.jsx)(TableHead, { children: "Estoque" }),
+					/* @__PURE__ */ (0, import_jsx_runtime.jsx)(TableHead, { children: "Custo" }),
+					/* @__PURE__ */ (0, import_jsx_runtime.jsx)(TableHead, { children: "Venda" }),
 					/* @__PURE__ */ (0, import_jsx_runtime.jsx)(TableHead, {
 						className: "text-right",
 						children: "Ações"
 					})
 				] }) }), /* @__PURE__ */ (0, import_jsx_runtime.jsx)(TableBody, { children: products.length === 0 ? /* @__PURE__ */ (0, import_jsx_runtime.jsx)(TableRow, { children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(TableCell, {
-					colSpan: 5,
+					colSpan: 7,
 					className: "text-center py-8 text-muted-foreground",
 					children: "Nenhum produto cadastrado."
 				}) }) : products.map((product) => /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(TableRow, { children: [
@@ -38639,6 +38695,14 @@ function Products() {
 						className: product.stock < 10 ? "text-red-500 font-bold" : "",
 						children: [product.stock, " un."]
 					}) }),
+					/* @__PURE__ */ (0, import_jsx_runtime.jsx)(TableCell, {
+						className: "text-muted-foreground text-sm",
+						children: product.purchasePrice ? formatCurrency(product.purchasePrice) : "-"
+					}),
+					/* @__PURE__ */ (0, import_jsx_runtime.jsx)(TableCell, {
+						className: "font-medium",
+						children: product.price ? formatCurrency(product.price) : "-"
+					}),
 					/* @__PURE__ */ (0, import_jsx_runtime.jsx)(TableCell, {
 						className: "text-right",
 						children: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
@@ -38673,8 +38737,8 @@ function Products() {
 				open: isDialogOpen,
 				onOpenChange: setIsDialogOpen,
 				children: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(DialogContent, {
-					className: "sm:max-w-[425px]",
-					children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)(DialogHeader, { children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(DialogTitle, { children: editingProduct ? "Editar Produto" : "Novo Produto" }), /* @__PURE__ */ (0, import_jsx_runtime.jsx)(DialogDescription, { children: "Preencha os detalhes do produto e estoque abaixo." })] }), /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Form, {
+					className: "sm:max-w-[550px]",
+					children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)(DialogHeader, { children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(DialogTitle, { children: editingProduct ? "Editar Produto" : "Novo Produto" }), /* @__PURE__ */ (0, import_jsx_runtime.jsx)(DialogDescription, { children: "Preencha os detalhes do produto, estoque e preços abaixo." })] }), /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Form, {
 						...form,
 						children: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("form", {
 							onSubmit: form.handleSubmit(onSubmit),
@@ -38719,32 +38783,49 @@ function Products() {
 									})]
 								}),
 								/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-									className: "grid grid-cols-2 gap-4",
-									children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(FormField, {
-										control: form.control,
-										name: "stock",
-										render: ({ field }) => /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(FormItem, { children: [
-											/* @__PURE__ */ (0, import_jsx_runtime.jsx)(FormLabel, { children: "Estoque (Qtd)" }),
-											/* @__PURE__ */ (0, import_jsx_runtime.jsx)(FormControl, { children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Input, {
-												type: "number",
-												...field
-											}) }),
-											/* @__PURE__ */ (0, import_jsx_runtime.jsx)(FormMessage, {})
-										] })
-									}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)(FormField, {
-										control: form.control,
-										name: "price",
-										render: ({ field }) => /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(FormItem, { children: [
-											/* @__PURE__ */ (0, import_jsx_runtime.jsx)(FormLabel, { children: "Preço (Opcional)" }),
-											/* @__PURE__ */ (0, import_jsx_runtime.jsx)(FormControl, { children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Input, {
-												placeholder: "0.00",
-												type: "number",
-												step: "0.01",
-												...field
-											}) }),
-											/* @__PURE__ */ (0, import_jsx_runtime.jsx)(FormMessage, {})
-										] })
-									})]
+									className: "grid grid-cols-3 gap-4",
+									children: [
+										/* @__PURE__ */ (0, import_jsx_runtime.jsx)(FormField, {
+											control: form.control,
+											name: "stock",
+											render: ({ field }) => /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(FormItem, { children: [
+												/* @__PURE__ */ (0, import_jsx_runtime.jsx)(FormLabel, { children: "Estoque (Qtd)" }),
+												/* @__PURE__ */ (0, import_jsx_runtime.jsx)(FormControl, { children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Input, {
+													type: "number",
+													...field
+												}) }),
+												/* @__PURE__ */ (0, import_jsx_runtime.jsx)(FormMessage, {})
+											] })
+										}),
+										/* @__PURE__ */ (0, import_jsx_runtime.jsx)(FormField, {
+											control: form.control,
+											name: "purchasePrice",
+											render: ({ field }) => /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(FormItem, { children: [
+												/* @__PURE__ */ (0, import_jsx_runtime.jsx)(FormLabel, { children: "Valor Compra" }),
+												/* @__PURE__ */ (0, import_jsx_runtime.jsx)(FormControl, { children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Input, {
+													placeholder: "0.00",
+													type: "number",
+													step: "0.01",
+													...field
+												}) }),
+												/* @__PURE__ */ (0, import_jsx_runtime.jsx)(FormMessage, {})
+											] })
+										}),
+										/* @__PURE__ */ (0, import_jsx_runtime.jsx)(FormField, {
+											control: form.control,
+											name: "price",
+											render: ({ field }) => /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(FormItem, { children: [
+												/* @__PURE__ */ (0, import_jsx_runtime.jsx)(FormLabel, { children: "Valor Venda" }),
+												/* @__PURE__ */ (0, import_jsx_runtime.jsx)(FormControl, { children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Input, {
+													placeholder: "0.00",
+													type: "number",
+													step: "0.01",
+													...field
+												}) }),
+												/* @__PURE__ */ (0, import_jsx_runtime.jsx)(FormMessage, {})
+											] })
+										})
+									]
 								}),
 								/* @__PURE__ */ (0, import_jsx_runtime.jsx)(DialogFooter, {
 									className: "pt-4",
@@ -39538,6 +39619,369 @@ function Appointments() {
 		})]
 	});
 }
+function InventoryInsights({ products, transactions }) {
+	const totalSold = (0, import_react.useMemo)(() => {
+		return transactions.filter((t$1) => t$1.type === "entry" && t$1.itemType === "product").reduce((sum, t$1) => sum + (t$1.quantity || 0), 0);
+	}, [transactions]);
+	const totalInStock = (0, import_react.useMemo)(() => {
+		return products.reduce((sum, p) => sum + p.stock, 0);
+	}, [products]);
+	const agingStock = (0, import_react.useMemo)(() => {
+		const thirtyDaysAgo = /* @__PURE__ */ new Date();
+		thirtyDaysAgo.setDate(thirtyDaysAgo.getDate() - 30);
+		const recentProductIds = new Set(transactions.filter((t$1) => t$1.type === "entry" && t$1.itemType === "product" && t$1.itemId && new Date(t$1.date) >= thirtyDaysAgo).map((t$1) => t$1.itemId));
+		return products.filter((p) => p.stock > 0 && !recentProductIds.has(p.id) && p.id);
+	}, [products, transactions]);
+	return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+		className: "grid gap-6 grid-cols-1 md:grid-cols-3",
+		children: [
+			/* @__PURE__ */ (0, import_jsx_runtime.jsxs)(Card, {
+				className: "shadow-subtle border-none",
+				children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)(CardHeader, {
+					className: "flex flex-row items-center justify-between pb-2",
+					children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(CardTitle, {
+						className: "text-sm font-medium text-muted-foreground uppercase tracking-wider",
+						children: "Total Vendido"
+					}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+						className: "h-8 w-8 rounded-full bg-blue-100 flex items-center justify-center",
+						children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(ShoppingCart, { className: "h-4 w-4 text-blue-600" })
+					})]
+				}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(CardContent, { children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+					className: "text-2xl font-bold",
+					children: [totalSold, " un."]
+				}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
+					className: "text-xs text-muted-foreground mt-1",
+					children: "Total histórico de vendas"
+				})] })]
+			}),
+			/* @__PURE__ */ (0, import_jsx_runtime.jsxs)(Card, {
+				className: "shadow-subtle border-none",
+				children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)(CardHeader, {
+					className: "flex flex-row items-center justify-between pb-2",
+					children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(CardTitle, {
+						className: "text-sm font-medium text-muted-foreground uppercase tracking-wider",
+						children: "Em Estoque"
+					}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+						className: "h-8 w-8 rounded-full bg-emerald-100 flex items-center justify-center",
+						children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Package, { className: "h-4 w-4 text-emerald-600" })
+					})]
+				}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(CardContent, { children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+					className: "text-2xl font-bold",
+					children: [totalInStock, " un."]
+				}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
+					className: "text-xs text-muted-foreground mt-1",
+					children: "Quantidade física disponível"
+				})] })]
+			}),
+			/* @__PURE__ */ (0, import_jsx_runtime.jsxs)(Card, {
+				className: "shadow-subtle border-none",
+				children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)(CardHeader, {
+					className: "flex flex-row items-center justify-between pb-2",
+					children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(CardTitle, {
+						className: "text-sm font-medium text-muted-foreground uppercase tracking-wider",
+						children: "Estoque Parado"
+					}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+						className: "h-8 w-8 rounded-full bg-amber-100 flex items-center justify-center",
+						children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(TriangleAlert, { className: "h-4 w-4 text-amber-600" })
+					})]
+				}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(CardContent, { children: [
+					/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+						className: "text-2xl font-bold",
+						children: [agingStock.length, " itens"]
+					}),
+					/* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
+						className: "text-xs text-muted-foreground mt-1",
+						children: "Sem vendas nos últimos 30 dias"
+					}),
+					agingStock.length > 0 && /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+						className: "mt-2 text-xs text-muted-foreground/80 truncate",
+						children: [
+							"Ex: ",
+							agingStock[0].name,
+							agingStock.length > 1 && `, ${agingStock[1].name}...`
+						]
+					})
+				] })]
+			})
+		]
+	});
+}
+function EmployeePerformance({ employees, transactions }) {
+	const stats = (0, import_react.useMemo)(() => {
+		const now = /* @__PURE__ */ new Date();
+		const currentMonth = now.getMonth();
+		const currentYear = now.getFullYear();
+		const lastMonthDate = /* @__PURE__ */ new Date();
+		lastMonthDate.setMonth(lastMonthDate.getMonth() - 1);
+		const previousMonth = lastMonthDate.getMonth();
+		const previousMonthYear = lastMonthDate.getFullYear();
+		return employees.map((emp) => {
+			const currentMonthCount = transactions.filter((t$1) => {
+				const tDate = new Date(t$1.date);
+				return t$1.employeeId === emp.id && t$1.type === "entry" && tDate.getMonth() === currentMonth && tDate.getFullYear() === currentYear;
+			}).length;
+			const prevMonthCount = transactions.filter((t$1) => {
+				const tDate = new Date(t$1.date);
+				return t$1.employeeId === emp.id && t$1.type === "entry" && tDate.getMonth() === previousMonth && tDate.getFullYear() === previousMonthYear;
+			}).length;
+			let growth = 0;
+			if (prevMonthCount > 0) growth = (currentMonthCount - prevMonthCount) / prevMonthCount * 100;
+			else if (currentMonthCount > 0) growth = 100;
+			return {
+				...emp,
+				currentMonthCount,
+				prevMonthCount,
+				growth
+			};
+		}).sort((a$1, b$1) => b$1.currentMonthCount - a$1.currentMonthCount);
+	}, [employees, transactions]);
+	const maxCount = Math.max(...stats.map((s$2) => s$2.currentMonthCount), 1);
+	return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(Card, {
+		className: "shadow-subtle border-none h-full",
+		children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)(CardHeader, { children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(CardTitle, {
+			className: "text-lg",
+			children: "Desempenho da Equipe"
+		}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)(CardDescription, { children: "Atendimentos realizados no mês atual vs anterior." })] }), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(CardContent, {
+			className: "space-y-6",
+			children: [stats.map((emp) => /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+				className: "space-y-2",
+				children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+					className: "flex items-center justify-between",
+					children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+						className: "flex items-center gap-3",
+						children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)(Avatar, {
+							className: "h-9 w-9 border border-border",
+							children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(AvatarImage, { src: `https://img.usecurling.com/ppl/thumbnail?gender=female&seed=${emp.id}` }), /* @__PURE__ */ (0, import_jsx_runtime.jsx)(AvatarFallback, { children: emp.name.substring(0, 2) })]
+						}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
+							className: "text-sm font-medium leading-none",
+							children: emp.name
+						}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("p", {
+							className: "text-xs text-muted-foreground mt-1",
+							children: [emp.currentMonthCount, " atendimentos"]
+						})] })]
+					}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+						className: "flex flex-col items-end",
+						children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+							className: "flex items-center gap-1 text-xs font-medium",
+							children: emp.growth > 0 ? /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("span", {
+								className: "text-emerald-600 flex items-center",
+								children: [
+									/* @__PURE__ */ (0, import_jsx_runtime.jsx)(TrendingUp, { className: "w-3 h-3 mr-1" }),
+									"+",
+									emp.growth.toFixed(0),
+									"%"
+								]
+							}) : emp.growth < 0 ? /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("span", {
+								className: "text-rose-600 flex items-center",
+								children: [
+									/* @__PURE__ */ (0, import_jsx_runtime.jsx)(TrendingDown, { className: "w-3 h-3 mr-1" }),
+									emp.growth.toFixed(0),
+									"%"
+								]
+							}) : /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("span", {
+								className: "text-muted-foreground flex items-center",
+								children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Minus, { className: "w-3 h-3 mr-1" }), "0%"]
+							})
+						}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
+							className: "text-[10px] text-muted-foreground",
+							children: "vs mês ant."
+						})]
+					})]
+				}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Progress, {
+					value: emp.currentMonthCount / maxCount * 100,
+					className: "h-2"
+				})]
+			}, emp.id)), stats.length === 0 && /* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
+				className: "text-sm text-center text-muted-foreground py-4",
+				children: "Nenhum dado de funcionário disponível."
+			})]
+		})]
+	});
+}
+function ProductMargins({ products }) {
+	const marginData = (0, import_react.useMemo)(() => {
+		return products.map((p) => {
+			const cost = p.purchasePrice || 0;
+			const sale = p.price || 0;
+			const profit = sale - cost;
+			const marginPercent = sale > 0 ? profit / sale * 100 : 0;
+			return {
+				...p,
+				cost,
+				sale,
+				profit,
+				marginPercent
+			};
+		}).sort((a$1, b$1) => b$1.marginPercent - a$1.marginPercent);
+	}, [products]);
+	return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(Card, {
+		className: "shadow-subtle border-none h-full",
+		children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)(CardHeader, { children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(CardTitle, {
+			className: "text-lg",
+			children: "Lucratividade de Produtos"
+		}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)(CardDescription, { children: "Análise de margens de lucro por item cadastrado." })] }), /* @__PURE__ */ (0, import_jsx_runtime.jsx)(CardContent, {
+			className: "p-0",
+			children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+				className: "overflow-auto max-h-[400px]",
+				children: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(Table, { children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(TableHeader, {
+					className: "bg-muted/30 sticky top-0 z-10",
+					children: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(TableRow, { children: [
+						/* @__PURE__ */ (0, import_jsx_runtime.jsx)(TableHead, { children: "Produto" }),
+						/* @__PURE__ */ (0, import_jsx_runtime.jsx)(TableHead, {
+							className: "text-right",
+							children: "Custo"
+						}),
+						/* @__PURE__ */ (0, import_jsx_runtime.jsx)(TableHead, {
+							className: "text-right",
+							children: "Venda"
+						}),
+						/* @__PURE__ */ (0, import_jsx_runtime.jsx)(TableHead, {
+							className: "text-right",
+							children: "Lucro"
+						}),
+						/* @__PURE__ */ (0, import_jsx_runtime.jsx)(TableHead, {
+							className: "text-right",
+							children: "Margem"
+						})
+					] })
+				}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(TableBody, { children: [marginData.map((item) => /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(TableRow, { children: [
+					/* @__PURE__ */ (0, import_jsx_runtime.jsx)(TableCell, {
+						className: "font-medium max-w-[150px] truncate",
+						children: item.name
+					}),
+					/* @__PURE__ */ (0, import_jsx_runtime.jsx)(TableCell, {
+						className: "text-right text-muted-foreground text-xs",
+						children: formatCurrency(item.cost)
+					}),
+					/* @__PURE__ */ (0, import_jsx_runtime.jsx)(TableCell, {
+						className: "text-right text-xs",
+						children: formatCurrency(item.sale)
+					}),
+					/* @__PURE__ */ (0, import_jsx_runtime.jsx)(TableCell, {
+						className: "text-right font-medium text-emerald-600 text-xs",
+						children: formatCurrency(item.profit)
+					}),
+					/* @__PURE__ */ (0, import_jsx_runtime.jsx)(TableCell, {
+						className: "text-right",
+						children: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(Badge, {
+							variant: item.marginPercent > 50 ? "default" : item.marginPercent > 30 ? "secondary" : "destructive",
+							className: "text-[10px]",
+							children: [item.marginPercent.toFixed(0), "%"]
+						})
+					})
+				] }, item.id)), marginData.length === 0 && /* @__PURE__ */ (0, import_jsx_runtime.jsx)(TableRow, { children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(TableCell, {
+					colSpan: 5,
+					className: "text-center py-6 text-muted-foreground",
+					children: "Nenhum produto cadastrado."
+				}) })] })] })
+			})
+		})]
+	});
+}
+function ManagerDashboard() {
+	const { transactions, products, employees } = useDataStore();
+	const [timeRange, setTimeRange] = (0, import_react.useState)("30");
+	const dailyAverage = (0, import_react.useMemo)(() => {
+		const days = parseInt(timeRange);
+		const cutoffDate = subDays(/* @__PURE__ */ new Date(), days);
+		const totalCount = transactions.filter((t$1) => t$1.type === "entry" && new Date(t$1.date) >= cutoffDate).length;
+		return (days > 0 ? totalCount / days : 0).toFixed(1);
+	}, [transactions, timeRange]);
+	return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+		className: "space-y-8 pb-10",
+		children: [
+			/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+				className: "flex flex-col md:flex-row justify-between items-start md:items-center gap-4",
+				children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("h1", {
+					className: "text-3xl font-bold tracking-tight text-foreground flex items-center gap-2",
+					children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(LayoutDashboard, { className: "h-8 w-8 text-primary" }), "Visão Geral"]
+				}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
+					className: "text-muted-foreground mt-2",
+					children: "Acompanhe indicadores chave de performance do negócio."
+				})] }), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+					className: "flex items-center gap-2 bg-white p-1 rounded-lg border border-border shadow-sm",
+					children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Calendar, { className: "w-4 h-4 text-muted-foreground ml-2" }), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(Select, {
+						value: timeRange,
+						onValueChange: setTimeRange,
+						children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(SelectTrigger, {
+							className: "w-[140px] border-none shadow-none h-8 focus:ring-0",
+							children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(SelectValue, { placeholder: "Período" })
+						}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(SelectContent, { children: [
+							/* @__PURE__ */ (0, import_jsx_runtime.jsx)(SelectItem, {
+								value: "7",
+								children: "Últimos 7 dias"
+							}),
+							/* @__PURE__ */ (0, import_jsx_runtime.jsx)(SelectItem, {
+								value: "15",
+								children: "Últimos 15 dias"
+							}),
+							/* @__PURE__ */ (0, import_jsx_runtime.jsx)(SelectItem, {
+								value: "30",
+								children: "Últimos 30 dias"
+							}),
+							/* @__PURE__ */ (0, import_jsx_runtime.jsx)(SelectItem, {
+								value: "60",
+								children: "Últimos 60 dias"
+							}),
+							/* @__PURE__ */ (0, import_jsx_runtime.jsx)(SelectItem, {
+								value: "90",
+								children: "Últimos 90 dias"
+							})
+						] })]
+					})]
+				})]
+			}),
+			/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+				className: "grid grid-cols-1 md:grid-cols-4 gap-6",
+				children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)(Card, {
+					className: "shadow-subtle border-none md:col-span-1 bg-gradient-to-br from-primary/90 to-primary text-primary-foreground",
+					children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(CardHeader, {
+						className: "pb-2",
+						children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(CardTitle, {
+							className: "text-sm font-medium uppercase tracking-wider opacity-90",
+							children: "Média Diária"
+						})
+					}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(CardContent, { children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+						className: "flex items-baseline gap-2",
+						children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+							className: "text-4xl font-bold",
+							children: dailyAverage
+						}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+							className: "text-sm opacity-80",
+							children: "atendimentos/dia"
+						})]
+					}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("p", {
+						className: "text-xs mt-2 opacity-70",
+						children: [
+							"Baseado nos últimos ",
+							timeRange,
+							" dias"
+						]
+					})] })]
+				}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+					className: "md:col-span-3",
+					children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(InventoryInsights, {
+						products,
+						transactions
+					})
+				})]
+			}),
+			/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+				className: "grid grid-cols-1 lg:grid-cols-2 gap-6 h-full",
+				children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+					className: "space-y-6",
+					children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(EmployeePerformance, {
+						employees,
+						transactions
+					})
+				}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+					className: "space-y-6",
+					children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(ProductMargins, { products })
+				})]
+			})
+		]
+	});
+}
 function Login() {
 	const [email$1, setEmail] = (0, import_react.useState)("");
 	const [password, setPassword] = (0, import_react.useState)("");
@@ -40173,6 +40617,11 @@ function AppSidebar() {
 	const isCollapsed = state === "collapsed";
 	const managerItems = [
 		{
+			title: "Dashboard",
+			url: "/admin-dashboard",
+			icon: ChartPie
+		},
+		{
 			title: "Fluxo de Caixa",
 			url: "/",
 			icon: ArrowLeftRight
@@ -40265,7 +40714,8 @@ function Layout() {
 	const { user, logout } = useAuthStore();
 	const getPageTitle = (pathname) => {
 		switch (pathname) {
-			case "/": return "Sistema Financeiro NesaMua - Caixa";
+			case "/": return "Fluxo de Caixa";
+			case "/admin-dashboard": return "Visão Geral do Negócio";
 			case "/payments": return "Pagamento de Funcionários";
 			case "/dashboard": return "Meu Painel";
 			case "/employees/new": return "Cadastrar Funcionário";
@@ -40376,6 +40826,13 @@ var App = () => /* @__PURE__ */ (0, import_jsx_runtime.jsx)(BrowserRouter, {
 						})
 					}),
 					/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Route, {
+						path: "/admin-dashboard",
+						element: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(ProtectedRoute, {
+							allowedRoles: ["manager"],
+							children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(ManagerDashboard, {})
+						})
+					}),
+					/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Route, {
 						path: "/payments",
 						element: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(ProtectedRoute, {
 							allowedRoles: ["manager"],
@@ -40436,4 +40893,4 @@ var App = () => /* @__PURE__ */ (0, import_jsx_runtime.jsx)(BrowserRouter, {
 var App_default = App;
 (0, import_client.createRoot)(document.getElementById("root")).render(/* @__PURE__ */ (0, import_jsx_runtime.jsx)(App_default, {}));
 
-//# sourceMappingURL=index-Zv6y0Egf.js.map
+//# sourceMappingURL=index-BRLsC4sI.js.map

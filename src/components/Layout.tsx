@@ -19,7 +19,9 @@ export default function Layout() {
   const getPageTitle = (pathname: string) => {
     switch (pathname) {
       case '/':
-        return 'Sistema Financeiro NesaMua - Caixa'
+        return 'Fluxo de Caixa'
+      case '/admin-dashboard':
+        return 'Visão Geral do Negócio'
       case '/payments':
         return 'Pagamento de Funcionários'
       case '/dashboard':

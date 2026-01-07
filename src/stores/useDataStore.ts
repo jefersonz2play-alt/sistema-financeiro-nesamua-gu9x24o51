@@ -146,6 +146,7 @@ const INITIAL_PRODUCTS: Product[] = [
     type: 'Fibra',
     stock: 50,
     price: 35.0,
+    purchasePrice: 18.0,
   },
   {
     id: 'p2',
@@ -154,6 +155,7 @@ const INITIAL_PRODUCTS: Product[] = [
     type: 'Finalizador',
     stock: 20,
     price: 45.0,
+    purchasePrice: 25.0,
   },
   {
     id: 'p3',
@@ -162,6 +164,7 @@ const INITIAL_PRODUCTS: Product[] = [
     type: 'Decoração',
     stock: 100,
     price: 15.0,
+    purchasePrice: 2.5,
   },
 ]
 
