@@ -15,9 +15,10 @@ import { useToast } from '@/hooks/use-toast'
 import { ProductionTable } from '@/components/employees/ProductionTable'
 import { FinancialSummary } from '@/components/employees/FinancialSummary'
 import useDataStore from '@/stores/useDataStore'
+import { formatCurrency } from '@/lib/utils'
 
 export default function EmployeePayments() {
-  const { employees, services, updateEmployee } = useDataStore()
+  const { employees, services, transactions, updateEmployee } = useDataStore()
   const [selectedEmployeeId, setSelectedEmployeeId] = useState<string>('')
 
   // Local state for editing before saving
@@ -59,11 +60,23 @@ export default function EmployeePayments() {
     setQuantities((prev) => ({ ...prev, [serviceId]: quantity }))
   }
 
-  const totalReceivable = useMemo(() => {
+  // Calculate commissions from static quantities
+  const commissionFromQuantities = useMemo(() => {
     return services.reduce((total, service) => {
       return total + service.payout * (quantities[service.id] || 0)
     }, 0)
   }, [quantities, services])
+
+  // Calculate commissions from linked transactions
+  const commissionFromTransactions = useMemo(() => {
+    if (!selectedEmployeeId) return 0
+    return transactions
+      .filter((t) => t.employeeId === selectedEmployeeId && t.employeePayment)
+      .reduce((sum, t) => sum + (t.employeePayment || 0), 0)
+  }, [transactions, selectedEmployeeId])
+
+  // Total Receivable is sum of both methods (Manual Quantities + Transaction Records)
+  const totalReceivable = commissionFromQuantities + commissionFromTransactions
 
   const handleSave = () => {
     if (!selectedEmployeeId) return
@@ -128,7 +141,7 @@ export default function EmployeePayments() {
         <div className="flex items-center gap-2">
           <Button
             onClick={handleSave}
-            className="rounded-full bg-primary hover:bg-primary/90 text-white px-8"
+            className="rounded-full bg-primary hover:bg-primary/90 text-primary-foreground px-8"
           >
             <Save className="w-4 h-4 mr-2" />
             Salvar Alterações
@@ -205,6 +218,34 @@ export default function EmployeePayments() {
             onStatusChange={(val) => setStatus(val)}
             lastUpdated={lastUpdated}
           />
+
+          <Card className="shadow-subtle border-none mb-6">
+            <CardHeader>
+              <CardTitle className="text-lg font-semibold">
+                Origem dos Ganhos
+              </CardTitle>
+            </CardHeader>
+            <CardContent>
+              <div className="grid grid-cols-2 gap-4">
+                <div className="p-4 rounded-lg bg-secondary/30 border border-secondary">
+                  <span className="text-sm text-muted-foreground block mb-1">
+                    Produção Manual (Quantidade)
+                  </span>
+                  <span className="text-xl font-bold">
+                    {formatCurrency(commissionFromQuantities)}
+                  </span>
+                </div>
+                <div className="p-4 rounded-lg bg-secondary/30 border border-secondary">
+                  <span className="text-sm text-muted-foreground block mb-1">
+                    Via Caixa (Movimentações)
+                  </span>
+                  <span className="text-xl font-bold">
+                    {formatCurrency(commissionFromTransactions)}
+                  </span>
+                </div>
+              </div>
+            </CardContent>
+          </Card>
 
           <ProductionTable
             services={services}

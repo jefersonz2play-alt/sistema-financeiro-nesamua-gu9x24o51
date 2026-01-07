@@ -11,6 +11,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { formatCurrency, formatDate } from '@/lib/utils'
 import { ArrowDownCircle, ArrowUpCircle } from 'lucide-react'
 import { Transaction } from '@/types'
+import useDataStore from '@/stores/useDataStore'
 
 export type TransactionType = 'entry' | 'exit'
 
@@ -23,10 +24,22 @@ interface TransactionTableProps {
 }
 
 export function TransactionTable({ transactions }: TransactionTableProps) {
+  const { customers, employees } = useDataStore()
+
+  const getCustomerName = (id?: string) => {
+    if (!id) return '-'
+    return customers.find((c) => c.id === id)?.name || 'Cliente Removido'
+  }
+
+  const getEmployeeName = (id?: string) => {
+    if (!id) return '-'
+    return employees.find((e) => e.id === id)?.name || 'Func. Removido'
+  }
+
   return (
     <Card className="shadow-subtle border-none overflow-hidden">
       <CardHeader className="bg-white border-b border-border/50">
-        <CardTitle className="text-lg font-semibold">
+        <CardTitle className="text-lg font-semibold text-foreground">
           Movimentações Financeiras
         </CardTitle>
       </CardHeader>
@@ -35,18 +48,20 @@ export function TransactionTable({ transactions }: TransactionTableProps) {
           <Table>
             <TableHeader className="bg-muted/30">
               <TableRow>
-                <TableHead className="w-[120px]">Data</TableHead>
+                <TableHead className="w-[100px]">Data</TableHead>
                 <TableHead>Descrição</TableHead>
-                <TableHead className="w-[120px]">Tipo</TableHead>
+                <TableHead>Cliente</TableHead>
+                <TableHead>Funcionário</TableHead>
+                <TableHead className="w-[100px]">Tipo</TableHead>
                 <TableHead className="text-right">Valor</TableHead>
-                <TableHead className="text-right">Saldo Após</TableHead>
+                <TableHead className="text-right">Saldo</TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>
               {transactions.length === 0 ? (
                 <TableRow>
                   <TableCell
-                    colSpan={5}
+                    colSpan={7}
                     className="h-24 text-center text-muted-foreground"
                   >
                     Nenhuma movimentação encontrada para este período.
@@ -58,19 +73,25 @@ export function TransactionTable({ transactions }: TransactionTableProps) {
                     key={transaction.id}
                     className="hover:bg-muted/20 transition-colors"
                   >
-                    <TableCell className="font-medium text-muted-foreground">
+                    <TableCell className="font-medium text-muted-foreground whitespace-nowrap">
                       {formatDate(transaction.date)}
                     </TableCell>
                     <TableCell className="font-medium">
                       {transaction.description}
+                    </TableCell>
+                    <TableCell className="text-sm">
+                      {getCustomerName(transaction.customerId)}
+                    </TableCell>
+                    <TableCell className="text-sm">
+                      {getEmployeeName(transaction.employeeId)}
                     </TableCell>
                     <TableCell>
                       <Badge
                         variant="secondary"
                         className={
                           transaction.type === 'entry'
-                            ? 'bg-green-100 text-green-800 hover:bg-green-200 border-none'
-                            : 'bg-red-100 text-red-800 hover:bg-red-200 border-none'
+                            ? 'bg-emerald-100 text-emerald-800 hover:bg-emerald-200 border-none'
+                            : 'bg-rose-100 text-rose-800 hover:bg-rose-200 border-none'
                         }
                       >
                         {transaction.type === 'entry' ? (
@@ -87,8 +108,8 @@ export function TransactionTable({ transactions }: TransactionTableProps) {
                     <TableCell
                       className={
                         transaction.type === 'entry'
-                          ? 'text-green-600 text-right font-medium'
-                          : 'text-red-600 text-right font-medium'
+                          ? 'text-emerald-600 text-right font-medium'
+                          : 'text-rose-600 text-right font-medium'
                       }
                     >
                       {transaction.type === 'exit' ? '-' : '+'}

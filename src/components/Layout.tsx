@@ -19,15 +19,21 @@ export default function Layout() {
   const getPageTitle = (pathname: string) => {
     switch (pathname) {
       case '/':
-        return 'Registro de Caixa'
+        return 'Sistema Financeiro NesaMua - Caixa'
       case '/payments':
         return 'Pagamento de Funcionários'
       case '/dashboard':
         return 'Meu Painel'
       case '/employees/new':
         return 'Cadastrar Funcionário'
+      case '/customers':
+        return 'Gestão de Clientes'
+      case '/services':
+        return 'Catálogo de Serviços'
+      case '/products':
+        return 'Controle de Estoque'
       default:
-        return 'Sistema Financeiro'
+        return 'Sistema Financeiro NesaMua'
     }
   }
 
@@ -50,7 +56,7 @@ export default function Layout() {
             <div className="flex items-center gap-4">
               <div className="flex items-center gap-3">
                 <div className="text-right hidden sm:block">
-                  <p className="text-sm font-medium leading-none">
+                  <p className="text-sm font-medium leading-none text-foreground">
                     {user?.name || 'Usuário'}
                   </p>
                   <p className="text-xs text-muted-foreground">
@@ -70,9 +76,9 @@ export default function Layout() {
                   variant="ghost"
                   size="icon"
                   onClick={handleLogout}
-                  className="ml-2"
+                  className="ml-2 hover:bg-destructive/10 hover:text-destructive"
                 >
-                  <LogOut className="w-4 h-4 text-muted-foreground" />
+                  <LogOut className="w-4 h-4" />
                 </Button>
               </div>
             </div>

@@ -17,7 +17,7 @@ import { Transaction } from '@/types'
 export default function Index() {
   const { transactions, addTransaction } = useDataStore()
   const [notes, setNotes] = useState(
-    'Verificar o recebimento do cliente X até sexta-feira.',
+    'Conferir estoque de Jumbo para o fim de semana.',
   )
   const [startDate, setStartDate] = useState('2023-10-01')
   const [endDate, setEndDate] = useState('2023-10-31')
@@ -64,6 +64,9 @@ export default function Index() {
     amount: number
     type: TransactionType
     date: Date
+    customerId?: string
+    employeeId?: string
+    employeePayment?: number
   }) => {
     const newTransaction: Transaction = {
       id: Math.random().toString(36).substr(2, 9),
@@ -72,6 +75,9 @@ export default function Index() {
       type: data.type,
       amount: data.amount,
       balanceAfter: 0, // Will be recalculated
+      customerId: data.customerId,
+      employeeId: data.employeeId,
+      employeePayment: data.employeePayment,
     }
 
     addTransaction(newTransaction)
@@ -110,7 +116,7 @@ export default function Index() {
           </div>
         </div>
         <Button
-          className="rounded-full px-8 bg-primary hover:bg-primary/90 text-white shadow-md hover:shadow-lg transition-all"
+          className="rounded-full px-8 bg-primary hover:bg-primary/90 text-primary-foreground shadow-md hover:shadow-lg transition-all"
           onClick={() => {}}
         >
           <Search className="w-4 h-4 mr-2" />

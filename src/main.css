@@ -6,77 +6,77 @@
 
 @layer base {
   :root {
-    /* Airbnb Inspired Colors */
-    --background: 0 0% 97%; /* #F7F7F7 */
-    --foreground: 0 0% 13%; /* #222222 */
+    /* NesaMua Brand Colors */
+    --background: 0 0% 98%; /* Light Background */
+    --foreground: 166 40% 10%; /* Dark Teal Text */
 
-    --card: 0 0% 100%; /* #FFFFFF */
-    --card-foreground: 0 0% 13%;
+    --card: 0 0% 100%;
+    --card-foreground: 166 40% 10%;
 
     --popover: 0 0% 100%;
-    --popover-foreground: 0 0% 13%;
+    --popover-foreground: 166 40% 10%;
 
-    --primary: 349 100% 61%; /* #FF385C (Airbnb Coral) */
-    --primary-foreground: 0 0% 100%;
+    --primary: 353 75% 78%; /* Soft Pink */
+    --primary-foreground: 166 40% 15%; /* Dark Teal on Pink */
 
-    --secondary: 0 0% 96%;
-    --secondary-foreground: 0 0% 13%;
+    --secondary: 166 30% 96%; /* Very Light Teal */
+    --secondary-foreground: 166 40% 15%;
 
-    --muted: 0 0% 96%;
-    --muted-foreground: 0 0% 44%; /* #717171 */
+    --muted: 166 20% 96%;
+    --muted-foreground: 166 20% 45%;
 
-    --accent: 0 0% 96%;
-    --accent-foreground: 0 0% 13%;
+    --accent: 353 75% 96%; /* Very Light Pink */
+    --accent-foreground: 166 40% 15%;
 
-    --destructive: 349 100% 61%;
+    --destructive: 353 75% 60%; /* Red/Pinkish Destructive */
     --destructive-foreground: 0 0% 100%;
 
-    --border: 0 0% 87%; /* #DDDDDD */
-    --input: 0 0% 87%;
-    --ring: 349 100% 61%;
+    --border: 166 20% 90%;
+    --input: 166 20% 90%;
+    --ring: 353 75% 78%;
 
     --radius: 0.75rem; /* 12px */
 
-    /* Sidebar Variables */
-    --sidebar-background: 0 0% 100%;
-    --sidebar-foreground: 0 0% 13%;
-    --sidebar-primary: 349 100% 61%;
-    --sidebar-primary-foreground: 0 0% 100%;
-    --sidebar-accent: 0 0% 97%;
-    --sidebar-accent-foreground: 349 100% 61%;
-    --sidebar-border: 0 0% 92%;
-    --sidebar-ring: 349 100% 61%;
+    /* Sidebar Variables - Dark Teal Theme */
+    --sidebar-background: 166 40% 17%; /* Dark Green/Teal from Logo */
+    --sidebar-foreground: 353 75% 95%; /* Light Pink/White Text */
+    --sidebar-primary: 353 75% 78%; /* Soft Pink Active */
+    --sidebar-primary-foreground: 166 40% 15%;
+    --sidebar-accent: 166 40% 25%; /* Lighter Green Hover */
+    --sidebar-accent-foreground: 353 75% 95%;
+    --sidebar-border: 166 40% 25%;
+    --sidebar-ring: 353 75% 78%;
   }
 
   .dark {
-    --background: 240 10% 3.9%;
-    --foreground: 0 0% 98%;
-    --card: 240 10% 3.9%;
-    --card-foreground: 0 0% 98%;
-    --popover: 240 10% 3.9%;
-    --popover-foreground: 0 0% 98%;
-    --primary: 349 100% 61%;
-    --primary-foreground: 0 0% 98%;
-    --secondary: 240 3.7% 15.9%;
-    --secondary-foreground: 0 0% 98%;
-    --muted: 240 3.7% 15.9%;
-    --muted-foreground: 240 5% 64.9%;
-    --accent: 240 3.7% 15.9%;
-    --accent-foreground: 0 0% 98%;
+    --background: 166 40% 10%;
+    --foreground: 353 75% 95%;
+    --card: 166 40% 12%;
+    --card-foreground: 353 75% 95%;
+    --popover: 166 40% 12%;
+    --popover-foreground: 353 75% 95%;
+    --primary: 353 75% 78%;
+    --primary-foreground: 166 40% 15%;
+    --secondary: 166 30% 20%;
+    --secondary-foreground: 353 75% 95%;
+    --muted: 166 30% 20%;
+    --muted-foreground: 166 20% 70%;
+    --accent: 166 30% 20%;
+    --accent-foreground: 353 75% 95%;
     --destructive: 0 62.8% 30.6%;
     --destructive-foreground: 0 0% 98%;
-    --border: 240 3.7% 15.9%;
-    --input: 240 3.7% 15.9%;
-    --ring: 240 4.9% 83.9%;
+    --border: 166 30% 20%;
+    --input: 166 30% 20%;
+    --ring: 353 75% 78%;
 
-    --sidebar-background: 240 5.9% 10%;
-    --sidebar-foreground: 240 4.8% 95.9%;
-    --sidebar-primary: 349 100% 61%;
-    --sidebar-primary-foreground: 0 0% 100%;
-    --sidebar-accent: 240 3.7% 15.9%;
-    --sidebar-accent-foreground: 240 4.8% 95.9%;
-    --sidebar-border: 240 3.7% 15.9%;
-    --sidebar-ring: 349 100% 61%;
+    --sidebar-background: 166 40% 10%;
+    --sidebar-foreground: 353 75% 95%;
+    --sidebar-primary: 353 75% 78%;
+    --sidebar-primary-foreground: 166 40% 15%;
+    --sidebar-accent: 166 30% 20%;
+    --sidebar-accent-foreground: 353 75% 95%;
+    --sidebar-border: 166 30% 20%;
+    --sidebar-ring: 353 75% 78%;
   }
 }
 

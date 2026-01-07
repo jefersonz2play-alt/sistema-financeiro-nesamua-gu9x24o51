@@ -27,58 +27,12 @@ interface DataContextType {
   deleteService: (id: string) => void
 }
 
-const INITIAL_TRANSACTIONS: Transaction[] = [
-  {
-    id: '1',
-    date: '2023-10-25',
-    description: 'Venda de Serviços',
-    type: 'entry',
-    amount: 1500.0,
-    balanceAfter: 1500.0,
-  },
-  {
-    id: '2',
-    date: '2023-10-26',
-    description: 'Pagamento de Fornecedor',
-    type: 'exit',
-    amount: 350.5,
-    balanceAfter: 1149.5,
-  },
-]
-
-const INITIAL_SERVICES: Service[] = [
-  {
-    id: 's1',
-    name: 'Corte Masculino',
-    description: 'Corte tradicional com tesoura ou máquina',
-    payout: 30,
-  },
-  {
-    id: 's2',
-    name: 'Barba',
-    description: 'Modelagem de barba com toalha quente',
-    payout: 25,
-  },
-  {
-    id: 's3',
-    name: 'Corte + Barba',
-    description: 'Combo completo',
-    payout: 50,
-  },
-  {
-    id: 's4',
-    name: 'Acabamento',
-    description: 'Pézinho e contornos',
-    payout: 15,
-  },
-]
-
 const INITIAL_EMPLOYEES: Employee[] = [
   {
     id: '1',
     name: 'Ana Silva',
     pix: '123.456.789-00',
-    email: 'ana@airbnb.com',
+    email: 'ana@nesamua.com',
     password: '123',
     quantities: { s1: 5, s2: 3 },
     paidAmount: 100,
@@ -89,33 +43,12 @@ const INITIAL_EMPLOYEES: Employee[] = [
     id: '2',
     name: 'Carlos Oliveira',
     pix: 'ana.silva@email.com',
-    email: 'carlos@airbnb.com',
+    email: 'carlos@nesamua.com',
     password: '123',
     quantities: { s3: 2 },
     paidAmount: 0,
     status: 'open',
     lastUpdated: new Date().toISOString(),
-  },
-]
-
-const INITIAL_PRODUCTS: Product[] = [
-  {
-    id: 'p1',
-    name: 'Shampoo Mentolado',
-    brand: 'FreshMen',
-    type: 'Cabelo',
-  },
-  {
-    id: 'p2',
-    name: 'Óleo para Barba',
-    brand: 'Barbudo',
-    type: 'Barba',
-  },
-  {
-    id: 'p3',
-    name: 'Pomada Modeladora',
-    brand: 'StyleFix',
-    type: 'Finalização',
   },
 ]
 
@@ -133,6 +66,76 @@ const INITIAL_CUSTOMERS: Customer[] = [
     email: 'julia@email.com',
     phone: '(11) 98888-2222',
     birthday: new Date('1995-10-20'),
+  },
+]
+
+const INITIAL_TRANSACTIONS: Transaction[] = [
+  {
+    id: '1',
+    date: '2023-10-25',
+    description: 'Tranças Box Braids',
+    type: 'entry',
+    amount: 350.0,
+    balanceAfter: 350.0,
+    customerId: 'c2',
+    employeeId: '1',
+    employeePayment: 150.0,
+  },
+  {
+    id: '2',
+    date: '2023-10-26',
+    description: 'Pagamento de Fornecedor (Cabelo)',
+    type: 'exit',
+    amount: 120.0,
+    balanceAfter: 230.0,
+  },
+]
+
+const INITIAL_SERVICES: Service[] = [
+  {
+    id: 's1',
+    name: 'Box Braids',
+    description: 'Tranças soltas com jumbo',
+    payout: 100,
+  },
+  {
+    id: 's2',
+    name: 'Nagô Desenhada',
+    description: 'Trança rasteira com desenho',
+    payout: 60,
+  },
+  {
+    id: 's3',
+    name: 'Twist',
+    description: 'Torcidinho com ou sem extensão',
+    payout: 90,
+  },
+  {
+    id: 's4',
+    name: 'Manutenção',
+    description: 'Manutenção de frente e nuca',
+    payout: 50,
+  },
+]
+
+const INITIAL_PRODUCTS: Product[] = [
+  {
+    id: 'p1',
+    name: 'Jumbo Premium',
+    brand: 'Ser Mulher',
+    type: 'Fibra',
+  },
+  {
+    id: 'p2',
+    name: 'Gel Cola',
+    brand: 'Arvensis',
+    type: 'Finalizador',
+  },
+  {
+    id: 'p3',
+    name: 'Anéis de Trança',
+    brand: 'Acessórios',
+    type: 'Decoração',
   },
 ]
 

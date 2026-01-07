@@ -9,6 +9,9 @@ export interface Transaction {
   type: TransactionType
   amount: number
   balanceAfter: number
+  customerId?: string // Linked customer
+  employeeId?: string // Linked employee
+  employeePayment?: number // Payment allocated to employee
 }
 
 export interface Employee {

@@ -23,6 +23,7 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
+  FormDescription,
 } from '@/components/ui/form'
 import { Input } from '@/components/ui/input'
 import {
@@ -39,6 +40,7 @@ import {
 } from '@/components/ui/popover'
 import { Calendar } from '@/components/ui/calendar'
 import { cn } from '@/lib/utils'
+import useDataStore from '@/stores/useDataStore'
 
 const formSchema = z.object({
   description: z.string().min(2, {
@@ -53,6 +55,9 @@ const formSchema = z.object({
   date: z.date({
     required_error: 'Selecione uma data.',
   }),
+  customerId: z.string().optional(),
+  employeeId: z.string().optional(),
+  employeePayment: z.string().optional(),
 })
 
 interface AddTransactionDialogProps {
@@ -61,11 +66,15 @@ interface AddTransactionDialogProps {
     amount: number
     type: 'entry' | 'exit'
     date: Date
+    customerId?: string
+    employeeId?: string
+    employeePayment?: number
   }) => void
 }
 
 export function AddTransactionDialog({ onAdd }: AddTransactionDialogProps) {
   const [open, setOpen] = useState(false)
+  const { customers, employees } = useDataStore()
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -74,15 +83,41 @@ export function AddTransactionDialog({ onAdd }: AddTransactionDialogProps) {
       amount: '',
       type: 'entry',
       date: new Date(),
+      customerId: undefined,
+      employeeId: undefined,
+      employeePayment: '',
     },
   })
 
+  const watchType = form.watch('type')
+
   function onSubmit(values: z.infer<typeof formSchema>) {
+    // Validation for associations if it is an entry
+    if (values.type === 'entry') {
+      if (!values.customerId) {
+        form.setError('customerId', {
+          message: 'Selecione um cliente para esta entrada.',
+        })
+        return
+      }
+      if (!values.employeeId) {
+        form.setError('employeeId', {
+          message: 'Selecione um funcionário responsável.',
+        })
+        return
+      }
+    }
+
     onAdd({
       description: values.description,
       amount: Number(values.amount),
       type: values.type,
       date: values.date,
+      customerId: values.customerId,
+      employeeId: values.employeeId,
+      employeePayment: values.employeePayment
+        ? Number(values.employeePayment)
+        : 0,
     })
     form.reset()
     setOpen(false)
@@ -91,16 +126,16 @@ export function AddTransactionDialog({ onAdd }: AddTransactionDialogProps) {
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
-        <Button className="rounded-full shadow-lg hover:shadow-xl transition-all duration-300 gap-2 h-12 px-6">
+        <Button className="rounded-full shadow-lg hover:shadow-xl transition-all duration-300 gap-2 h-12 px-6 bg-primary text-primary-foreground hover:bg-primary/90">
           <Plus className="w-5 h-5" />
-          Adicionar Movimentação
+          Nova Movimentação
         </Button>
       </DialogTrigger>
-      <DialogContent className="sm:max-w-[425px] rounded-xl">
+      <DialogContent className="sm:max-w-[500px] rounded-xl max-h-[90vh] overflow-y-auto">
         <DialogHeader>
           <DialogTitle>Nova Movimentação</DialogTitle>
           <DialogDescription>
-            Adicione uma nova entrada ou saída ao fluxo de caixa.
+            Registre uma entrada de serviço ou saída de caixa.
           </DialogDescription>
         </DialogHeader>
         <Form {...form}>
@@ -110,7 +145,7 @@ export function AddTransactionDialog({ onAdd }: AddTransactionDialogProps) {
               name="type"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Tipo</FormLabel>
+                  <FormLabel>Tipo de Movimentação</FormLabel>
                   <Select
                     onValueChange={field.onChange}
                     defaultValue={field.value}
@@ -121,14 +156,74 @@ export function AddTransactionDialog({ onAdd }: AddTransactionDialogProps) {
                       </SelectTrigger>
                     </FormControl>
                     <SelectContent>
-                      <SelectItem value="entry">Entrada</SelectItem>
-                      <SelectItem value="exit">Saída</SelectItem>
+                      <SelectItem value="entry">Entrada (Serviço)</SelectItem>
+                      <SelectItem value="exit">Saída (Despesa)</SelectItem>
                     </SelectContent>
                   </Select>
                   <FormMessage />
                 </FormItem>
               )}
             />
+
+            {watchType === 'entry' && (
+              <div className="grid grid-cols-2 gap-4">
+                <FormField
+                  control={form.control}
+                  name="customerId"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Cliente</FormLabel>
+                      <Select
+                        onValueChange={field.onChange}
+                        defaultValue={field.value}
+                      >
+                        <FormControl>
+                          <SelectTrigger>
+                            <SelectValue placeholder="Selecione..." />
+                          </SelectTrigger>
+                        </FormControl>
+                        <SelectContent>
+                          {customers.map((c) => (
+                            <SelectItem key={c.id} value={c.id}>
+                              {c.name}
+                            </SelectItem>
+                          ))}
+                        </SelectContent>
+                      </Select>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+                <FormField
+                  control={form.control}
+                  name="employeeId"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Funcionário</FormLabel>
+                      <Select
+                        onValueChange={field.onChange}
+                        defaultValue={field.value}
+                      >
+                        <FormControl>
+                          <SelectTrigger>
+                            <SelectValue placeholder="Selecione..." />
+                          </SelectTrigger>
+                        </FormControl>
+                        <SelectContent>
+                          {employees.map((e) => (
+                            <SelectItem key={e.id} value={e.id}>
+                              {e.name}
+                            </SelectItem>
+                          ))}
+                        </SelectContent>
+                      </Select>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+              </div>
+            )}
+
             <FormField
               control={form.control}
               name="description"
@@ -136,30 +231,58 @@ export function AddTransactionDialog({ onAdd }: AddTransactionDialogProps) {
                 <FormItem>
                   <FormLabel>Descrição</FormLabel>
                   <FormControl>
-                    <Input placeholder="Ex: Venda de produtos" {...field} />
+                    <Input placeholder="Ex: Box Braids Jumbo" {...field} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
               )}
             />
-            <FormField
-              control={form.control}
-              name="amount"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Valor (R$)</FormLabel>
-                  <FormControl>
-                    <Input
-                      placeholder="0.00"
-                      type="number"
-                      step="0.01"
-                      {...field}
-                    />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
+
+            <div className="grid grid-cols-2 gap-4">
+              <FormField
+                control={form.control}
+                name="amount"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Valor Total (R$)</FormLabel>
+                    <FormControl>
+                      <Input
+                        placeholder="0.00"
+                        type="number"
+                        step="0.01"
+                        {...field}
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+
+              {watchType === 'entry' && (
+                <FormField
+                  control={form.control}
+                  name="employeePayment"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Repasse (R$)</FormLabel>
+                      <FormControl>
+                        <Input
+                          placeholder="0.00"
+                          type="number"
+                          step="0.01"
+                          {...field}
+                        />
+                      </FormControl>
+                      <FormDescription className="text-xs">
+                        Valor pago ao funcionário.
+                      </FormDescription>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
               )}
-            />
+            </div>
+
             <FormField
               control={form.control}
               name="date"
@@ -200,7 +323,7 @@ export function AddTransactionDialog({ onAdd }: AddTransactionDialogProps) {
             />
             <DialogFooter className="pt-4">
               <Button type="submit" className="w-full rounded-full">
-                Salvar Movimentação
+                Registrar Movimentação
               </Button>
             </DialogFooter>
           </form>

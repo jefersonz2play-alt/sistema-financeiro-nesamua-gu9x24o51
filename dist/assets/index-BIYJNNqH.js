@@ -18905,13 +18905,6 @@ var Calendar = createLucideIcon("calendar", [
 		key: "8toen8"
 	}]
 ]);
-var ChartPie = createLucideIcon("chart-pie", [["path", {
-	d: "M21 12c.552 0 1.005-.449.95-.998a10 10 0 0 0-8.953-8.951c-.55-.055-.998.398-.998.95v8a1 1 0 0 0 1 1z",
-	key: "pzmjnu"
-}], ["path", {
-	d: "M21.21 15.89A10 10 0 1 1 8 2.83",
-	key: "k2fpak"
-}]]);
 var Check = createLucideIcon("check", [["path", {
 	d: "M20 6 9 17l-5-5",
 	key: "1gmf2c"
@@ -24104,13 +24097,203 @@ function Badge({ className, variant, ...props }) {
 		...props
 	});
 }
+var INITIAL_EMPLOYEES = [{
+	id: "1",
+	name: "Ana Silva",
+	pix: "123.456.789-00",
+	email: "ana@nesamua.com",
+	password: "123",
+	quantities: {
+		s1: 5,
+		s2: 3
+	},
+	paidAmount: 100,
+	status: "partial",
+	lastUpdated: (/* @__PURE__ */ new Date()).toISOString()
+}, {
+	id: "2",
+	name: "Carlos Oliveira",
+	pix: "ana.silva@email.com",
+	email: "carlos@nesamua.com",
+	password: "123",
+	quantities: { s3: 2 },
+	paidAmount: 0,
+	status: "open",
+	lastUpdated: (/* @__PURE__ */ new Date()).toISOString()
+}];
+var INITIAL_CUSTOMERS = [{
+	id: "c1",
+	name: "Roberto Santos",
+	email: "roberto@email.com",
+	phone: "(11) 99999-1111",
+	birthday: /* @__PURE__ */ new Date("1990-05-15")
+}, {
+	id: "c2",
+	name: "Julia Lima",
+	email: "julia@email.com",
+	phone: "(11) 98888-2222",
+	birthday: /* @__PURE__ */ new Date("1995-10-20")
+}];
+var INITIAL_TRANSACTIONS = [{
+	id: "1",
+	date: "2023-10-25",
+	description: "Tranças Box Braids",
+	type: "entry",
+	amount: 350,
+	balanceAfter: 350,
+	customerId: "c2",
+	employeeId: "1",
+	employeePayment: 150
+}, {
+	id: "2",
+	date: "2023-10-26",
+	description: "Pagamento de Fornecedor (Cabelo)",
+	type: "exit",
+	amount: 120,
+	balanceAfter: 230
+}];
+var INITIAL_SERVICES = [
+	{
+		id: "s1",
+		name: "Box Braids",
+		description: "Tranças soltas com jumbo",
+		payout: 100
+	},
+	{
+		id: "s2",
+		name: "Nagô Desenhada",
+		description: "Trança rasteira com desenho",
+		payout: 60
+	},
+	{
+		id: "s3",
+		name: "Twist",
+		description: "Torcidinho com ou sem extensão",
+		payout: 90
+	},
+	{
+		id: "s4",
+		name: "Manutenção",
+		description: "Manutenção de frente e nuca",
+		payout: 50
+	}
+];
+var INITIAL_PRODUCTS = [
+	{
+		id: "p1",
+		name: "Jumbo Premium",
+		brand: "Ser Mulher",
+		type: "Fibra"
+	},
+	{
+		id: "p2",
+		name: "Gel Cola",
+		brand: "Arvensis",
+		type: "Finalizador"
+	},
+	{
+		id: "p3",
+		name: "Anéis de Trança",
+		brand: "Acessórios",
+		type: "Decoração"
+	}
+];
+var DataContext = (0, import_react.createContext)(void 0);
+function DataProvider({ children }) {
+	const [transactions, setTransactions] = (0, import_react.useState)(INITIAL_TRANSACTIONS);
+	const [employees, setEmployees] = (0, import_react.useState)(INITIAL_EMPLOYEES);
+	const [products, setProducts] = (0, import_react.useState)(INITIAL_PRODUCTS);
+	const [customers, setCustomers] = (0, import_react.useState)(INITIAL_CUSTOMERS);
+	const [services, setServices] = (0, import_react.useState)(INITIAL_SERVICES);
+	const addTransaction = (transaction) => {
+		setTransactions((prev) => [...prev, transaction]);
+	};
+	const addEmployee = (employee) => {
+		setEmployees((prev) => [...prev, employee]);
+	};
+	const updateEmployee = (id, data) => {
+		setEmployees((prev) => prev.map((emp) => emp.id === id ? {
+			...emp,
+			...data
+		} : emp));
+	};
+	const addProduct = (product) => {
+		setProducts((prev) => [...prev, product]);
+	};
+	const updateProduct = (id, data) => {
+		setProducts((prev) => prev.map((p) => p.id === id ? {
+			...p,
+			...data
+		} : p));
+	};
+	const deleteProduct = (id) => {
+		setProducts((prev) => prev.filter((p) => p.id !== id));
+	};
+	const addCustomer = (customer) => {
+		setCustomers((prev) => [...prev, customer]);
+	};
+	const updateCustomer = (id, data) => {
+		setCustomers((prev) => prev.map((c) => c.id === id ? {
+			...c,
+			...data
+		} : c));
+	};
+	const deleteCustomer = (id) => {
+		setCustomers((prev) => prev.filter((c) => c.id !== id));
+	};
+	const addService = (service) => {
+		setServices((prev) => [...prev, service]);
+	};
+	const updateService = (id, data) => {
+		setServices((prev) => prev.map((s$2) => s$2.id === id ? {
+			...s$2,
+			...data
+		} : s$2));
+	};
+	const deleteService = (id) => {
+		setServices((prev) => prev.filter((s$2) => s$2.id !== id));
+	};
+	return (0, import_react.createElement)(DataContext.Provider, { value: {
+		transactions,
+		employees,
+		products,
+		customers,
+		services,
+		addTransaction,
+		addEmployee,
+		updateEmployee,
+		addProduct,
+		updateProduct,
+		deleteProduct,
+		addCustomer,
+		updateCustomer,
+		deleteCustomer,
+		addService,
+		updateService,
+		deleteService
+	} }, children);
+}
+function useDataStore() {
+	const context = (0, import_react.useContext)(DataContext);
+	if (!context) throw new Error("useDataStore must be used within a DataProvider");
+	return context;
+}
 function TransactionTable({ transactions }) {
+	const { customers, employees } = useDataStore();
+	const getCustomerName = (id) => {
+		if (!id) return "-";
+		return customers.find((c) => c.id === id)?.name || "Cliente Removido";
+	};
+	const getEmployeeName = (id) => {
+		if (!id) return "-";
+		return employees.find((e) => e.id === id)?.name || "Func. Removido";
+	};
 	return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(Card, {
 		className: "shadow-subtle border-none overflow-hidden",
 		children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(CardHeader, {
 			className: "bg-white border-b border-border/50",
 			children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(CardTitle, {
-				className: "text-lg font-semibold",
+				className: "text-lg font-semibold text-foreground",
 				children: "Movimentações Financeiras"
 			})
 		}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)(CardContent, {
@@ -24121,12 +24304,14 @@ function TransactionTable({ transactions }) {
 					className: "bg-muted/30",
 					children: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(TableRow, { children: [
 						/* @__PURE__ */ (0, import_jsx_runtime.jsx)(TableHead, {
-							className: "w-[120px]",
+							className: "w-[100px]",
 							children: "Data"
 						}),
 						/* @__PURE__ */ (0, import_jsx_runtime.jsx)(TableHead, { children: "Descrição" }),
+						/* @__PURE__ */ (0, import_jsx_runtime.jsx)(TableHead, { children: "Cliente" }),
+						/* @__PURE__ */ (0, import_jsx_runtime.jsx)(TableHead, { children: "Funcionário" }),
 						/* @__PURE__ */ (0, import_jsx_runtime.jsx)(TableHead, {
-							className: "w-[120px]",
+							className: "w-[100px]",
 							children: "Tipo"
 						}),
 						/* @__PURE__ */ (0, import_jsx_runtime.jsx)(TableHead, {
@@ -24135,27 +24320,35 @@ function TransactionTable({ transactions }) {
 						}),
 						/* @__PURE__ */ (0, import_jsx_runtime.jsx)(TableHead, {
 							className: "text-right",
-							children: "Saldo Após"
+							children: "Saldo"
 						})
 					] })
 				}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)(TableBody, { children: transactions.length === 0 ? /* @__PURE__ */ (0, import_jsx_runtime.jsx)(TableRow, { children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(TableCell, {
-					colSpan: 5,
+					colSpan: 7,
 					className: "h-24 text-center text-muted-foreground",
 					children: "Nenhuma movimentação encontrada para este período."
 				}) }) : transactions.map((transaction) => /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(TableRow, {
 					className: "hover:bg-muted/20 transition-colors",
 					children: [
 						/* @__PURE__ */ (0, import_jsx_runtime.jsx)(TableCell, {
-							className: "font-medium text-muted-foreground",
+							className: "font-medium text-muted-foreground whitespace-nowrap",
 							children: formatDate(transaction.date)
 						}),
 						/* @__PURE__ */ (0, import_jsx_runtime.jsx)(TableCell, {
 							className: "font-medium",
 							children: transaction.description
 						}),
+						/* @__PURE__ */ (0, import_jsx_runtime.jsx)(TableCell, {
+							className: "text-sm",
+							children: getCustomerName(transaction.customerId)
+						}),
+						/* @__PURE__ */ (0, import_jsx_runtime.jsx)(TableCell, {
+							className: "text-sm",
+							children: getEmployeeName(transaction.employeeId)
+						}),
 						/* @__PURE__ */ (0, import_jsx_runtime.jsx)(TableCell, { children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Badge, {
 							variant: "secondary",
-							className: transaction.type === "entry" ? "bg-green-100 text-green-800 hover:bg-green-200 border-none" : "bg-red-100 text-red-800 hover:bg-red-200 border-none",
+							className: transaction.type === "entry" ? "bg-emerald-100 text-emerald-800 hover:bg-emerald-200 border-none" : "bg-rose-100 text-rose-800 hover:bg-rose-200 border-none",
 							children: transaction.type === "entry" ? /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("span", {
 								className: "flex items-center gap-1",
 								children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(CircleArrowUp, { className: "w-3 h-3" }), " Entrada"]
@@ -24165,7 +24358,7 @@ function TransactionTable({ transactions }) {
 							})
 						}) }),
 						/* @__PURE__ */ (0, import_jsx_runtime.jsxs)(TableCell, {
-							className: transaction.type === "entry" ? "text-green-600 text-right font-medium" : "text-red-600 text-right font-medium",
+							className: transaction.type === "entry" ? "text-emerald-600 text-right font-medium" : "text-rose-600 text-right font-medium",
 							children: [transaction.type === "exit" ? "-" : "+", formatCurrency(transaction.amount)]
 						}),
 						/* @__PURE__ */ (0, import_jsx_runtime.jsx)(TableCell, {
@@ -36122,25 +36315,46 @@ var formSchema = object({
 	description: string().min(2, { message: "A descrição deve ter pelo menos 2 caracteres." }),
 	amount: string().refine((val) => !isNaN(Number(val)) && Number(val) > 0, { message: "O valor deve ser um número positivo." }),
 	type: _enum(["entry", "exit"], { required_error: "Selecione o tipo de movimentação." }),
-	date: date({ required_error: "Selecione uma data." })
+	date: date({ required_error: "Selecione uma data." }),
+	customerId: string().optional(),
+	employeeId: string().optional(),
+	employeePayment: string().optional()
 });
 function AddTransactionDialog({ onAdd }) {
 	const [open, setOpen] = (0, import_react.useState)(false);
+	const { customers, employees } = useDataStore();
 	const form = useForm({
 		resolver: a(formSchema),
 		defaultValues: {
 			description: "",
 			amount: "",
 			type: "entry",
-			date: /* @__PURE__ */ new Date()
+			date: /* @__PURE__ */ new Date(),
+			customerId: void 0,
+			employeeId: void 0,
+			employeePayment: ""
 		}
 	});
+	const watchType = form.watch("type");
 	function onSubmit(values) {
+		if (values.type === "entry") {
+			if (!values.customerId) {
+				form.setError("customerId", { message: "Selecione um cliente para esta entrada." });
+				return;
+			}
+			if (!values.employeeId) {
+				form.setError("employeeId", { message: "Selecione um funcionário responsável." });
+				return;
+			}
+		}
 		onAdd({
 			description: values.description,
 			amount: Number(values.amount),
 			type: values.type,
-			date: values.date
+			date: values.date,
+			customerId: values.customerId,
+			employeeId: values.employeeId,
+			employeePayment: values.employeePayment ? Number(values.employeePayment) : 0
 		});
 		form.reset();
 		setOpen(false);
@@ -36151,12 +36365,12 @@ function AddTransactionDialog({ onAdd }) {
 		children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(DialogTrigger, {
 			asChild: true,
 			children: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(Button, {
-				className: "rounded-full shadow-lg hover:shadow-xl transition-all duration-300 gap-2 h-12 px-6",
-				children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Plus, { className: "w-5 h-5" }), "Adicionar Movimentação"]
+				className: "rounded-full shadow-lg hover:shadow-xl transition-all duration-300 gap-2 h-12 px-6 bg-primary text-primary-foreground hover:bg-primary/90",
+				children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Plus, { className: "w-5 h-5" }), "Nova Movimentação"]
 			})
 		}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(DialogContent, {
-			className: "sm:max-w-[425px] rounded-xl",
-			children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)(DialogHeader, { children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(DialogTitle, { children: "Nova Movimentação" }), /* @__PURE__ */ (0, import_jsx_runtime.jsx)(DialogDescription, { children: "Adicione uma nova entrada ou saída ao fluxo de caixa." })] }), /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Form, {
+			className: "sm:max-w-[500px] rounded-xl max-h-[90vh] overflow-y-auto",
+			children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)(DialogHeader, { children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(DialogTitle, { children: "Nova Movimentação" }), /* @__PURE__ */ (0, import_jsx_runtime.jsx)(DialogDescription, { children: "Registre uma entrada de serviço ou saída de caixa." })] }), /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Form, {
 				...form,
 				children: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("form", {
 					onSubmit: form.handleSubmit(onSubmit),
@@ -36166,20 +36380,54 @@ function AddTransactionDialog({ onAdd }) {
 							control: form.control,
 							name: "type",
 							render: ({ field }) => /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(FormItem, { children: [
-								/* @__PURE__ */ (0, import_jsx_runtime.jsx)(FormLabel, { children: "Tipo" }),
+								/* @__PURE__ */ (0, import_jsx_runtime.jsx)(FormLabel, { children: "Tipo de Movimentação" }),
 								/* @__PURE__ */ (0, import_jsx_runtime.jsxs)(Select, {
 									onValueChange: field.onChange,
 									defaultValue: field.value,
 									children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(FormControl, { children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(SelectTrigger, { children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(SelectValue, { placeholder: "Selecione o tipo" }) }) }), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(SelectContent, { children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(SelectItem, {
 										value: "entry",
-										children: "Entrada"
+										children: "Entrada (Serviço)"
 									}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)(SelectItem, {
 										value: "exit",
-										children: "Saída"
+										children: "Saída (Despesa)"
 									})] })]
 								}),
 								/* @__PURE__ */ (0, import_jsx_runtime.jsx)(FormMessage, {})
 							] })
+						}),
+						watchType === "entry" && /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+							className: "grid grid-cols-2 gap-4",
+							children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(FormField, {
+								control: form.control,
+								name: "customerId",
+								render: ({ field }) => /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(FormItem, { children: [
+									/* @__PURE__ */ (0, import_jsx_runtime.jsx)(FormLabel, { children: "Cliente" }),
+									/* @__PURE__ */ (0, import_jsx_runtime.jsxs)(Select, {
+										onValueChange: field.onChange,
+										defaultValue: field.value,
+										children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(FormControl, { children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(SelectTrigger, { children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(SelectValue, { placeholder: "Selecione..." }) }) }), /* @__PURE__ */ (0, import_jsx_runtime.jsx)(SelectContent, { children: customers.map((c) => /* @__PURE__ */ (0, import_jsx_runtime.jsx)(SelectItem, {
+											value: c.id,
+											children: c.name
+										}, c.id)) })]
+									}),
+									/* @__PURE__ */ (0, import_jsx_runtime.jsx)(FormMessage, {})
+								] })
+							}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)(FormField, {
+								control: form.control,
+								name: "employeeId",
+								render: ({ field }) => /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(FormItem, { children: [
+									/* @__PURE__ */ (0, import_jsx_runtime.jsx)(FormLabel, { children: "Funcionário" }),
+									/* @__PURE__ */ (0, import_jsx_runtime.jsxs)(Select, {
+										onValueChange: field.onChange,
+										defaultValue: field.value,
+										children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(FormControl, { children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(SelectTrigger, { children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(SelectValue, { placeholder: "Selecione..." }) }) }), /* @__PURE__ */ (0, import_jsx_runtime.jsx)(SelectContent, { children: employees.map((e) => /* @__PURE__ */ (0, import_jsx_runtime.jsx)(SelectItem, {
+											value: e.id,
+											children: e.name
+										}, e.id)) })]
+									}),
+									/* @__PURE__ */ (0, import_jsx_runtime.jsx)(FormMessage, {})
+								] })
+							})]
 						}),
 						/* @__PURE__ */ (0, import_jsx_runtime.jsx)(FormField, {
 							control: form.control,
@@ -36187,25 +36435,45 @@ function AddTransactionDialog({ onAdd }) {
 							render: ({ field }) => /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(FormItem, { children: [
 								/* @__PURE__ */ (0, import_jsx_runtime.jsx)(FormLabel, { children: "Descrição" }),
 								/* @__PURE__ */ (0, import_jsx_runtime.jsx)(FormControl, { children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Input, {
-									placeholder: "Ex: Venda de produtos",
+									placeholder: "Ex: Box Braids Jumbo",
 									...field
 								}) }),
 								/* @__PURE__ */ (0, import_jsx_runtime.jsx)(FormMessage, {})
 							] })
 						}),
-						/* @__PURE__ */ (0, import_jsx_runtime.jsx)(FormField, {
-							control: form.control,
-							name: "amount",
-							render: ({ field }) => /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(FormItem, { children: [
-								/* @__PURE__ */ (0, import_jsx_runtime.jsx)(FormLabel, { children: "Valor (R$)" }),
-								/* @__PURE__ */ (0, import_jsx_runtime.jsx)(FormControl, { children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Input, {
-									placeholder: "0.00",
-									type: "number",
-									step: "0.01",
-									...field
-								}) }),
-								/* @__PURE__ */ (0, import_jsx_runtime.jsx)(FormMessage, {})
-							] })
+						/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+							className: "grid grid-cols-2 gap-4",
+							children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(FormField, {
+								control: form.control,
+								name: "amount",
+								render: ({ field }) => /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(FormItem, { children: [
+									/* @__PURE__ */ (0, import_jsx_runtime.jsx)(FormLabel, { children: "Valor Total (R$)" }),
+									/* @__PURE__ */ (0, import_jsx_runtime.jsx)(FormControl, { children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Input, {
+										placeholder: "0.00",
+										type: "number",
+										step: "0.01",
+										...field
+									}) }),
+									/* @__PURE__ */ (0, import_jsx_runtime.jsx)(FormMessage, {})
+								] })
+							}), watchType === "entry" && /* @__PURE__ */ (0, import_jsx_runtime.jsx)(FormField, {
+								control: form.control,
+								name: "employeePayment",
+								render: ({ field }) => /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(FormItem, { children: [
+									/* @__PURE__ */ (0, import_jsx_runtime.jsx)(FormLabel, { children: "Repasse (R$)" }),
+									/* @__PURE__ */ (0, import_jsx_runtime.jsx)(FormControl, { children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Input, {
+										placeholder: "0.00",
+										type: "number",
+										step: "0.01",
+										...field
+									}) }),
+									/* @__PURE__ */ (0, import_jsx_runtime.jsx)(FormDescription, {
+										className: "text-xs",
+										children: "Valor pago ao funcionário."
+									}),
+									/* @__PURE__ */ (0, import_jsx_runtime.jsx)(FormMessage, {})
+								] })
+							})]
 						}),
 						/* @__PURE__ */ (0, import_jsx_runtime.jsx)(FormField, {
 							control: form.control,
@@ -36240,7 +36508,7 @@ function AddTransactionDialog({ onAdd }) {
 							children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Button, {
 								type: "submit",
 								className: "w-full rounded-full",
-								children: "Salvar Movimentação"
+								children: "Registrar Movimentação"
 							})
 						})
 					]
@@ -36257,187 +36525,9 @@ var Textarea = import_react.forwardRef(({ className, ...props }, ref) => {
 	});
 });
 Textarea.displayName = "Textarea";
-var INITIAL_TRANSACTIONS = [{
-	id: "1",
-	date: "2023-10-25",
-	description: "Venda de Serviços",
-	type: "entry",
-	amount: 1500,
-	balanceAfter: 1500
-}, {
-	id: "2",
-	date: "2023-10-26",
-	description: "Pagamento de Fornecedor",
-	type: "exit",
-	amount: 350.5,
-	balanceAfter: 1149.5
-}];
-var INITIAL_SERVICES = [
-	{
-		id: "s1",
-		name: "Corte Masculino",
-		description: "Corte tradicional com tesoura ou máquina",
-		payout: 30
-	},
-	{
-		id: "s2",
-		name: "Barba",
-		description: "Modelagem de barba com toalha quente",
-		payout: 25
-	},
-	{
-		id: "s3",
-		name: "Corte + Barba",
-		description: "Combo completo",
-		payout: 50
-	},
-	{
-		id: "s4",
-		name: "Acabamento",
-		description: "Pézinho e contornos",
-		payout: 15
-	}
-];
-var INITIAL_EMPLOYEES = [{
-	id: "1",
-	name: "Ana Silva",
-	pix: "123.456.789-00",
-	email: "ana@airbnb.com",
-	password: "123",
-	quantities: {
-		s1: 5,
-		s2: 3
-	},
-	paidAmount: 100,
-	status: "partial",
-	lastUpdated: (/* @__PURE__ */ new Date()).toISOString()
-}, {
-	id: "2",
-	name: "Carlos Oliveira",
-	pix: "ana.silva@email.com",
-	email: "carlos@airbnb.com",
-	password: "123",
-	quantities: { s3: 2 },
-	paidAmount: 0,
-	status: "open",
-	lastUpdated: (/* @__PURE__ */ new Date()).toISOString()
-}];
-var INITIAL_PRODUCTS = [
-	{
-		id: "p1",
-		name: "Shampoo Mentolado",
-		brand: "FreshMen",
-		type: "Cabelo"
-	},
-	{
-		id: "p2",
-		name: "Óleo para Barba",
-		brand: "Barbudo",
-		type: "Barba"
-	},
-	{
-		id: "p3",
-		name: "Pomada Modeladora",
-		brand: "StyleFix",
-		type: "Finalização"
-	}
-];
-var INITIAL_CUSTOMERS = [{
-	id: "c1",
-	name: "Roberto Santos",
-	email: "roberto@email.com",
-	phone: "(11) 99999-1111",
-	birthday: /* @__PURE__ */ new Date("1990-05-15")
-}, {
-	id: "c2",
-	name: "Julia Lima",
-	email: "julia@email.com",
-	phone: "(11) 98888-2222",
-	birthday: /* @__PURE__ */ new Date("1995-10-20")
-}];
-var DataContext = (0, import_react.createContext)(void 0);
-function DataProvider({ children }) {
-	const [transactions, setTransactions] = (0, import_react.useState)(INITIAL_TRANSACTIONS);
-	const [employees, setEmployees] = (0, import_react.useState)(INITIAL_EMPLOYEES);
-	const [products, setProducts] = (0, import_react.useState)(INITIAL_PRODUCTS);
-	const [customers, setCustomers] = (0, import_react.useState)(INITIAL_CUSTOMERS);
-	const [services, setServices] = (0, import_react.useState)(INITIAL_SERVICES);
-	const addTransaction = (transaction) => {
-		setTransactions((prev) => [...prev, transaction]);
-	};
-	const addEmployee = (employee) => {
-		setEmployees((prev) => [...prev, employee]);
-	};
-	const updateEmployee = (id, data) => {
-		setEmployees((prev) => prev.map((emp) => emp.id === id ? {
-			...emp,
-			...data
-		} : emp));
-	};
-	const addProduct = (product) => {
-		setProducts((prev) => [...prev, product]);
-	};
-	const updateProduct = (id, data) => {
-		setProducts((prev) => prev.map((p) => p.id === id ? {
-			...p,
-			...data
-		} : p));
-	};
-	const deleteProduct = (id) => {
-		setProducts((prev) => prev.filter((p) => p.id !== id));
-	};
-	const addCustomer = (customer) => {
-		setCustomers((prev) => [...prev, customer]);
-	};
-	const updateCustomer = (id, data) => {
-		setCustomers((prev) => prev.map((c) => c.id === id ? {
-			...c,
-			...data
-		} : c));
-	};
-	const deleteCustomer = (id) => {
-		setCustomers((prev) => prev.filter((c) => c.id !== id));
-	};
-	const addService = (service) => {
-		setServices((prev) => [...prev, service]);
-	};
-	const updateService = (id, data) => {
-		setServices((prev) => prev.map((s$2) => s$2.id === id ? {
-			...s$2,
-			...data
-		} : s$2));
-	};
-	const deleteService = (id) => {
-		setServices((prev) => prev.filter((s$2) => s$2.id !== id));
-	};
-	return (0, import_react.createElement)(DataContext.Provider, { value: {
-		transactions,
-		employees,
-		products,
-		customers,
-		services,
-		addTransaction,
-		addEmployee,
-		updateEmployee,
-		addProduct,
-		updateProduct,
-		deleteProduct,
-		addCustomer,
-		updateCustomer,
-		deleteCustomer,
-		addService,
-		updateService,
-		deleteService
-	} }, children);
-}
-function useDataStore() {
-	const context = (0, import_react.useContext)(DataContext);
-	if (!context) throw new Error("useDataStore must be used within a DataProvider");
-	return context;
-}
 function Index() {
 	const { transactions, addTransaction } = useDataStore();
-	const [notes, setNotes] = (0, import_react.useState)("Verificar o recebimento do cliente X até sexta-feira.");
+	const [notes, setNotes] = (0, import_react.useState)("Conferir estoque de Jumbo para o fim de semana.");
 	const [startDate, setStartDate] = (0, import_react.useState)("2023-10-01");
 	const [endDate, setEndDate] = (0, import_react.useState)("2023-10-31");
 	const { toast: toast$2 } = useToast();
@@ -36479,7 +36569,10 @@ function Index() {
 			description: data.description,
 			type: data.type,
 			amount: data.amount,
-			balanceAfter: 0
+			balanceAfter: 0,
+			customerId: data.customerId,
+			employeeId: data.employeeId,
+			employeePayment: data.employeePayment
 		});
 		toast$2({
 			title: "Movimentação adicionada",
@@ -36517,7 +36610,7 @@ function Index() {
 						})]
 					})]
 				}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(Button, {
-					className: "rounded-full px-8 bg-primary hover:bg-primary/90 text-white shadow-md hover:shadow-lg transition-all",
+					className: "rounded-full px-8 bg-primary hover:bg-primary/90 text-primary-foreground shadow-md hover:shadow-lg transition-all",
 					onClick: () => {},
 					children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Search, { className: "w-4 h-4 mr-2" }), "Filtrar Período"]
 				})]
@@ -36952,7 +37045,7 @@ function FinancialSummary({ totalReceivable, paidAmount, onPaidAmountChange, sta
 	});
 }
 function EmployeePayments() {
-	const { employees, services, updateEmployee } = useDataStore();
+	const { employees, services, transactions, updateEmployee } = useDataStore();
 	const [selectedEmployeeId, setSelectedEmployeeId] = (0, import_react.useState)("");
 	const [quantities, setQuantities] = (0, import_react.useState)({});
 	const [paidAmount, setPaidAmount] = (0, import_react.useState)(0);
@@ -36978,11 +37071,16 @@ function EmployeePayments() {
 			[serviceId]: quantity
 		}));
 	};
-	const totalReceivable = (0, import_react.useMemo)(() => {
+	const commissionFromQuantities = (0, import_react.useMemo)(() => {
 		return services.reduce((total, service) => {
 			return total + service.payout * (quantities[service.id] || 0);
 		}, 0);
 	}, [quantities, services]);
+	const commissionFromTransactions = (0, import_react.useMemo)(() => {
+		if (!selectedEmployeeId) return 0;
+		return transactions.filter((t$1) => t$1.employeeId === selectedEmployeeId && t$1.employeePayment).reduce((sum, t$1) => sum + (t$1.employeePayment || 0), 0);
+	}, [transactions, selectedEmployeeId]);
+	const totalReceivable = commissionFromQuantities + commissionFromTransactions;
 	const handleSave = () => {
 		if (!selectedEmployeeId) return;
 		updateEmployee(selectedEmployeeId, {
@@ -37034,7 +37132,7 @@ function EmployeePayments() {
 				className: "flex items-center gap-2",
 				children: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(Button, {
 					onClick: handleSave,
-					className: "rounded-full bg-primary hover:bg-primary/90 text-white px-8",
+					className: "rounded-full bg-primary hover:bg-primary/90 text-primary-foreground px-8",
 					children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Save, { className: "w-4 h-4 mr-2" }), "Salvar Alterações"]
 				})
 			})]
@@ -37089,18 +37187,49 @@ function EmployeePayments() {
 				})]
 			}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
 				className: "space-y-6 lg:col-span-2",
-				children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(FinancialSummary, {
-					totalReceivable,
-					paidAmount,
-					onPaidAmountChange: (val) => setPaidAmount(val),
-					status,
-					onStatusChange: (val) => setStatus(val),
-					lastUpdated
-				}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)(ProductionTable, {
-					services,
-					quantities,
-					onQuantityChange: handleQuantityChange
-				})]
+				children: [
+					/* @__PURE__ */ (0, import_jsx_runtime.jsx)(FinancialSummary, {
+						totalReceivable,
+						paidAmount,
+						onPaidAmountChange: (val) => setPaidAmount(val),
+						status,
+						onStatusChange: (val) => setStatus(val),
+						lastUpdated
+					}),
+					/* @__PURE__ */ (0, import_jsx_runtime.jsxs)(Card, {
+						className: "shadow-subtle border-none mb-6",
+						children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(CardHeader, { children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(CardTitle, {
+							className: "text-lg font-semibold",
+							children: "Origem dos Ganhos"
+						}) }), /* @__PURE__ */ (0, import_jsx_runtime.jsx)(CardContent, { children: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+							className: "grid grid-cols-2 gap-4",
+							children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+								className: "p-4 rounded-lg bg-secondary/30 border border-secondary",
+								children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+									className: "text-sm text-muted-foreground block mb-1",
+									children: "Produção Manual (Quantidade)"
+								}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+									className: "text-xl font-bold",
+									children: formatCurrency(commissionFromQuantities)
+								})]
+							}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+								className: "p-4 rounded-lg bg-secondary/30 border border-secondary",
+								children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+									className: "text-sm text-muted-foreground block mb-1",
+									children: "Via Caixa (Movimentações)"
+								}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+									className: "text-xl font-bold",
+									children: formatCurrency(commissionFromTransactions)
+								})]
+							})]
+						}) })]
+					}),
+					/* @__PURE__ */ (0, import_jsx_runtime.jsx)(ProductionTable, {
+						services,
+						quantities,
+						onQuantityChange: handleQuantityChange
+					})
+				]
 			})]
 		})]
 	});
@@ -38872,29 +39001,41 @@ function AppSidebar() {
 		collapsible: "icon",
 		children: [
 			/* @__PURE__ */ (0, import_jsx_runtime.jsx)(SidebarHeader, {
-				className: "h-16 flex items-center justify-center border-b border-border/50",
+				className: "h-20 flex items-center justify-center border-b border-white/10",
 				children: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-					className: "flex items-center gap-2 font-bold text-xl text-primary w-full px-2",
-					children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(ChartPie, { className: "w-8 h-8 flex-shrink-0" }), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
-						className: cn("transition-all duration-200 overflow-hidden whitespace-nowrap", isCollapsed ? "w-0 opacity-0" : "w-auto opacity-100"),
-						children: "Finanças"
+					className: "flex items-center gap-3 w-full px-2 overflow-hidden",
+					children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+						className: "flex-shrink-0 w-10 h-10 rounded-full bg-white flex items-center justify-center overflow-hidden",
+						children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)("img", {
+							src: "https://img.usecurling.com/i?q=braids&color=rose",
+							alt: "NesaMua Logo",
+							className: "w-8 h-8 object-cover"
+						})
+					}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+						className: cn("flex flex-col transition-all duration-200", isCollapsed ? "w-0 opacity-0" : "w-auto opacity-100"),
+						children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+							className: "font-bold text-lg text-white leading-tight whitespace-nowrap",
+							children: "Studio NesaMua"
+						}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+							className: "text-xs text-white/70 whitespace-nowrap",
+							children: "Sistema Financeiro"
+						})]
 					})]
 				})
 			}),
-			/* @__PURE__ */ (0, import_jsx_runtime.jsx)(SidebarContent, { children: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(SidebarGroup, { children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(SidebarGroupLabel, { children: "Menu Principal" }), /* @__PURE__ */ (0, import_jsx_runtime.jsx)(SidebarGroupContent, { children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(SidebarMenu, { children: items.map((item) => /* @__PURE__ */ (0, import_jsx_runtime.jsx)(SidebarMenuItem, { children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(SidebarMenuButton, {
+			/* @__PURE__ */ (0, import_jsx_runtime.jsx)(SidebarContent, { children: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(SidebarGroup, { children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(SidebarGroupLabel, {
+				className: "text-white/50",
+				children: "Menu Principal"
+			}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)(SidebarGroupContent, { children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(SidebarMenu, { children: items.map((item) => /* @__PURE__ */ (0, import_jsx_runtime.jsx)(SidebarMenuItem, { children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(SidebarMenuButton, {
 				asChild: true,
 				isActive: location.pathname === item.url,
 				tooltip: item.title,
 				size: "lg",
-				className: "data-[active=true]:font-bold data-[active=true]:text-primary hover:text-primary transition-colors",
+				className: "text-white/80 hover:text-white hover:bg-white/10 data-[active=true]:bg-primary data-[active=true]:text-primary-foreground transition-all",
 				children: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(Link, {
 					to: item.url,
 					className: "flex items-center gap-3",
-					children: [
-						/* @__PURE__ */ (0, import_jsx_runtime.jsx)(item.icon, { className: cn("w-5 h-5", location.pathname === item.url && "text-primary") }),
-						/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { children: item.title }),
-						location.pathname === item.url && /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { className: "absolute left-0 top-1/2 -translate-y-1/2 w-1 h-8 bg-primary rounded-r-full" })
-					]
+					children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(item.icon, { className: cn("w-5 h-5") }), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { children: item.title })]
 				})
 			}) }, item.title)) }) })] }) }),
 			/* @__PURE__ */ (0, import_jsx_runtime.jsx)(SidebarRail, {})
@@ -38907,11 +39048,14 @@ function Layout() {
 	const { user, logout } = useAuthStore();
 	const getPageTitle = (pathname) => {
 		switch (pathname) {
-			case "/": return "Registro de Caixa";
+			case "/": return "Sistema Financeiro NesaMua - Caixa";
 			case "/payments": return "Pagamento de Funcionários";
 			case "/dashboard": return "Meu Painel";
 			case "/employees/new": return "Cadastrar Funcionário";
-			default: return "Sistema Financeiro";
+			case "/customers": return "Gestão de Clientes";
+			case "/services": return "Catálogo de Serviços";
+			case "/products": return "Controle de Estoque";
+			default: return "Sistema Financeiro NesaMua";
 		}
 	};
 	const handleLogout = () => {
@@ -38939,7 +39083,7 @@ function Layout() {
 							/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
 								className: "text-right hidden sm:block",
 								children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
-									className: "text-sm font-medium leading-none",
+									className: "text-sm font-medium leading-none text-foreground",
 									children: user?.name || "Usuário"
 								}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
 									className: "text-xs text-muted-foreground",
@@ -38957,8 +39101,8 @@ function Layout() {
 								variant: "ghost",
 								size: "icon",
 								onClick: handleLogout,
-								className: "ml-2",
-								children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(LogOut, { className: "w-4 h-4 text-muted-foreground" })
+								className: "ml-2 hover:bg-destructive/10 hover:text-destructive",
+								children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(LogOut, { className: "w-4 h-4" })
 							})
 						]
 					})
@@ -39067,4 +39211,4 @@ var App = () => /* @__PURE__ */ (0, import_jsx_runtime.jsx)(BrowserRouter, {
 var App_default = App;
 (0, import_client.createRoot)(document.getElementById("root")).render(/* @__PURE__ */ (0, import_jsx_runtime.jsx)(App_default, {}));
 
-//# sourceMappingURL=index-Ca_dlDV0.js.map
+//# sourceMappingURL=index-BIYJNNqH.js.map

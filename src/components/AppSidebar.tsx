@@ -1,7 +1,6 @@
 import {
   ArrowLeftRight,
   CreditCard,
-  PieChart,
   Users,
   LayoutDashboard,
   Package,
@@ -76,22 +75,36 @@ export function AppSidebar() {
 
   return (
     <Sidebar collapsible="icon">
-      <SidebarHeader className="h-16 flex items-center justify-center border-b border-border/50">
-        <div className="flex items-center gap-2 font-bold text-xl text-primary w-full px-2">
-          <PieChart className="w-8 h-8 flex-shrink-0" />
-          <span
+      <SidebarHeader className="h-20 flex items-center justify-center border-b border-white/10">
+        <div className="flex items-center gap-3 w-full px-2 overflow-hidden">
+          {/* Logo Placeholder - NesaMua Style */}
+          <div className="flex-shrink-0 w-10 h-10 rounded-full bg-white flex items-center justify-center overflow-hidden">
+            <img
+              src="https://img.usecurling.com/i?q=braids&color=rose"
+              alt="NesaMua Logo"
+              className="w-8 h-8 object-cover"
+            />
+          </div>
+          <div
             className={cn(
-              'transition-all duration-200 overflow-hidden whitespace-nowrap',
+              'flex flex-col transition-all duration-200',
               isCollapsed ? 'w-0 opacity-0' : 'w-auto opacity-100',
             )}
           >
-            Finanças
-          </span>
+            <span className="font-bold text-lg text-white leading-tight whitespace-nowrap">
+              Studio NesaMua
+            </span>
+            <span className="text-xs text-white/70 whitespace-nowrap">
+              Sistema Financeiro
+            </span>
+          </div>
         </div>
       </SidebarHeader>
       <SidebarContent>
         <SidebarGroup>
-          <SidebarGroupLabel>Menu Principal</SidebarGroupLabel>
+          <SidebarGroupLabel className="text-white/50">
+            Menu Principal
+          </SidebarGroupLabel>
           <SidebarGroupContent>
             <SidebarMenu>
               {items.map((item) => (
@@ -101,19 +114,16 @@ export function AppSidebar() {
                     isActive={location.pathname === item.url}
                     tooltip={item.title}
                     size="lg"
-                    className="data-[active=true]:font-bold data-[active=true]:text-primary hover:text-primary transition-colors"
+                    className="text-white/80 hover:text-white hover:bg-white/10 data-[active=true]:bg-primary data-[active=true]:text-primary-foreground transition-all"
                   >
                     <Link to={item.url} className="flex items-center gap-3">
                       <item.icon
                         className={cn(
                           'w-5 h-5',
-                          location.pathname === item.url && 'text-primary',
+                          // location.pathname === item.url && 'text-white',
                         )}
                       />
                       <span>{item.title}</span>
-                      {location.pathname === item.url && (
-                        <div className="absolute left-0 top-1/2 -translate-y-1/2 w-1 h-8 bg-primary rounded-r-full" />
-                      )}
                     </Link>
                   </SidebarMenuButton>
                 </SidebarMenuItem>
