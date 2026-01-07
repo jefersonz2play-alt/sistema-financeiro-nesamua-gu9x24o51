@@ -16424,6 +16424,21 @@ function isModifiedEvent(event) {
 function shouldProcessLinkClick(event, target) {
 	return event.button === 0 && (!target || target === "_self") && !isModifiedEvent(event);
 }
+function createSearchParams(init = "") {
+	return new URLSearchParams(typeof init === "string" || Array.isArray(init) || init instanceof URLSearchParams ? init : Object.keys(init).reduce((memo2, key) => {
+		let value = init[key];
+		return memo2.concat(Array.isArray(value) ? value.map((v) => [key, v]) : [[key, value]]);
+	}, []));
+}
+function getSearchParamsForLocation(locationSearch, defaultSearchParams) {
+	let searchParams = createSearchParams(locationSearch);
+	if (defaultSearchParams) defaultSearchParams.forEach((_$1, key) => {
+		if (!searchParams.has(key)) defaultSearchParams.getAll(key).forEach((value) => {
+			searchParams.append(key, value);
+		});
+	});
+	return searchParams;
+}
 var _formDataSupportsSubmitter = null;
 function isFormDataSubmitterSupported() {
 	if (_formDataSupportsSubmitter === null) try {
@@ -17041,6 +17056,19 @@ function useLinkClickHandler(to, { target, replace: replaceProp, state, preventS
 		unstable_defaultShouldRevalidate,
 		unstable_useTransitions
 	]);
+}
+function useSearchParams(defaultInit) {
+	warning(typeof URLSearchParams !== "undefined", `You cannot use the \`useSearchParams\` hook in a browser that does not support the URLSearchParams API. If you need to support Internet Explorer 11, we recommend you load a polyfill such as https://github.com/ungap/url-search-params.`);
+	let defaultSearchParamsRef = import_react.useRef(createSearchParams(defaultInit));
+	let hasSetSearchParamsRef = import_react.useRef(false);
+	let location = useLocation();
+	let searchParams = import_react.useMemo(() => getSearchParamsForLocation(location.search, hasSetSearchParamsRef.current ? null : defaultSearchParamsRef.current), [location.search]);
+	let navigate = useNavigate();
+	return [searchParams, import_react.useCallback((nextInit, navigateOptions) => {
+		const newSearchParams = createSearchParams(typeof nextInit === "function" ? nextInit(new URLSearchParams(searchParams)) : nextInit);
+		hasSetSearchParamsRef.current = true;
+		navigate("?" + newSearchParams, navigateOptions);
+	}, [navigate, searchParams])];
 }
 var fetcherId = 0;
 var getUniqueFetcherId = () => `__${String(++fetcherId)}__`;
@@ -18883,6 +18911,13 @@ var ArrowLeftRight = createLucideIcon("arrow-left-right", [
 		key: "h6l3hr"
 	}]
 ]);
+var ArrowLeft = createLucideIcon("arrow-left", [["path", {
+	d: "m12 19-7-7 7-7",
+	key: "1l729n"
+}], ["path", {
+	d: "M19 12H5",
+	key: "x3x0zl"
+}]]);
 var Banknote = createLucideIcon("banknote", [
 	["rect", {
 		width: "20",
@@ -19130,6 +19165,20 @@ var DollarSign = createLucideIcon("dollar-sign", [["line", {
 	d: "M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6",
 	key: "1b0p4s"
 }]]);
+var ExternalLink = createLucideIcon("external-link", [
+	["path", {
+		d: "M15 3h6v6",
+		key: "1q9fwt"
+	}],
+	["path", {
+		d: "M10 14 21 3",
+		key: "gplh6r"
+	}],
+	["path", {
+		d: "M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6",
+		key: "a6xqqp"
+	}]
+]);
 var Instagram = createLucideIcon("instagram", [
 	["rect", {
 		width: "20",
@@ -19258,6 +19307,24 @@ var Plus = createLucideIcon("plus", [["path", {
 	d: "M12 5v14",
 	key: "s699le"
 }]]);
+var Printer = createLucideIcon("printer", [
+	["path", {
+		d: "M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2",
+		key: "143wyd"
+	}],
+	["path", {
+		d: "M6 9V3a1 1 0 0 1 1-1h10a1 1 0 0 1 1 1v6",
+		key: "1itne7"
+	}],
+	["rect", {
+		x: "6",
+		y: "14",
+		width: "12",
+		height: "8",
+		rx: "1",
+		key: "1ue0tg"
+	}]
+]);
 var Save = createLucideIcon("save", [
 	["path", {
 		d: "M15.2 3a2 2 0 0 1 1.4.6l3.8 3.8a2 2 0 0 1 .6 1.4V19a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2z",
@@ -37432,8 +37499,8 @@ function ProfitabilityCharts({ transactions, products, services }) {
 function Index() {
 	const { transactions, addTransaction, products, services } = useDataStore();
 	const [notes, setNotes] = (0, import_react.useState)("Conferir estoque de Jumbo para o fim de semana.");
-	const [startDate, setStartDate] = (0, import_react.useState)("2023-10-01");
-	const [endDate, setEndDate] = (0, import_react.useState)("2023-12-31");
+	const [startDate, setStartDate] = (0, import_react.useState)("2026-01-01");
+	const [endDate, setEndDate] = (0, import_react.useState)((/* @__PURE__ */ new Date()).toISOString().split("T")[0]);
 	const { toast: toast$2 } = useToast();
 	const processedTransactions = (0, import_react.useMemo)(() => {
 		let runningBalance = 0;
@@ -39619,7 +39686,7 @@ function Appointments() {
 		})]
 	});
 }
-function InventoryInsights({ products, transactions }) {
+function InventoryInsights({ products, transactions, timeRange = "30" }) {
 	const totalSold = (0, import_react.useMemo)(() => {
 		return transactions.filter((t$1) => t$1.type === "entry" && t$1.itemType === "product").reduce((sum, t$1) => sum + (t$1.quantity || 0), 0);
 	}, [transactions]);
@@ -39635,24 +39702,35 @@ function InventoryInsights({ products, transactions }) {
 	return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
 		className: "grid gap-6 grid-cols-1 md:grid-cols-3",
 		children: [
-			/* @__PURE__ */ (0, import_jsx_runtime.jsxs)(Card, {
-				className: "shadow-subtle border-none",
-				children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)(CardHeader, {
-					className: "flex flex-row items-center justify-between pb-2",
-					children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(CardTitle, {
-						className: "text-sm font-medium text-muted-foreground uppercase tracking-wider",
-						children: "Total Vendido"
-					}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
-						className: "h-8 w-8 rounded-full bg-blue-100 flex items-center justify-center",
-						children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(ShoppingCart, { className: "h-4 w-4 text-blue-600" })
-					})]
-				}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(CardContent, { children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-					className: "text-2xl font-bold",
-					children: [totalSold, " un."]
-				}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
-					className: "text-xs text-muted-foreground mt-1",
-					children: "Total histórico de vendas"
-				})] })]
+			/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Link, {
+				to: `/reports/sales?days=${timeRange}`,
+				className: "block transition-transform hover:scale-105",
+				children: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(Card, {
+					className: "shadow-subtle border-none h-full cursor-pointer hover:shadow-lg transition-shadow bg-blue-50/50 hover:bg-blue-50",
+					children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)(CardHeader, {
+						className: "flex flex-row items-center justify-between pb-2",
+						children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(CardTitle, {
+							className: "text-sm font-medium text-muted-foreground uppercase tracking-wider",
+							children: "Total Vendido"
+						}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+							className: "h-8 w-8 rounded-full bg-blue-100 flex items-center justify-center",
+							children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(ShoppingCart, { className: "h-4 w-4 text-blue-600" })
+						})]
+					}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(CardContent, { children: [
+						/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+							className: "text-2xl font-bold text-foreground",
+							children: [totalSold, " un."]
+						}),
+						/* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
+							className: "text-xs text-muted-foreground mt-1",
+							children: "Total histórico de vendas"
+						}),
+						/* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
+							className: "text-[10px] text-blue-600 font-medium mt-2",
+							children: "Ver Detalhes →"
+						})
+					] })]
+				})
 			}),
 			/* @__PURE__ */ (0, import_jsx_runtime.jsxs)(Card, {
 				className: "shadow-subtle border-none",
@@ -39706,7 +39784,7 @@ function InventoryInsights({ products, transactions }) {
 		]
 	});
 }
-function EmployeePerformance({ employees, transactions }) {
+function EmployeePerformance({ employees, transactions, timeRange = "30" }) {
 	const stats = (0, import_react.useMemo)(() => {
 		const now = /* @__PURE__ */ new Date();
 		const currentMonth = now.getMonth();
@@ -39738,10 +39816,22 @@ function EmployeePerformance({ employees, transactions }) {
 	const maxCount = Math.max(...stats.map((s$2) => s$2.currentMonthCount), 1);
 	return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(Card, {
 		className: "shadow-subtle border-none h-full",
-		children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)(CardHeader, { children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(CardTitle, {
-			className: "text-lg",
-			children: "Desempenho da Equipe"
-		}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)(CardDescription, { children: "Atendimentos realizados no mês atual vs anterior." })] }), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(CardContent, {
+		children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)(CardHeader, {
+			className: "flex flex-row items-start justify-between",
+			children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(CardTitle, {
+				className: "text-lg",
+				children: "Desempenho da Equipe"
+			}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)(CardDescription, { children: "Atendimentos realizados no mês atual vs anterior." })] }), /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Button, {
+				variant: "ghost",
+				size: "icon",
+				asChild: true,
+				className: "h-8 w-8",
+				children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Link, {
+					to: `/reports/employees?days=${timeRange}`,
+					children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(ExternalLink, { className: "w-4 h-4 text-muted-foreground" })
+				})
+			})]
+		}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(CardContent, {
 			className: "space-y-6",
 			children: [stats.map((emp) => /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
 				className: "space-y-2",
@@ -39933,36 +40023,41 @@ function ManagerDashboard() {
 			}),
 			/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
 				className: "grid grid-cols-1 md:grid-cols-4 gap-6",
-				children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)(Card, {
-					className: "shadow-subtle border-none md:col-span-1 bg-gradient-to-br from-primary/90 to-primary text-primary-foreground",
-					children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(CardHeader, {
-						className: "pb-2",
-						children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(CardTitle, {
-							className: "text-sm font-medium uppercase tracking-wider opacity-90",
-							children: "Média Diária"
-						})
-					}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(CardContent, { children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-						className: "flex items-baseline gap-2",
-						children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
-							className: "text-4xl font-bold",
-							children: dailyAverage
-						}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
-							className: "text-sm opacity-80",
-							children: "atendimentos/dia"
-						})]
-					}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("p", {
-						className: "text-xs mt-2 opacity-70",
-						children: [
-							"Baseado nos últimos ",
-							timeRange,
-							" dias"
-						]
-					})] })]
+				children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Link, {
+					to: `/reports/attendance?days=${timeRange}`,
+					className: "block transition-transform hover:scale-105",
+					children: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(Card, {
+						className: "shadow-subtle border-none md:col-span-1 bg-gradient-to-br from-primary/90 to-primary text-primary-foreground h-full cursor-pointer hover:shadow-lg transition-shadow",
+						children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(CardHeader, {
+							className: "pb-2",
+							children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(CardTitle, {
+								className: "text-sm font-medium uppercase tracking-wider opacity-90",
+								children: "Média Diária"
+							})
+						}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(CardContent, { children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+							className: "flex items-baseline gap-2",
+							children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+								className: "text-4xl font-bold",
+								children: dailyAverage
+							}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+								className: "text-sm opacity-80",
+								children: "atendimentos/dia"
+							})]
+						}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("p", {
+							className: "text-xs mt-2 opacity-70",
+							children: [
+								"Baseado nos últimos ",
+								timeRange,
+								" dias. Clique para detalhes."
+							]
+						})] })]
+					})
 				}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
 					className: "md:col-span-3",
 					children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(InventoryInsights, {
 						products,
-						transactions
+						transactions,
+						timeRange
 					})
 				})]
 			}),
@@ -39972,7 +40067,8 @@ function ManagerDashboard() {
 					className: "space-y-6",
 					children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(EmployeePerformance, {
 						employees,
-						transactions
+						transactions,
+						timeRange
 					})
 				}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
 					className: "space-y-6",
@@ -40723,6 +40819,9 @@ function Layout() {
 			case "/services": return "Catálogo de Serviços";
 			case "/products": return "Controle de Estoque";
 			case "/appointments": return "Agenda de Serviços";
+			case "/reports/attendance": return "Relatório de Atendimentos";
+			case "/reports/sales": return "Relatório de Vendas";
+			case "/reports/employees": return "Relatório de Equipe";
 			default: return "Sistema Financeiro NesaMua";
 		}
 	};
@@ -40784,6 +40883,392 @@ function Layout() {
 			children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Outlet, {})
 		})
 	})] })] });
+}
+function AttendanceReport() {
+	const [searchParams] = useSearchParams();
+	const navigate = useNavigate();
+	const { transactions, customers, employees, services } = useDataStore();
+	const days = parseInt(searchParams.get("days") || "30");
+	const cutoffDate = subDays(/* @__PURE__ */ new Date(), days);
+	const filteredTransactions = (0, import_react.useMemo)(() => {
+		return transactions.filter((t$1) => {
+			const tDate = new Date(t$1.date);
+			return t$1.type === "entry" && t$1.itemType === "service" && tDate >= cutoffDate;
+		}).sort((a$1, b$1) => new Date(b$1.date).getTime() - new Date(a$1.date).getTime());
+	}, [transactions, cutoffDate]);
+	const getCustomerName = (id) => customers.find((c) => c.id === id)?.name || "N/A";
+	const getEmployeeName = (id) => employees.find((e) => e.id === id)?.name || "N/A";
+	const getServiceName = (id) => services.find((s$2) => s$2.id === id)?.name || id || "Serviço";
+	const totalRevenue = filteredTransactions.reduce((sum, t$1) => sum + t$1.amount, 0);
+	const handlePrint = () => {
+		window.print();
+	};
+	return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+		className: "space-y-6",
+		children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+			className: "flex items-center justify-between no-print",
+			children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)(Button, {
+				variant: "ghost",
+				onClick: () => navigate(-1),
+				className: "gap-2",
+				children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(ArrowLeft, { className: "w-4 h-4" }), " Voltar"]
+			}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(Button, {
+				onClick: handlePrint,
+				className: "gap-2",
+				children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Printer, { className: "w-4 h-4" }), " Imprimir Relatório"]
+			})]
+		}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(Card, {
+			className: "border-none shadow-none print:shadow-none",
+			children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(CardHeader, {
+				className: "text-center md:text-left border-b pb-6",
+				children: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+					className: "flex flex-col md:flex-row justify-between items-center gap-4",
+					children: [
+						/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(CardTitle, {
+							className: "text-2xl font-bold",
+							children: "Relatório de Atendimentos"
+						}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("p", {
+							className: "text-muted-foreground mt-1",
+							children: [
+								"Período: Últimos ",
+								days,
+								" dias (",
+								format(cutoffDate, "dd/MM/yyyy"),
+								" ",
+								"até ",
+								format(/* @__PURE__ */ new Date(), "dd/MM/yyyy"),
+								")"
+							]
+						})] }),
+						/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+							className: "text-right",
+							children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
+								className: "text-sm text-muted-foreground",
+								children: "Total de Atendimentos"
+							}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
+								className: "text-2xl font-bold",
+								children: filteredTransactions.length
+							})]
+						}),
+						/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+							className: "text-right",
+							children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
+								className: "text-sm text-muted-foreground",
+								children: "Faturamento Total"
+							}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
+								className: "text-2xl font-bold text-emerald-600",
+								children: formatCurrency(totalRevenue)
+							})]
+						})
+					]
+				})
+			}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)(CardContent, {
+				className: "p-0 pt-6",
+				children: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(Table, { children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(TableHeader, { children: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(TableRow, { children: [
+					/* @__PURE__ */ (0, import_jsx_runtime.jsx)(TableHead, { children: "Data" }),
+					/* @__PURE__ */ (0, import_jsx_runtime.jsx)(TableHead, { children: "Cliente" }),
+					/* @__PURE__ */ (0, import_jsx_runtime.jsx)(TableHead, { children: "Serviço" }),
+					/* @__PURE__ */ (0, import_jsx_runtime.jsx)(TableHead, { children: "Profissional" }),
+					/* @__PURE__ */ (0, import_jsx_runtime.jsx)(TableHead, {
+						className: "text-right",
+						children: "Valor"
+					})
+				] }) }), /* @__PURE__ */ (0, import_jsx_runtime.jsx)(TableBody, { children: filteredTransactions.length === 0 ? /* @__PURE__ */ (0, import_jsx_runtime.jsx)(TableRow, { children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(TableCell, {
+					colSpan: 5,
+					className: "text-center py-8 text-muted-foreground",
+					children: "Nenhum atendimento encontrado no período."
+				}) }) : filteredTransactions.map((t$1) => /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(TableRow, { children: [
+					/* @__PURE__ */ (0, import_jsx_runtime.jsx)(TableCell, { children: format(new Date(t$1.date), "dd/MM/yyyy", { locale: ptBR }) }),
+					/* @__PURE__ */ (0, import_jsx_runtime.jsx)(TableCell, {
+						className: "font-medium",
+						children: getCustomerName(t$1.customerId)
+					}),
+					/* @__PURE__ */ (0, import_jsx_runtime.jsx)(TableCell, { children: getServiceName(t$1.itemId) }),
+					/* @__PURE__ */ (0, import_jsx_runtime.jsx)(TableCell, { children: getEmployeeName(t$1.employeeId) }),
+					/* @__PURE__ */ (0, import_jsx_runtime.jsx)(TableCell, {
+						className: "text-right",
+						children: formatCurrency(t$1.amount)
+					})
+				] }, t$1.id)) })] })
+			})]
+		})]
+	});
+}
+function SalesReport() {
+	const [searchParams] = useSearchParams();
+	const navigate = useNavigate();
+	const { transactions, products } = useDataStore();
+	const days = parseInt(searchParams.get("days") || "30");
+	const cutoffDate = subDays(/* @__PURE__ */ new Date(), days);
+	const filteredTransactions = (0, import_react.useMemo)(() => {
+		return transactions.filter((t$1) => {
+			const tDate = new Date(t$1.date);
+			return t$1.type === "entry" && t$1.itemType === "product" && tDate >= cutoffDate;
+		}).sort((a$1, b$1) => new Date(b$1.date).getTime() - new Date(a$1.date).getTime());
+	}, [transactions, cutoffDate]);
+	const getProductName = (id) => products.find((p) => p.id === id)?.name || "Produto Removido";
+	const totalRevenue = filteredTransactions.reduce((sum, t$1) => sum + t$1.amount, 0);
+	const totalItems = filteredTransactions.reduce((sum, t$1) => sum + (t$1.quantity || 0), 0);
+	const handlePrint = () => {
+		window.print();
+	};
+	return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+		className: "space-y-6",
+		children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+			className: "flex items-center justify-between no-print",
+			children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)(Button, {
+				variant: "ghost",
+				onClick: () => navigate(-1),
+				className: "gap-2",
+				children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(ArrowLeft, { className: "w-4 h-4" }), " Voltar"]
+			}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(Button, {
+				onClick: handlePrint,
+				className: "gap-2",
+				children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Printer, { className: "w-4 h-4" }), " Imprimir Relatório"]
+			})]
+		}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(Card, {
+			className: "border-none shadow-none print:shadow-none",
+			children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(CardHeader, {
+				className: "text-center md:text-left border-b pb-6",
+				children: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+					className: "flex flex-col md:flex-row justify-between items-center gap-4",
+					children: [
+						/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(CardTitle, {
+							className: "text-2xl font-bold",
+							children: "Relatório de Vendas"
+						}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("p", {
+							className: "text-muted-foreground mt-1",
+							children: [
+								"Período: Últimos ",
+								days,
+								" dias (",
+								format(cutoffDate, "dd/MM/yyyy"),
+								" ",
+								"até ",
+								format(/* @__PURE__ */ new Date(), "dd/MM/yyyy"),
+								")"
+							]
+						})] }),
+						/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+							className: "text-right",
+							children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
+								className: "text-sm text-muted-foreground",
+								children: "Itens Vendidos"
+							}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("p", {
+								className: "text-2xl font-bold",
+								children: [
+									totalItems,
+									" ",
+									/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+										className: "text-sm font-normal text-muted-foreground",
+										children: "un."
+									})
+								]
+							})]
+						}),
+						/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+							className: "text-right",
+							children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
+								className: "text-sm text-muted-foreground",
+								children: "Volume Total"
+							}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
+								className: "text-2xl font-bold text-emerald-600",
+								children: formatCurrency(totalRevenue)
+							})]
+						})
+					]
+				})
+			}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)(CardContent, {
+				className: "p-0 pt-6",
+				children: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(Table, { children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(TableHeader, { children: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(TableRow, { children: [
+					/* @__PURE__ */ (0, import_jsx_runtime.jsx)(TableHead, { children: "Data" }),
+					/* @__PURE__ */ (0, import_jsx_runtime.jsx)(TableHead, { children: "Produto" }),
+					/* @__PURE__ */ (0, import_jsx_runtime.jsx)(TableHead, {
+						className: "text-center",
+						children: "Qtd"
+					}),
+					/* @__PURE__ */ (0, import_jsx_runtime.jsx)(TableHead, {
+						className: "text-right",
+						children: "Valor Unit."
+					}),
+					/* @__PURE__ */ (0, import_jsx_runtime.jsx)(TableHead, {
+						className: "text-right",
+						children: "Total"
+					})
+				] }) }), /* @__PURE__ */ (0, import_jsx_runtime.jsx)(TableBody, { children: filteredTransactions.length === 0 ? /* @__PURE__ */ (0, import_jsx_runtime.jsx)(TableRow, { children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(TableCell, {
+					colSpan: 5,
+					className: "text-center py-8 text-muted-foreground",
+					children: "Nenhuma venda encontrada no período."
+				}) }) : filteredTransactions.map((t$1) => {
+					const unitPrice = t$1.quantity ? t$1.amount / t$1.quantity : t$1.amount;
+					return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(TableRow, { children: [
+						/* @__PURE__ */ (0, import_jsx_runtime.jsx)(TableCell, { children: format(new Date(t$1.date), "dd/MM/yyyy", { locale: ptBR }) }),
+						/* @__PURE__ */ (0, import_jsx_runtime.jsx)(TableCell, {
+							className: "font-medium",
+							children: getProductName(t$1.itemId)
+						}),
+						/* @__PURE__ */ (0, import_jsx_runtime.jsx)(TableCell, {
+							className: "text-center",
+							children: t$1.quantity || 1
+						}),
+						/* @__PURE__ */ (0, import_jsx_runtime.jsx)(TableCell, {
+							className: "text-right",
+							children: formatCurrency(unitPrice)
+						}),
+						/* @__PURE__ */ (0, import_jsx_runtime.jsx)(TableCell, {
+							className: "text-right font-bold",
+							children: formatCurrency(t$1.amount)
+						})
+					] }, t$1.id);
+				}) })] })
+			})]
+		})]
+	});
+}
+function EmployeeReport() {
+	const [searchParams] = useSearchParams();
+	const navigate = useNavigate();
+	const { transactions, employees, services } = useDataStore();
+	const days = parseInt(searchParams.get("days") || "30");
+	const cutoffDate = subDays(/* @__PURE__ */ new Date(), days);
+	const reportData = (0, import_react.useMemo)(() => {
+		return employees.map((emp) => {
+			const empTransactions = transactions.filter((t$1) => t$1.employeeId === emp.id && t$1.type === "entry" && t$1.itemType === "service" && new Date(t$1.date) >= cutoffDate).sort((a$1, b$1) => new Date(b$1.date).getTime() - new Date(a$1.date).getTime());
+			return {
+				employee: emp,
+				transactions: empTransactions,
+				totalRevenue: empTransactions.reduce((sum, t$1) => sum + t$1.amount, 0),
+				totalCommission: empTransactions.reduce((sum, t$1) => sum + (t$1.employeePayment || 0), 0)
+			};
+		}).filter((data) => data.transactions.length > 0);
+	}, [
+		employees,
+		transactions,
+		cutoffDate
+	]);
+	const getServiceName = (id) => services.find((s$2) => s$2.id === id)?.name || "Serviço";
+	const handlePrint = () => {
+		window.print();
+	};
+	return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+		className: "space-y-8",
+		children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+			className: "flex items-center justify-between no-print",
+			children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)(Button, {
+				variant: "ghost",
+				onClick: () => navigate(-1),
+				className: "gap-2",
+				children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(ArrowLeft, { className: "w-4 h-4" }), " Voltar"]
+			}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(Button, {
+				onClick: handlePrint,
+				className: "gap-2",
+				children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Printer, { className: "w-4 h-4" }), " Imprimir Relatório"]
+			})]
+		}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(Card, {
+			className: "border-none shadow-none print:shadow-none",
+			children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(CardHeader, {
+				className: "text-center md:text-left border-b pb-6",
+				children: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(CardTitle, {
+					className: "text-2xl font-bold",
+					children: "Relatório de Desempenho da Equipe"
+				}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("p", {
+					className: "text-muted-foreground mt-1",
+					children: [
+						"Período: Últimos ",
+						days,
+						" dias (",
+						format(cutoffDate, "dd/MM/yyyy"),
+						" ",
+						"até ",
+						format(/* @__PURE__ */ new Date(), "dd/MM/yyyy"),
+						")"
+					]
+				})] })
+			}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)(CardContent, {
+				className: "p-0 pt-6 space-y-8",
+				children: reportData.length === 0 ? /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+					className: "text-center py-8 text-muted-foreground",
+					children: "Nenhum registro de atendimento encontrado para os funcionários neste período."
+				}) : reportData.map(({ employee, transactions: transactions$1, totalRevenue, totalCommission }) => /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+					className: "space-y-4 page-break",
+					children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+						className: "bg-muted/30 p-4 rounded-lg flex flex-col md:flex-row justify-between items-start md:items-center",
+						children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("h3", {
+							className: "text-lg font-bold",
+							children: employee.name
+						}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
+							className: "text-sm text-muted-foreground",
+							children: employee.email
+						})] }), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+							className: "flex gap-6 mt-2 md:mt-0",
+							children: [
+								/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+									className: "text-right",
+									children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
+										className: "text-xs text-muted-foreground uppercase",
+										children: "Atendimentos"
+									}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
+										className: "font-bold",
+										children: transactions$1.length
+									})]
+								}),
+								/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+									className: "text-right",
+									children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
+										className: "text-xs text-muted-foreground uppercase",
+										children: "Gerado (Bruto)"
+									}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
+										className: "font-bold",
+										children: formatCurrency(totalRevenue)
+									})]
+								}),
+								/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+									className: "text-right",
+									children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
+										className: "text-xs text-muted-foreground uppercase",
+										children: "Comissões"
+									}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
+										className: "font-bold text-emerald-600",
+										children: formatCurrency(totalCommission)
+									})]
+								})
+							]
+						})]
+					}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(Table, { children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(TableHeader, { children: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(TableRow, { children: [
+						/* @__PURE__ */ (0, import_jsx_runtime.jsx)(TableHead, { children: "Data" }),
+						/* @__PURE__ */ (0, import_jsx_runtime.jsx)(TableHead, { children: "Serviço" }),
+						/* @__PURE__ */ (0, import_jsx_runtime.jsx)(TableHead, { children: "Descrição" }),
+						/* @__PURE__ */ (0, import_jsx_runtime.jsx)(TableHead, {
+							className: "text-right",
+							children: "Valor"
+						}),
+						/* @__PURE__ */ (0, import_jsx_runtime.jsx)(TableHead, {
+							className: "text-right",
+							children: "Comissão"
+						})
+					] }) }), /* @__PURE__ */ (0, import_jsx_runtime.jsx)(TableBody, { children: transactions$1.map((t$1) => /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(TableRow, { children: [
+						/* @__PURE__ */ (0, import_jsx_runtime.jsx)(TableCell, { children: format(new Date(t$1.date), "dd/MM/yyyy", { locale: ptBR }) }),
+						/* @__PURE__ */ (0, import_jsx_runtime.jsx)(TableCell, {
+							className: "font-medium",
+							children: getServiceName(t$1.itemId)
+						}),
+						/* @__PURE__ */ (0, import_jsx_runtime.jsx)(TableCell, {
+							className: "text-muted-foreground text-xs max-w-[200px] truncate",
+							children: t$1.description
+						}),
+						/* @__PURE__ */ (0, import_jsx_runtime.jsx)(TableCell, {
+							className: "text-right",
+							children: formatCurrency(t$1.amount)
+						}),
+						/* @__PURE__ */ (0, import_jsx_runtime.jsx)(TableCell, {
+							className: "text-right text-emerald-600 font-medium",
+							children: formatCurrency(t$1.employeePayment || 0)
+						})
+					] }, t$1.id)) })] })]
+				}, employee.id))
+			})]
+		})]
+	});
 }
 function ProtectedRoute({ children, allowedRoles }) {
 	const { user, isAuthenticated } = useAuthStore();
@@ -40875,6 +41360,27 @@ var App = () => /* @__PURE__ */ (0, import_jsx_runtime.jsx)(BrowserRouter, {
 						})
 					}),
 					/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Route, {
+						path: "/reports/attendance",
+						element: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(ProtectedRoute, {
+							allowedRoles: ["manager"],
+							children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(AttendanceReport, {})
+						})
+					}),
+					/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Route, {
+						path: "/reports/sales",
+						element: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(ProtectedRoute, {
+							allowedRoles: ["manager"],
+							children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(SalesReport, {})
+						})
+					}),
+					/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Route, {
+						path: "/reports/employees",
+						element: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(ProtectedRoute, {
+							allowedRoles: ["manager"],
+							children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(EmployeeReport, {})
+						})
+					}),
+					/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Route, {
 						path: "/dashboard",
 						element: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(ProtectedRoute, {
 							allowedRoles: ["employee"],
@@ -40893,4 +41399,4 @@ var App = () => /* @__PURE__ */ (0, import_jsx_runtime.jsx)(BrowserRouter, {
 var App_default = App;
 (0, import_client.createRoot)(document.getElementById("root")).render(/* @__PURE__ */ (0, import_jsx_runtime.jsx)(App_default, {}));
 
-//# sourceMappingURL=index-BRLsC4sI.js.map
+//# sourceMappingURL=index-BWCCPPQm.js.map

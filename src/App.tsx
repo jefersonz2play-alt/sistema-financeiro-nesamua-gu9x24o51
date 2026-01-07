@@ -14,6 +14,9 @@ import ManagerDashboard from './pages/ManagerDashboard'
 import Login from './pages/Login'
 import NotFound from './pages/NotFound'
 import Layout from './components/Layout'
+import AttendanceReport from './pages/reports/AttendanceReport'
+import SalesReport from './pages/reports/SalesReport'
+import EmployeeReport from './pages/reports/EmployeeReport'
 import { AuthProvider } from '@/stores/useAuthStore'
 import { DataProvider } from '@/stores/useDataStore'
 import { ProtectedRoute } from '@/components/auth/ProtectedRoute'
@@ -99,6 +102,32 @@ const App = () => (
                 element={
                   <ProtectedRoute allowedRoles={['manager']}>
                     <RegisterEmployee />
+                  </ProtectedRoute>
+                }
+              />
+
+              {/* Reports */}
+              <Route
+                path="/reports/attendance"
+                element={
+                  <ProtectedRoute allowedRoles={['manager']}>
+                    <AttendanceReport />
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path="/reports/sales"
+                element={
+                  <ProtectedRoute allowedRoles={['manager']}>
+                    <SalesReport />
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path="/reports/employees"
+                element={
+                  <ProtectedRoute allowedRoles={['manager']}>
+                    <EmployeeReport />
                   </ProtectedRoute>
                 }
               />

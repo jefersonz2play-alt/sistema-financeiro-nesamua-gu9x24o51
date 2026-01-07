@@ -2,15 +2,18 @@ import { useMemo } from 'react'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Package, AlertTriangle, ShoppingCart } from 'lucide-react'
 import { Product, Transaction } from '@/types'
+import { Link } from 'react-router-dom'
 
 interface InventoryInsightsProps {
   products: Product[]
   transactions: Transaction[]
+  timeRange?: string
 }
 
 export function InventoryInsights({
   products,
   transactions,
+  timeRange = '30',
 }: InventoryInsightsProps) {
   const totalSold = useMemo(() => {
     return transactions
@@ -47,22 +50,32 @@ export function InventoryInsights({
 
   return (
     <div className="grid gap-6 grid-cols-1 md:grid-cols-3">
-      <Card className="shadow-subtle border-none">
-        <CardHeader className="flex flex-row items-center justify-between pb-2">
-          <CardTitle className="text-sm font-medium text-muted-foreground uppercase tracking-wider">
-            Total Vendido
-          </CardTitle>
-          <div className="h-8 w-8 rounded-full bg-blue-100 flex items-center justify-center">
-            <ShoppingCart className="h-4 w-4 text-blue-600" />
-          </div>
-        </CardHeader>
-        <CardContent>
-          <div className="text-2xl font-bold">{totalSold} un.</div>
-          <p className="text-xs text-muted-foreground mt-1">
-            Total histórico de vendas
-          </p>
-        </CardContent>
-      </Card>
+      <Link
+        to={`/reports/sales?days=${timeRange}`}
+        className="block transition-transform hover:scale-105"
+      >
+        <Card className="shadow-subtle border-none h-full cursor-pointer hover:shadow-lg transition-shadow bg-blue-50/50 hover:bg-blue-50">
+          <CardHeader className="flex flex-row items-center justify-between pb-2">
+            <CardTitle className="text-sm font-medium text-muted-foreground uppercase tracking-wider">
+              Total Vendido
+            </CardTitle>
+            <div className="h-8 w-8 rounded-full bg-blue-100 flex items-center justify-center">
+              <ShoppingCart className="h-4 w-4 text-blue-600" />
+            </div>
+          </CardHeader>
+          <CardContent>
+            <div className="text-2xl font-bold text-foreground">
+              {totalSold} un.
+            </div>
+            <p className="text-xs text-muted-foreground mt-1">
+              Total histórico de vendas
+            </p>
+            <p className="text-[10px] text-blue-600 font-medium mt-2">
+              Ver Detalhes &rarr;
+            </p>
+          </CardContent>
+        </Card>
+      </Link>
 
       <Card className="shadow-subtle border-none">
         <CardHeader className="flex flex-row items-center justify-between pb-2">

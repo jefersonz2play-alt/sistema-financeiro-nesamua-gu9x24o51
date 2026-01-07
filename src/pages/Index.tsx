@@ -18,8 +18,8 @@ export default function Index() {
   const [notes, setNotes] = useState(
     'Conferir estoque de Jumbo para o fim de semana.',
   )
-  const [startDate, setStartDate] = useState('2023-10-01')
-  const [endDate, setEndDate] = useState('2023-12-31')
+  const [startDate, setStartDate] = useState('2026-01-01') // Updated default date
+  const [endDate, setEndDate] = useState(new Date().toISOString().split('T')[0])
   const { toast } = useToast()
 
   // Recalculate balances whenever transactions change

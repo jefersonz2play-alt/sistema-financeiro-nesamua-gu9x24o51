@@ -9,16 +9,20 @@ import {
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import { Progress } from '@/components/ui/progress'
 import { Employee, Transaction } from '@/types'
-import { TrendingDown, TrendingUp, Minus } from 'lucide-react'
+import { TrendingDown, TrendingUp, Minus, ExternalLink } from 'lucide-react'
+import { Link } from 'react-router-dom'
+import { Button } from '@/components/ui/button'
 
 interface EmployeePerformanceProps {
   employees: Employee[]
   transactions: Transaction[]
+  timeRange?: string
 }
 
 export function EmployeePerformance({
   employees,
   transactions,
+  timeRange = '30',
 }: EmployeePerformanceProps) {
   const stats = useMemo(() => {
     const now = new Date()
@@ -79,11 +83,18 @@ export function EmployeePerformance({
 
   return (
     <Card className="shadow-subtle border-none h-full">
-      <CardHeader>
-        <CardTitle className="text-lg">Desempenho da Equipe</CardTitle>
-        <CardDescription>
-          Atendimentos realizados no mês atual vs anterior.
-        </CardDescription>
+      <CardHeader className="flex flex-row items-start justify-between">
+        <div>
+          <CardTitle className="text-lg">Desempenho da Equipe</CardTitle>
+          <CardDescription>
+            Atendimentos realizados no mês atual vs anterior.
+          </CardDescription>
+        </div>
+        <Button variant="ghost" size="icon" asChild className="h-8 w-8">
+          <Link to={`/reports/employees?days=${timeRange}`}>
+            <ExternalLink className="w-4 h-4 text-muted-foreground" />
+          </Link>
+        </Button>
       </CardHeader>
       <CardContent className="space-y-6">
         {stats.map((emp) => (

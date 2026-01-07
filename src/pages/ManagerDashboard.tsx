@@ -6,6 +6,7 @@ import {
 } from 'lucide-react'
 import { format, subDays } from 'date-fns'
 import { ptBR } from 'date-fns/locale'
+import { Link } from 'react-router-dom'
 
 import { Button } from '@/components/ui/button'
 import {
@@ -79,26 +80,35 @@ export default function ManagerDashboard() {
 
       {/* Top Metrics Row */}
       <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
-        <Card className="shadow-subtle border-none md:col-span-1 bg-gradient-to-br from-primary/90 to-primary text-primary-foreground">
-          <CardHeader className="pb-2">
-            <CardTitle className="text-sm font-medium uppercase tracking-wider opacity-90">
-              Média Diária
-            </CardTitle>
-          </CardHeader>
-          <CardContent>
-            <div className="flex items-baseline gap-2">
-              <span className="text-4xl font-bold">{dailyAverage}</span>
-              <span className="text-sm opacity-80">atendimentos/dia</span>
-            </div>
-            <p className="text-xs mt-2 opacity-70">
-              Baseado nos últimos {timeRange} dias
-            </p>
-          </CardContent>
-        </Card>
+        <Link
+          to={`/reports/attendance?days=${timeRange}`}
+          className="block transition-transform hover:scale-105"
+        >
+          <Card className="shadow-subtle border-none md:col-span-1 bg-gradient-to-br from-primary/90 to-primary text-primary-foreground h-full cursor-pointer hover:shadow-lg transition-shadow">
+            <CardHeader className="pb-2">
+              <CardTitle className="text-sm font-medium uppercase tracking-wider opacity-90">
+                Média Diária
+              </CardTitle>
+            </CardHeader>
+            <CardContent>
+              <div className="flex items-baseline gap-2">
+                <span className="text-4xl font-bold">{dailyAverage}</span>
+                <span className="text-sm opacity-80">atendimentos/dia</span>
+              </div>
+              <p className="text-xs mt-2 opacity-70">
+                Baseado nos últimos {timeRange} dias. Clique para detalhes.
+              </p>
+            </CardContent>
+          </Card>
+        </Link>
 
         {/* Inventory Summary */}
         <div className="md:col-span-3">
-          <InventoryInsights products={products} transactions={transactions} />
+          <InventoryInsights
+            products={products}
+            transactions={transactions}
+            timeRange={timeRange}
+          />
         </div>
       </div>
 
@@ -109,6 +119,7 @@ export default function ManagerDashboard() {
           <EmployeePerformance
             employees={employees}
             transactions={transactions}
+            timeRange={timeRange}
           />
         </div>
 
