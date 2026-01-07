@@ -10,17 +10,13 @@ import { Badge } from '@/components/ui/badge'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { formatCurrency, formatDate } from '@/lib/utils'
 import { ArrowDownCircle, ArrowUpCircle } from 'lucide-react'
+import { Transaction } from '@/types'
 
 export type TransactionType = 'entry' | 'exit'
 
-export interface Transaction {
-  id: string
-  date: string
-  description: string
-  type: TransactionType
-  amount: number
-  balanceAfter: number
-}
+// Re-exporting Transaction from types to maintain compatibility if imported elsewhere,
+// or just use the one from types directly in this file.
+export type { Transaction }
 
 interface TransactionTableProps {
   transactions: Transaction[]

@@ -15,11 +15,13 @@ export const SERVICE_PRICES = [15, 20, 30, 40, 45, 50, 55, 60]
 interface ProductionTableProps {
   quantities: Record<number, number>
   onQuantityChange: (price: number, quantity: number) => void
+  readOnly?: boolean
 }
 
 export function ProductionTable({
   quantities,
   onQuantityChange,
+  readOnly = false,
 }: ProductionTableProps) {
   return (
     <Card className="shadow-subtle border-none overflow-hidden">
@@ -57,6 +59,7 @@ export function ProductionTable({
                         const val = parseInt(e.target.value) || 0
                         onQuantityChange(price, val)
                       }}
+                      disabled={readOnly}
                     />
                   </TableCell>
                   <TableCell className="text-right font-bold text-muted-foreground">

@@ -17,6 +17,7 @@ interface FinancialSummaryProps {
   status: 'paid' | 'partial' | 'open'
   onStatusChange: (status: 'paid' | 'partial' | 'open') => void
   lastUpdated: Date
+  readOnly?: boolean
 }
 
 export function FinancialSummary({
@@ -26,6 +27,7 @@ export function FinancialSummary({
   status,
   onStatusChange,
   lastUpdated,
+  readOnly = false,
 }: FinancialSummaryProps) {
   const openAmount = totalReceivable - paidAmount
 
@@ -54,6 +56,7 @@ export function FinancialSummary({
               className="pl-9 font-semibold text-lg"
               value={paidAmount}
               onChange={(e) => onPaidAmountChange(Number(e.target.value))}
+              disabled={readOnly}
             />
           </div>
         </div>
@@ -73,7 +76,11 @@ export function FinancialSummary({
           <Label className="text-muted-foreground text-xs uppercase tracking-wider font-semibold">
             Status do Pagamento
           </Label>
-          <Select value={status} onValueChange={(v: any) => onStatusChange(v)}>
+          <Select
+            value={status}
+            onValueChange={(v: any) => onStatusChange(v)}
+            disabled={readOnly}
+          >
             <SelectTrigger
               className={
                 status === 'paid'

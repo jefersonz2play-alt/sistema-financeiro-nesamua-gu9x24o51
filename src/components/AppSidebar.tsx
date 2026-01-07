@@ -1,4 +1,10 @@
-import { ArrowLeftRight, CreditCard, PieChart } from 'lucide-react'
+import {
+  ArrowLeftRight,
+  CreditCard,
+  PieChart,
+  Users,
+  LayoutDashboard,
+} from 'lucide-react'
 import {
   Sidebar,
   SidebarContent,
@@ -14,13 +20,15 @@ import {
 } from '@/components/ui/sidebar'
 import { useLocation, Link } from 'react-router-dom'
 import { cn } from '@/lib/utils'
+import useAuthStore from '@/stores/useAuthStore'
 
 export function AppSidebar() {
   const location = useLocation()
   const { state } = useSidebar()
+  const { user } = useAuthStore()
   const isCollapsed = state === 'collapsed'
 
-  const items = [
+  const managerItems = [
     {
       title: 'Fluxo de Caixa',
       url: '/',
@@ -31,7 +39,22 @@ export function AppSidebar() {
       url: '/payments',
       icon: CreditCard,
     },
+    {
+      title: 'Novo Funcionário',
+      url: '/employees/new',
+      icon: Users,
+    },
   ]
+
+  const employeeItems = [
+    {
+      title: 'Meu Painel',
+      url: '/dashboard',
+      icon: LayoutDashboard,
+    },
+  ]
+
+  const items = user?.role === 'manager' ? managerItems : employeeItems
 
   return (
     <Sidebar collapsible="icon">

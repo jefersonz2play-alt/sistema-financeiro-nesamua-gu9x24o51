@@ -19000,6 +19000,58 @@ var DollarSign = createLucideIcon("dollar-sign", [["line", {
 	d: "M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6",
 	key: "1b0p4s"
 }]]);
+var LayoutDashboard = createLucideIcon("layout-dashboard", [
+	["rect", {
+		width: "7",
+		height: "9",
+		x: "3",
+		y: "3",
+		rx: "1",
+		key: "10lvy0"
+	}],
+	["rect", {
+		width: "7",
+		height: "5",
+		x: "14",
+		y: "3",
+		rx: "1",
+		key: "16une8"
+	}],
+	["rect", {
+		width: "7",
+		height: "9",
+		x: "14",
+		y: "12",
+		rx: "1",
+		key: "1hutg5"
+	}],
+	["rect", {
+		width: "7",
+		height: "5",
+		x: "3",
+		y: "16",
+		rx: "1",
+		key: "ldoo1y"
+	}]
+]);
+var LoaderCircle = createLucideIcon("loader-circle", [["path", {
+	d: "M21 12a9 9 0 1 1-6.219-8.56",
+	key: "13zald"
+}]]);
+var LogOut = createLucideIcon("log-out", [
+	["path", {
+		d: "m16 17 5-5-5-5",
+		key: "1bji2h"
+	}],
+	["path", {
+		d: "M21 12H9",
+		key: "dn1m92"
+	}],
+	["path", {
+		d: "M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4",
+		key: "1uf3rs"
+	}]
+]);
 var PanelLeft = createLucideIcon("panel-left", [["rect", {
 	width: "18",
 	height: "18",
@@ -19055,6 +19107,52 @@ var TrendingUp = createLucideIcon("trending-up", [["path", {
 	d: "m22 7-8.5 8.5-5-5L2 17",
 	key: "1t1m79"
 }]]);
+var UserPlus = createLucideIcon("user-plus", [
+	["path", {
+		d: "M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2",
+		key: "1yyitq"
+	}],
+	["circle", {
+		cx: "9",
+		cy: "7",
+		r: "4",
+		key: "nufk8"
+	}],
+	["line", {
+		x1: "19",
+		x2: "19",
+		y1: "8",
+		y2: "14",
+		key: "1bvyxn"
+	}],
+	["line", {
+		x1: "22",
+		x2: "16",
+		y1: "11",
+		y2: "11",
+		key: "1shjgl"
+	}]
+]);
+var Users = createLucideIcon("users", [
+	["path", {
+		d: "M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2",
+		key: "1yyitq"
+	}],
+	["path", {
+		d: "M16 3.128a4 4 0 0 1 0 7.744",
+		key: "16gr8j"
+	}],
+	["path", {
+		d: "M22 21v-2a4 4 0 0 0-3-3.87",
+		key: "kshegd"
+	}],
+	["circle", {
+		cx: "9",
+		cy: "7",
+		r: "4",
+		key: "nufk8"
+	}]
+]);
 var X = createLucideIcon("x", [["path", {
 	d: "M18 6 6 18",
 	key: "1bl5f8"
@@ -36104,8 +36202,75 @@ var INITIAL_TRANSACTIONS = [
 		balanceAfter: 899.5
 	}
 ];
-function Index() {
+var INITIAL_EMPLOYEES = [
+	{
+		id: "1",
+		name: "Ana Silva",
+		pix: "123.456.789-00",
+		email: "ana@airbnb.com",
+		password: "123",
+		quantities: {
+			15: 10,
+			20: 5
+		},
+		paidAmount: 100,
+		status: "partial",
+		lastUpdated: (/* @__PURE__ */ new Date()).toISOString()
+	},
+	{
+		id: "2",
+		name: "Carlos Oliveira",
+		pix: "ana.silva@email.com",
+		email: "carlos@airbnb.com",
+		password: "123",
+		quantities: {},
+		paidAmount: 0,
+		status: "open",
+		lastUpdated: (/* @__PURE__ */ new Date()).toISOString()
+	},
+	{
+		id: "3",
+		name: "Mariana Santos",
+		pix: "11999998888",
+		email: "mariana@airbnb.com",
+		password: "123",
+		quantities: {},
+		paidAmount: 0,
+		status: "open",
+		lastUpdated: (/* @__PURE__ */ new Date()).toISOString()
+	}
+];
+var DataContext = (0, import_react.createContext)(void 0);
+function DataProvider({ children }) {
 	const [transactions, setTransactions] = (0, import_react.useState)(INITIAL_TRANSACTIONS);
+	const [employees, setEmployees] = (0, import_react.useState)(INITIAL_EMPLOYEES);
+	const addTransaction = (transaction) => {
+		setTransactions((prev) => [...prev, transaction]);
+	};
+	const addEmployee = (employee) => {
+		setEmployees((prev) => [...prev, employee]);
+	};
+	const updateEmployee = (id, data) => {
+		setEmployees((prev) => prev.map((emp) => emp.id === id ? {
+			...emp,
+			...data
+		} : emp));
+	};
+	return (0, import_react.createElement)(DataContext.Provider, { value: {
+		transactions,
+		employees,
+		addTransaction,
+		addEmployee,
+		updateEmployee
+	} }, children);
+}
+function useDataStore() {
+	const context = (0, import_react.useContext)(DataContext);
+	if (!context) throw new Error("useDataStore must be used within a DataProvider");
+	return context;
+}
+function Index() {
+	const { transactions, addTransaction } = useDataStore();
 	const [notes, setNotes] = (0, import_react.useState)("Verificar o recebimento do cliente X até sexta-feira.");
 	const [startDate, setStartDate] = (0, import_react.useState)("2023-10-01");
 	const [endDate, setEndDate] = (0, import_react.useState)("2023-10-31");
@@ -36142,15 +36307,14 @@ function Index() {
 		return filteredTransactions[filteredTransactions.length - 1].balanceAfter;
 	}, [filteredTransactions, initialBalance]);
 	const handleAddTransaction = (data) => {
-		const newTransaction = {
+		addTransaction({
 			id: Math.random().toString(36).substr(2, 9),
 			date: data.date.toISOString().split("T")[0],
 			description: data.description,
 			type: data.type,
 			amount: data.amount,
 			balanceAfter: 0
-		};
-		setTransactions((prev) => [...prev, newTransaction]);
+		});
 		toast$2({
 			title: "Movimentação adicionada",
 			description: "O registro de caixa foi atualizado com sucesso."
@@ -36300,7 +36464,7 @@ var require_use_sync_external_store_shim_development = /* @__PURE__ */ __commonJ
 				var cachedValue = getSnapshot();
 				objectIs(value, cachedValue) || (console.error("The result of getSnapshot should be cached to avoid an infinite loop"), didWarnUncachedGetSnapshot = !0);
 			}
-			cachedValue = useState$6({ inst: {
+			cachedValue = useState$10({ inst: {
 				value,
 				getSnapshot
 			} });
@@ -36314,7 +36478,7 @@ var require_use_sync_external_store_shim_development = /* @__PURE__ */ __commonJ
 				value,
 				getSnapshot
 			]);
-			useEffect$2(function() {
+			useEffect$4(function() {
 				checkIfSnapshotChanged(inst) && forceUpdate({ inst });
 				return subscribe$1(function() {
 					checkIfSnapshotChanged(inst) && forceUpdate({ inst });
@@ -36337,7 +36501,7 @@ var require_use_sync_external_store_shim_development = /* @__PURE__ */ __commonJ
 			return getSnapshot();
 		}
 		"undefined" !== typeof __REACT_DEVTOOLS_GLOBAL_HOOK__ && "function" === typeof __REACT_DEVTOOLS_GLOBAL_HOOK__.registerInternalModuleStart && __REACT_DEVTOOLS_GLOBAL_HOOK__.registerInternalModuleStart(Error());
-		var React$30 = require_react(), objectIs = "function" === typeof Object.is ? Object.is : is, useState$6 = React$30.useState, useEffect$2 = React$30.useEffect, useLayoutEffect$2 = React$30.useLayoutEffect, useDebugValue = React$30.useDebugValue, didWarnOld18Alpha = !1, didWarnUncachedGetSnapshot = !1, shim = "undefined" === typeof window || "undefined" === typeof window.document || "undefined" === typeof window.document.createElement ? useSyncExternalStore$1 : useSyncExternalStore$2;
+		var React$30 = require_react(), objectIs = "function" === typeof Object.is ? Object.is : is, useState$10 = React$30.useState, useEffect$4 = React$30.useEffect, useLayoutEffect$2 = React$30.useLayoutEffect, useDebugValue = React$30.useDebugValue, didWarnOld18Alpha = !1, didWarnUncachedGetSnapshot = !1, shim = "undefined" === typeof window || "undefined" === typeof window.document || "undefined" === typeof window.document.createElement ? useSyncExternalStore$1 : useSyncExternalStore$2;
 		exports.useSyncExternalStore = void 0 !== React$30.useSyncExternalStore ? React$30.useSyncExternalStore : shim;
 		"undefined" !== typeof __REACT_DEVTOOLS_GLOBAL_HOOK__ && "function" === typeof __REACT_DEVTOOLS_GLOBAL_HOOK__.registerInternalModuleStop && __REACT_DEVTOOLS_GLOBAL_HOOK__.registerInternalModuleStop(Error());
 	})();
@@ -36475,7 +36639,7 @@ const SERVICE_PRICES = [
 	55,
 	60
 ];
-function ProductionTable({ quantities, onQuantityChange }) {
+function ProductionTable({ quantities, onQuantityChange, readOnly = false }) {
 	return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(Card, {
 		className: "shadow-subtle border-none overflow-hidden",
 		children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(CardHeader, {
@@ -36515,7 +36679,8 @@ function ProductionTable({ quantities, onQuantityChange }) {
 							value: quantities[price] || "",
 							onChange: (e) => {
 								onQuantityChange(price, parseInt(e.target.value) || 0);
-							}
+							},
+							disabled: readOnly
 						}) }),
 						/* @__PURE__ */ (0, import_jsx_runtime.jsx)(TableCell, {
 							className: "text-right font-bold text-muted-foreground",
@@ -36527,7 +36692,7 @@ function ProductionTable({ quantities, onQuantityChange }) {
 		})]
 	});
 }
-function FinancialSummary({ totalReceivable, paidAmount, onPaidAmountChange, status, onStatusChange, lastUpdated }) {
+function FinancialSummary({ totalReceivable, paidAmount, onPaidAmountChange, status, onStatusChange, lastUpdated, readOnly = false }) {
 	const openAmount = totalReceivable - paidAmount;
 	return /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Card, {
 		className: "shadow-subtle border-none bg-white",
@@ -36558,7 +36723,8 @@ function FinancialSummary({ totalReceivable, paidAmount, onPaidAmountChange, sta
 							type: "number",
 							className: "pl-9 font-semibold text-lg",
 							value: paidAmount,
-							onChange: (e) => onPaidAmountChange(Number(e.target.value))
+							onChange: (e) => onPaidAmountChange(Number(e.target.value)),
+							disabled: readOnly
 						})]
 					})]
 				}),
@@ -36582,6 +36748,7 @@ function FinancialSummary({ totalReceivable, paidAmount, onPaidAmountChange, sta
 						/* @__PURE__ */ (0, import_jsx_runtime.jsxs)(Select, {
 							value: status,
 							onValueChange: (v) => onStatusChange(v),
+							disabled: readOnly,
 							children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(SelectTrigger, {
 								className: status === "paid" ? "bg-green-100 border-green-200 text-green-800" : status === "partial" ? "bg-yellow-100 border-yellow-200 text-yellow-800" : "bg-red-100 border-red-200 text-red-800",
 								children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(SelectValue, {})
@@ -36616,38 +36783,32 @@ function FinancialSummary({ totalReceivable, paidAmount, onPaidAmountChange, sta
 		})
 	});
 }
-var EMPLOYEES = [
-	{
-		id: "1",
-		name: "Ana Silva",
-		pix: "123.456.789-00"
-	},
-	{
-		id: "2",
-		name: "Carlos Oliveira",
-		pix: "ana.silva@email.com"
-	},
-	{
-		id: "3",
-		name: "Mariana Santos",
-		pix: "11999998888"
-	}
-];
 function EmployeePayments() {
-	const [selectedEmployeeId, setSelectedEmployeeId] = (0, import_react.useState)(EMPLOYEES[0].id);
+	const { employees, updateEmployee } = useDataStore();
+	const [selectedEmployeeId, setSelectedEmployeeId] = (0, import_react.useState)("");
 	const [quantities, setQuantities] = (0, import_react.useState)({});
 	const [paidAmount, setPaidAmount] = (0, import_react.useState)(0);
 	const [status, setStatus] = (0, import_react.useState)("open");
 	const [notes, setNotes] = (0, import_react.useState)("");
 	const [lastUpdated, setLastUpdated] = (0, import_react.useState)(/* @__PURE__ */ new Date());
 	const { toast: toast$2 } = useToast();
-	const selectedEmployee = EMPLOYEES.find((e) => e.id === selectedEmployeeId);
+	const selectedEmployee = (0, import_react.useMemo)(() => employees.find((e) => e.id === selectedEmployeeId), [employees, selectedEmployeeId]);
+	(0, import_react.useEffect)(() => {
+		if (employees.length > 0 && !selectedEmployeeId) setSelectedEmployeeId(employees[0].id);
+	}, [employees, selectedEmployeeId]);
+	(0, import_react.useEffect)(() => {
+		if (selectedEmployee) {
+			setQuantities(selectedEmployee.quantities || {});
+			setPaidAmount(selectedEmployee.paidAmount || 0);
+			setStatus(selectedEmployee.status || "open");
+			setLastUpdated(selectedEmployee.lastUpdated ? new Date(selectedEmployee.lastUpdated) : /* @__PURE__ */ new Date());
+		}
+	}, [selectedEmployee]);
 	const handleQuantityChange = (price, quantity) => {
 		setQuantities((prev) => ({
 			...prev,
 			[price]: quantity
 		}));
-		setLastUpdated(/* @__PURE__ */ new Date());
 	};
 	const totalReceivable = (0, import_react.useMemo)(() => {
 		return SERVICE_PRICES.reduce((total, price) => {
@@ -36655,6 +36816,14 @@ function EmployeePayments() {
 		}, 0);
 	}, [quantities]);
 	const handleSave = () => {
+		if (!selectedEmployeeId) return;
+		updateEmployee(selectedEmployeeId, {
+			quantities,
+			paidAmount,
+			status,
+			lastUpdated: (/* @__PURE__ */ new Date()).toISOString()
+		});
+		setLastUpdated(/* @__PURE__ */ new Date());
 		toast$2({
 			title: "Pagamento Salvo",
 			description: `Os dados de pagamento de ${selectedEmployee?.name} foram atualizados.`
@@ -36669,6 +36838,10 @@ function EmployeePayments() {
 			});
 		}
 	};
+	if (employees.length === 0) return /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+		className: "p-8 text-center text-muted-foreground",
+		children: "Nenhum funcionário cadastrado."
+	});
 	return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
 		className: "space-y-6 pb-10",
 		children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
@@ -36680,16 +36853,11 @@ function EmployeePayments() {
 					children: "Selecione o Funcionário"
 				}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(Select, {
 					value: selectedEmployeeId,
-					onValueChange: (v) => {
-						setSelectedEmployeeId(v);
-						setQuantities({});
-						setPaidAmount(0);
-						setStatus("open");
-					},
+					onValueChange: setSelectedEmployeeId,
 					children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(SelectTrigger, {
 						className: "w-full h-11",
 						children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(SelectValue, { placeholder: "Selecione..." })
-					}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)(SelectContent, { children: EMPLOYEES.map((emp) => /* @__PURE__ */ (0, import_jsx_runtime.jsx)(SelectItem, {
+					}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)(SelectContent, { children: employees.map((emp) => /* @__PURE__ */ (0, import_jsx_runtime.jsx)(SelectItem, {
 						value: emp.id,
 						children: emp.name
 					}, emp.id)) })]
@@ -36756,15 +36924,9 @@ function EmployeePayments() {
 				children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(FinancialSummary, {
 					totalReceivable,
 					paidAmount,
-					onPaidAmountChange: (val) => {
-						setPaidAmount(val);
-						setLastUpdated(/* @__PURE__ */ new Date());
-					},
+					onPaidAmountChange: (val) => setPaidAmount(val),
 					status,
-					onStatusChange: (val) => {
-						setStatus(val);
-						setLastUpdated(/* @__PURE__ */ new Date());
-					},
+					onStatusChange: (val) => setStatus(val),
 					lastUpdated
 				}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)(ProductionTable, {
 					quantities,
@@ -36772,6 +36934,384 @@ function EmployeePayments() {
 				})]
 			})]
 		})]
+	});
+}
+var AuthContext = (0, import_react.createContext)(void 0);
+function AuthProvider({ children }) {
+	const [user, setUser] = (0, import_react.useState)(null);
+	const login = (userData) => {
+		setUser(userData);
+	};
+	const logout = () => {
+		setUser(null);
+	};
+	return (0, import_react.createElement)(AuthContext.Provider, { value: {
+		user,
+		login,
+		logout,
+		isAuthenticated: !!user
+	} }, children);
+}
+function useAuthStore() {
+	const context = (0, import_react.useContext)(AuthContext);
+	if (!context) throw new Error("useAuthStore must be used within a AuthProvider");
+	return context;
+}
+function EmployeeDashboard() {
+	const { user } = useAuthStore();
+	const { employees } = useDataStore();
+	const employeeData = (0, import_react.useMemo)(() => {
+		return employees.find((emp) => emp.id === user?.id);
+	}, [employees, user]);
+	if (!employeeData) return /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+		className: "p-8 text-center",
+		children: "Carregando dados..."
+	});
+	const totalReceivable = (0, import_react.useMemo)(() => {
+		return SERVICE_PRICES.reduce((total, price) => {
+			return total + price * (employeeData.quantities[price] || 0);
+		}, 0);
+	}, [employeeData.quantities]);
+	const lastUpdated = employeeData.lastUpdated ? new Date(employeeData.lastUpdated) : /* @__PURE__ */ new Date();
+	return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+		className: "space-y-6 pb-10",
+		children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+			className: "bg-primary/5 rounded-xl p-6 border border-primary/10",
+			children: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+				className: "flex items-center gap-4",
+				children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)(Avatar, {
+					className: "w-20 h-20 border-4 border-white shadow-md",
+					children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(AvatarImage, { src: `https://img.usecurling.com/ppl/medium?gender=female&seed=${employeeData.id}` }), /* @__PURE__ */ (0, import_jsx_runtime.jsx)(AvatarFallback, { children: employeeData.name.substring(0, 2) })]
+				}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("h1", {
+					className: "text-2xl font-bold text-foreground",
+					children: [
+						"Olá, ",
+						employeeData.name,
+						"!"
+					]
+				}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
+					className: "text-muted-foreground",
+					children: "Bem-vindo ao seu painel financeiro."
+				})] })]
+			})
+		}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+			className: "grid grid-cols-1 lg:grid-cols-3 gap-6",
+			children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+				className: "space-y-6 lg:col-span-1",
+				children: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(Card, {
+					className: "shadow-subtle border-none",
+					children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(CardHeader, { children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(CardTitle, {
+						className: "text-lg",
+						children: "Dados do Funcionário"
+					}) }), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(CardContent, {
+						className: "space-y-4",
+						children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+							className: "p-3 bg-muted/30 rounded-lg",
+							children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
+								className: "text-xs font-semibold text-muted-foreground uppercase tracking-wide mb-1",
+								children: "Chave PIX Cadastrada"
+							}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
+								className: "font-mono text-sm",
+								children: employeeData.pix
+							})]
+						}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+							className: "p-3 bg-muted/30 rounded-lg",
+							children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
+								className: "text-xs font-semibold text-muted-foreground uppercase tracking-wide mb-1",
+								children: "Email de Acesso"
+							}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
+								className: "text-sm",
+								children: employeeData.email
+							})]
+						})]
+					})]
+				})
+			}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+				className: "space-y-6 lg:col-span-2",
+				children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(FinancialSummary, {
+					totalReceivable,
+					paidAmount: employeeData.paidAmount,
+					onPaidAmountChange: () => {},
+					status: employeeData.status,
+					onStatusChange: () => {},
+					lastUpdated,
+					readOnly: true
+				}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)(ProductionTable, {
+					quantities: employeeData.quantities,
+					onQuantityChange: () => {},
+					readOnly: true
+				})]
+			})]
+		})]
+	});
+}
+var employeeSchema = object({
+	name: string().min(2, { message: "O nome deve ter pelo menos 2 caracteres." }),
+	email: string().email({ message: "Insira um email válido." }),
+	pix: string().min(5, { message: "Chave PIX inválida." }),
+	password: string().min(4, { message: "A senha deve ter pelo menos 4 caracteres." })
+});
+function RegisterEmployee() {
+	const { addEmployee } = useDataStore();
+	const { toast: toast$2 } = useToast();
+	const navigate = useNavigate();
+	const [isSubmitting, setIsSubmitting] = (0, import_react.useState)(false);
+	const form = useForm({
+		resolver: a(employeeSchema),
+		defaultValues: {
+			name: "",
+			email: "",
+			pix: "",
+			password: ""
+		}
+	});
+	function onSubmit(values) {
+		setIsSubmitting(true);
+		setTimeout(() => {
+			addEmployee({
+				id: Math.random().toString(36).substr(2, 9),
+				name: values.name,
+				email: values.email,
+				pix: values.pix,
+				password: values.password,
+				quantities: {},
+				paidAmount: 0,
+				status: "open",
+				lastUpdated: (/* @__PURE__ */ new Date()).toISOString()
+			});
+			toast$2({
+				title: "Funcionário cadastrado!",
+				description: `${values.name} foi adicionado ao sistema com sucesso.`
+			});
+			setIsSubmitting(false);
+			navigate("/payments");
+		}, 1e3);
+	}
+	return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+		className: "max-w-3xl mx-auto pb-10",
+		children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+			className: "mb-6",
+			children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("h1", {
+				className: "text-3xl font-bold tracking-tight text-foreground",
+				children: "Novo Funcionário"
+			}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
+				className: "text-muted-foreground mt-2",
+				children: "Cadastre novos membros da equipe e credenciais de acesso."
+			})]
+		}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(Card, {
+			className: "shadow-subtle border-none",
+			children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)(CardHeader, { children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)(CardTitle, {
+				className: "flex items-center gap-2",
+				children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(UserPlus, { className: "w-5 h-5 text-primary" }), "Dados do Colaborador"]
+			}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)(CardDescription, { children: "Preencha as informações abaixo para criar uma nova conta de funcionário." })] }), /* @__PURE__ */ (0, import_jsx_runtime.jsx)(CardContent, { children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Form, {
+				...form,
+				children: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("form", {
+					onSubmit: form.handleSubmit(onSubmit),
+					className: "space-y-6",
+					children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+						className: "grid grid-cols-1 md:grid-cols-2 gap-6",
+						children: [
+							/* @__PURE__ */ (0, import_jsx_runtime.jsx)(FormField, {
+								control: form.control,
+								name: "name",
+								render: ({ field }) => /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(FormItem, { children: [
+									/* @__PURE__ */ (0, import_jsx_runtime.jsx)(FormLabel, { children: "Nome Completo" }),
+									/* @__PURE__ */ (0, import_jsx_runtime.jsx)(FormControl, { children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Input, {
+										placeholder: "Ex: João da Silva",
+										...field
+									}) }),
+									/* @__PURE__ */ (0, import_jsx_runtime.jsx)(FormMessage, {})
+								] })
+							}),
+							/* @__PURE__ */ (0, import_jsx_runtime.jsx)(FormField, {
+								control: form.control,
+								name: "email",
+								render: ({ field }) => /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(FormItem, { children: [
+									/* @__PURE__ */ (0, import_jsx_runtime.jsx)(FormLabel, { children: "Email (Usuário de Acesso)" }),
+									/* @__PURE__ */ (0, import_jsx_runtime.jsx)(FormControl, { children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Input, {
+										placeholder: "joao@empresa.com",
+										...field
+									}) }),
+									/* @__PURE__ */ (0, import_jsx_runtime.jsx)(FormMessage, {})
+								] })
+							}),
+							/* @__PURE__ */ (0, import_jsx_runtime.jsx)(FormField, {
+								control: form.control,
+								name: "pix",
+								render: ({ field }) => /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(FormItem, { children: [
+									/* @__PURE__ */ (0, import_jsx_runtime.jsx)(FormLabel, { children: "Chave PIX" }),
+									/* @__PURE__ */ (0, import_jsx_runtime.jsx)(FormControl, { children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Input, {
+										placeholder: "CPF, Email ou Telefone",
+										...field
+									}) }),
+									/* @__PURE__ */ (0, import_jsx_runtime.jsx)(FormDescription, { children: "Utilizada para realizar os pagamentos." }),
+									/* @__PURE__ */ (0, import_jsx_runtime.jsx)(FormMessage, {})
+								] })
+							}),
+							/* @__PURE__ */ (0, import_jsx_runtime.jsx)(FormField, {
+								control: form.control,
+								name: "password",
+								render: ({ field }) => /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(FormItem, { children: [
+									/* @__PURE__ */ (0, import_jsx_runtime.jsx)(FormLabel, { children: "Senha de Acesso" }),
+									/* @__PURE__ */ (0, import_jsx_runtime.jsx)(FormControl, { children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Input, {
+										type: "password",
+										placeholder: "••••••",
+										...field
+									}) }),
+									/* @__PURE__ */ (0, import_jsx_runtime.jsx)(FormDescription, { children: "Senha inicial para o funcionário acessar o sistema." }),
+									/* @__PURE__ */ (0, import_jsx_runtime.jsx)(FormMessage, {})
+								] })
+							})
+						]
+					}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+						className: "flex justify-end pt-4",
+						children: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(Button, {
+							type: "submit",
+							size: "lg",
+							className: "rounded-full px-8",
+							disabled: isSubmitting,
+							children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Save, { className: "w-4 h-4 mr-2" }), isSubmitting ? "Salvando..." : "Cadastrar Funcionário"]
+						})
+					})]
+				})
+			}) })]
+		})]
+	});
+}
+function Login() {
+	const [email$1, setEmail] = (0, import_react.useState)("");
+	const [password, setPassword] = (0, import_react.useState)("");
+	const [isLoading, setIsLoading] = (0, import_react.useState)(false);
+	const { login } = useAuthStore();
+	const { employees } = useDataStore();
+	const navigate = useNavigate();
+	const { toast: toast$2 } = useToast();
+	const handleLogin = (e) => {
+		e.preventDefault();
+		setIsLoading(true);
+		setTimeout(() => {
+			if (email$1 === "admin@airbnb.com" && password === "admin") {
+				login({
+					id: "admin",
+					name: "Administrador",
+					email: "admin@airbnb.com",
+					role: "manager"
+				});
+				toast$2({
+					title: "Bem-vindo!",
+					description: "Login realizado com sucesso."
+				});
+				navigate("/");
+				return;
+			}
+			const employee = employees.find((emp) => emp.email === email$1 && emp.password === password);
+			if (employee) {
+				login({
+					id: employee.id,
+					name: employee.name,
+					email: employee.email,
+					role: "employee"
+				});
+				toast$2({
+					title: `Olá, ${employee.name}`,
+					description: "Login realizado com sucesso."
+				});
+				navigate("/dashboard");
+				return;
+			}
+			toast$2({
+				variant: "destructive",
+				title: "Erro no login",
+				description: "Credenciais inválidas. Verifique seu e-mail e senha."
+			});
+			setIsLoading(false);
+		}, 1e3);
+	};
+	return /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+		className: "min-h-screen flex items-center justify-center bg-gray-50 px-4",
+		children: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(Card, {
+			className: "w-full max-w-md shadow-lg border-none",
+			children: [
+				/* @__PURE__ */ (0, import_jsx_runtime.jsxs)(CardHeader, {
+					className: "space-y-1 text-center",
+					children: [
+						/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+							className: "flex justify-center mb-4",
+							children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+								className: "w-12 h-12 bg-primary rounded-full flex items-center justify-center",
+								children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)("svg", {
+									xmlns: "http://www.w3.org/2000/svg",
+									viewBox: "0 0 24 24",
+									fill: "none",
+									stroke: "currentColor",
+									strokeWidth: "2",
+									strokeLinecap: "round",
+									strokeLinejoin: "round",
+									className: "w-8 h-8 text-white",
+									children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)("path", { d: "M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5" })
+								})
+							})
+						}),
+						/* @__PURE__ */ (0, import_jsx_runtime.jsx)(CardTitle, {
+							className: "text-2xl font-bold tracking-tight text-foreground",
+							children: "Bem-vindo de volta"
+						}),
+						/* @__PURE__ */ (0, import_jsx_runtime.jsx)(CardDescription, { children: "Entre com suas credenciais para acessar o sistema" })
+					]
+				}),
+				/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("form", {
+					onSubmit: handleLogin,
+					children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)(CardContent, {
+						className: "space-y-4",
+						children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+							className: "space-y-2",
+							children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Label, {
+								htmlFor: "email",
+								children: "Email"
+							}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Input, {
+								id: "email",
+								type: "email",
+								placeholder: "nome@exemplo.com",
+								value: email$1,
+								onChange: (e) => setEmail(e.target.value),
+								required: true,
+								className: "h-11"
+							})]
+						}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+							className: "space-y-2",
+							children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+								className: "flex items-center justify-between",
+								children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Label, {
+									htmlFor: "password",
+									children: "Senha"
+								})
+							}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Input, {
+								id: "password",
+								type: "password",
+								placeholder: "••••••••",
+								value: password,
+								onChange: (e) => setPassword(e.target.value),
+								required: true,
+								className: "h-11"
+							})]
+						})]
+					}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)(CardFooter, { children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Button, {
+						type: "submit",
+						className: "w-full h-11 text-base font-medium rounded-lg",
+						disabled: isLoading,
+						children: isLoading ? /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(import_jsx_runtime.Fragment, { children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(LoaderCircle, { className: "mr-2 h-4 w-4 animate-spin" }), "Entrando..."] }) : "Entrar"
+					}) })]
+				}),
+				/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+					className: "text-center p-6 pt-0 text-sm text-muted-foreground",
+					children: [
+						/* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", { children: "Credenciais Demo:" }),
+						/* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", { children: "Admin: admin@airbnb.com / admin" }),
+						/* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", { children: "Func: ana@airbnb.com / 123" })
+					]
+				})
+			]
+		})
 	});
 }
 var NotFound = () => {
@@ -37269,16 +37809,31 @@ SidebarMenuSubButton.displayName = "SidebarMenuSubButton";
 function AppSidebar() {
 	const location = useLocation();
 	const { state } = useSidebar();
+	const { user } = useAuthStore();
 	const isCollapsed = state === "collapsed";
-	const items = [{
-		title: "Fluxo de Caixa",
-		url: "/",
-		icon: ArrowLeftRight
-	}, {
-		title: "Pagamentos",
-		url: "/payments",
-		icon: CreditCard
+	const managerItems = [
+		{
+			title: "Fluxo de Caixa",
+			url: "/",
+			icon: ArrowLeftRight
+		},
+		{
+			title: "Pagamentos",
+			url: "/payments",
+			icon: CreditCard
+		},
+		{
+			title: "Novo Funcionário",
+			url: "/employees/new",
+			icon: Users
+		}
+	];
+	const employeeItems = [{
+		title: "Meu Painel",
+		url: "/dashboard",
+		icon: LayoutDashboard
 	}];
+	const items = user?.role === "manager" ? managerItems : employeeItems;
 	return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(Sidebar, {
 		collapsible: "icon",
 		children: [
@@ -37314,12 +37869,20 @@ function AppSidebar() {
 }
 function Layout() {
 	const location = useLocation();
+	const navigate = useNavigate();
+	const { user, logout } = useAuthStore();
 	const getPageTitle = (pathname) => {
 		switch (pathname) {
 			case "/": return "Registro de Caixa";
 			case "/payments": return "Pagamento de Funcionários";
+			case "/dashboard": return "Meu Painel";
+			case "/employees/new": return "Cadastrar Funcionário";
 			default: return "Sistema Financeiro";
 		}
+	};
+	const handleLogout = () => {
+		logout();
+		navigate("/login");
 	};
 	return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(SidebarProvider, { children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(AppSidebar, {}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(SidebarInset, { children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("header", {
 		className: "sticky top-0 flex h-16 shrink-0 items-center gap-2 border-b bg-background/80 backdrop-blur-md px-6 z-10 transition-all",
@@ -37338,22 +37901,32 @@ function Layout() {
 					className: "flex items-center gap-4",
 					children: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
 						className: "flex items-center gap-3",
-						children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-							className: "text-right hidden sm:block",
-							children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
-								className: "text-sm font-medium leading-none",
-								children: "Administrador"
-							}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
-								className: "text-xs text-muted-foreground",
-								children: "Gerente"
-							})]
-						}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(Avatar, {
-							className: "h-9 w-9 border-2 border-background shadow-sm cursor-pointer hover:opacity-80 transition-opacity",
-							children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(AvatarImage, {
-								src: "https://img.usecurling.com/ppl/thumbnail?gender=male",
-								alt: "Admin"
-							}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)(AvatarFallback, { children: "AD" })]
-						})]
+						children: [
+							/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+								className: "text-right hidden sm:block",
+								children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
+									className: "text-sm font-medium leading-none",
+									children: user?.name || "Usuário"
+								}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
+									className: "text-xs text-muted-foreground",
+									children: user?.role === "manager" ? "Administrador" : "Funcionário"
+								})]
+							}),
+							/* @__PURE__ */ (0, import_jsx_runtime.jsxs)(Avatar, {
+								className: "h-9 w-9 border-2 border-background shadow-sm cursor-pointer hover:opacity-80 transition-opacity",
+								children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(AvatarImage, {
+									src: `https://img.usecurling.com/ppl/thumbnail?gender=${user?.role === "manager" ? "male" : "female"}`,
+									alt: user?.name
+								}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)(AvatarFallback, { children: user?.name?.substring(0, 2).toUpperCase() })]
+							}),
+							/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Button, {
+								variant: "ghost",
+								size: "icon",
+								onClick: handleLogout,
+								className: "ml-2",
+								children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(LogOut, { className: "w-4 h-4 text-muted-foreground" })
+							})
+						]
 					})
 				})]
 			})
@@ -37366,30 +37939,77 @@ function Layout() {
 		})
 	})] })] });
 }
+function ProtectedRoute({ children, allowedRoles }) {
+	const { user, isAuthenticated } = useAuthStore();
+	const navigate = useNavigate();
+	(0, import_react.useEffect)(() => {
+		if (!isAuthenticated) navigate("/login");
+		else if (allowedRoles && user && !allowedRoles.includes(user.role)) if (user.role === "employee") navigate("/dashboard");
+		else navigate("/");
+	}, [
+		isAuthenticated,
+		user,
+		navigate,
+		allowedRoles
+	]);
+	if (!isAuthenticated) return null;
+	if (allowedRoles && user && !allowedRoles.includes(user.role)) return null;
+	return /* @__PURE__ */ (0, import_jsx_runtime.jsx)(import_jsx_runtime.Fragment, { children });
+}
 var App = () => /* @__PURE__ */ (0, import_jsx_runtime.jsx)(BrowserRouter, {
 	future: {
 		v7_startTransition: false,
 		v7_relativeSplatPath: false
 	},
-	children: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(TooltipProvider, { children: [
+	children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(TooltipProvider, { children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(DataProvider, { children: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(AuthProvider, { children: [
 		/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Toaster, {}),
 		/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Toaster$1, {}),
-		/* @__PURE__ */ (0, import_jsx_runtime.jsxs)(Routes, { children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)(Route, {
-			element: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Layout, {}),
-			children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Route, {
-				path: "/",
-				element: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Index, {})
-			}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Route, {
-				path: "/payments",
-				element: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(EmployeePayments, {})
-			})]
-		}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Route, {
-			path: "*",
-			element: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(NotFound_default, {})
-		})] })
-	] })
+		/* @__PURE__ */ (0, import_jsx_runtime.jsxs)(Routes, { children: [
+			/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Route, {
+				path: "/login",
+				element: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Login, {})
+			}),
+			/* @__PURE__ */ (0, import_jsx_runtime.jsxs)(Route, {
+				element: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(ProtectedRoute, { children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Layout, {}) }),
+				children: [
+					/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Route, {
+						path: "/",
+						element: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(ProtectedRoute, {
+							allowedRoles: ["manager"],
+							children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Index, {})
+						})
+					}),
+					/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Route, {
+						path: "/payments",
+						element: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(ProtectedRoute, {
+							allowedRoles: ["manager"],
+							children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(EmployeePayments, {})
+						})
+					}),
+					/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Route, {
+						path: "/employees/new",
+						element: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(ProtectedRoute, {
+							allowedRoles: ["manager"],
+							children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(RegisterEmployee, {})
+						})
+					}),
+					/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Route, {
+						path: "/dashboard",
+						element: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(ProtectedRoute, {
+							allowedRoles: ["employee"],
+							children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(EmployeeDashboard, {})
+						})
+					})
+				]
+			}),
+			/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Route, {
+				path: "*",
+				element: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(NotFound_default, {})
+			})
+		] })
+	] }) }) })
 });
 var App_default = App;
 (0, import_client.createRoot)(document.getElementById("root")).render(/* @__PURE__ */ (0, import_jsx_runtime.jsx)(App_default, {}));
 
-//# sourceMappingURL=index-tiVqU6OR.js.map
+//# sourceMappingURL=index-DZGifTgw.js.map

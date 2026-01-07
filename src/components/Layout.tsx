@@ -1,4 +1,4 @@
-import { Outlet, useLocation } from 'react-router-dom'
+import { Outlet, useLocation, useNavigate } from 'react-router-dom'
 import {
   SidebarProvider,
   SidebarTrigger,
@@ -7,9 +7,14 @@ import {
 import { AppSidebar } from '@/components/AppSidebar'
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import { Separator } from '@/components/ui/separator'
+import { Button } from '@/components/ui/button'
+import { LogOut } from 'lucide-react'
+import useAuthStore from '@/stores/useAuthStore'
 
 export default function Layout() {
   const location = useLocation()
+  const navigate = useNavigate()
+  const { user, logout } = useAuthStore()
 
   const getPageTitle = (pathname: string) => {
     switch (pathname) {
@@ -17,9 +22,18 @@ export default function Layout() {
         return 'Registro de Caixa'
       case '/payments':
         return 'Pagamento de Funcionários'
+      case '/dashboard':
+        return 'Meu Painel'
+      case '/employees/new':
+        return 'Cadastrar Funcionário'
       default:
         return 'Sistema Financeiro'
     }
+  }
+
+  const handleLogout = () => {
+    logout()
+    navigate('/login')
   }
 
   return (
@@ -37,17 +51,29 @@ export default function Layout() {
               <div className="flex items-center gap-3">
                 <div className="text-right hidden sm:block">
                   <p className="text-sm font-medium leading-none">
-                    Administrador
+                    {user?.name || 'Usuário'}
                   </p>
-                  <p className="text-xs text-muted-foreground">Gerente</p>
+                  <p className="text-xs text-muted-foreground">
+                    {user?.role === 'manager' ? 'Administrador' : 'Funcionário'}
+                  </p>
                 </div>
                 <Avatar className="h-9 w-9 border-2 border-background shadow-sm cursor-pointer hover:opacity-80 transition-opacity">
                   <AvatarImage
-                    src="https://img.usecurling.com/ppl/thumbnail?gender=male"
-                    alt="Admin"
+                    src={`https://img.usecurling.com/ppl/thumbnail?gender=${user?.role === 'manager' ? 'male' : 'female'}`}
+                    alt={user?.name}
                   />
-                  <AvatarFallback>AD</AvatarFallback>
+                  <AvatarFallback>
+                    {user?.name?.substring(0, 2).toUpperCase()}
+                  </AvatarFallback>
                 </Avatar>
+                <Button
+                  variant="ghost"
+                  size="icon"
+                  onClick={handleLogout}
+                  className="ml-2"
+                >
+                  <LogOut className="w-4 h-4 text-muted-foreground" />
+                </Button>
               </div>
             </div>
           </div>

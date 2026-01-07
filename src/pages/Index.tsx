@@ -2,7 +2,6 @@ import { useState, useMemo } from 'react'
 import { SummaryCards } from '@/components/cash-flow/SummaryCards'
 import {
   TransactionTable,
-  Transaction,
   TransactionType,
 } from '@/components/cash-flow/TransactionTable'
 import { AddTransactionDialog } from '@/components/cash-flow/AddTransactionDialog'
@@ -12,46 +11,11 @@ import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { useToast } from '@/hooks/use-toast'
 import { Search } from 'lucide-react'
-
-// Initial Mock Data
-const INITIAL_TRANSACTIONS: Transaction[] = [
-  {
-    id: '1',
-    date: '2023-10-25',
-    description: 'Venda de Serviços',
-    type: 'entry',
-    amount: 1500.0,
-    balanceAfter: 1500.0,
-  },
-  {
-    id: '2',
-    date: '2023-10-26',
-    description: 'Pagamento de Fornecedor',
-    type: 'exit',
-    amount: 350.5,
-    balanceAfter: 1149.5,
-  },
-  {
-    id: '3',
-    date: '2023-10-26',
-    description: 'Venda de Produto A',
-    type: 'entry',
-    amount: 200.0,
-    balanceAfter: 1349.5,
-  },
-  {
-    id: '4',
-    date: '2023-10-27',
-    description: 'Conta de Luz',
-    type: 'exit',
-    amount: 450.0,
-    balanceAfter: 899.5,
-  },
-]
+import useDataStore from '@/stores/useDataStore'
+import { Transaction } from '@/types'
 
 export default function Index() {
-  const [transactions, setTransactions] =
-    useState<Transaction[]>(INITIAL_TRANSACTIONS)
+  const { transactions, addTransaction } = useDataStore()
   const [notes, setNotes] = useState(
     'Verificar o recebimento do cliente X até sexta-feira.',
   )
@@ -83,10 +47,8 @@ export default function Index() {
 
   const initialBalance = useMemo(() => {
     // Find the balance before the first transaction in the filtered list
-    // Ideally this would come from previous history
     if (filteredTransactions.length === 0) return 0
 
-    // Simple logic: Take the first transaction's balanceAfter and reverse the operation
     const first = filteredTransactions[0]
     if (first.type === 'entry') return first.balanceAfter - first.amount
     return first.balanceAfter + first.amount
@@ -112,7 +74,7 @@ export default function Index() {
       balanceAfter: 0, // Will be recalculated
     }
 
-    setTransactions((prev) => [...prev, newTransaction])
+    addTransaction(newTransaction)
     toast({
       title: 'Movimentação adicionada',
       description: 'O registro de caixa foi atualizado com sucesso.',

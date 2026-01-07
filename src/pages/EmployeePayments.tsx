@@ -1,4 +1,4 @@
-import { useState, useMemo } from 'react'
+import { useState, useMemo, useEffect } from 'react'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import {
   Select,
@@ -17,18 +17,13 @@ import {
   SERVICE_PRICES,
 } from '@/components/employees/ProductionTable'
 import { FinancialSummary } from '@/components/employees/FinancialSummary'
-
-// Mock Data
-const EMPLOYEES = [
-  { id: '1', name: 'Ana Silva', pix: '123.456.789-00' },
-  { id: '2', name: 'Carlos Oliveira', pix: 'ana.silva@email.com' },
-  { id: '3', name: 'Mariana Santos', pix: '11999998888' },
-]
+import useDataStore from '@/stores/useDataStore'
 
 export default function EmployeePayments() {
-  const [selectedEmployeeId, setSelectedEmployeeId] = useState<string>(
-    EMPLOYEES[0].id,
-  )
+  const { employees, updateEmployee } = useDataStore()
+  const [selectedEmployeeId, setSelectedEmployeeId] = useState<string>('')
+
+  // Local state for editing before saving
   const [quantities, setQuantities] = useState<Record<number, number>>({})
   const [paidAmount, setPaidAmount] = useState(0)
   const [status, setStatus] = useState<'paid' | 'partial' | 'open'>('open')
@@ -37,11 +32,34 @@ export default function EmployeePayments() {
 
   const { toast } = useToast()
 
-  const selectedEmployee = EMPLOYEES.find((e) => e.id === selectedEmployeeId)
+  const selectedEmployee = useMemo(
+    () => employees.find((e) => e.id === selectedEmployeeId),
+    [employees, selectedEmployeeId],
+  )
+
+  // Select first employee on load
+  useEffect(() => {
+    if (employees.length > 0 && !selectedEmployeeId) {
+      setSelectedEmployeeId(employees[0].id)
+    }
+  }, [employees, selectedEmployeeId])
+
+  // Sync local state with selected employee
+  useEffect(() => {
+    if (selectedEmployee) {
+      setQuantities(selectedEmployee.quantities || {})
+      setPaidAmount(selectedEmployee.paidAmount || 0)
+      setStatus(selectedEmployee.status || 'open')
+      setLastUpdated(
+        selectedEmployee.lastUpdated
+          ? new Date(selectedEmployee.lastUpdated)
+          : new Date(),
+      )
+    }
+  }, [selectedEmployee])
 
   const handleQuantityChange = (price: number, quantity: number) => {
     setQuantities((prev) => ({ ...prev, [price]: quantity }))
-    setLastUpdated(new Date())
   }
 
   const totalReceivable = useMemo(() => {
@@ -51,6 +69,17 @@ export default function EmployeePayments() {
   }, [quantities])
 
   const handleSave = () => {
+    if (!selectedEmployeeId) return
+
+    updateEmployee(selectedEmployeeId, {
+      quantities,
+      paidAmount,
+      status,
+      lastUpdated: new Date().toISOString(),
+    })
+
+    setLastUpdated(new Date())
+
     toast({
       title: 'Pagamento Salvo',
       description: `Os dados de pagamento de ${selectedEmployee?.name} foram atualizados.`,
@@ -67,6 +96,14 @@ export default function EmployeePayments() {
     }
   }
 
+  if (employees.length === 0) {
+    return (
+      <div className="p-8 text-center text-muted-foreground">
+        Nenhum funcionário cadastrado.
+      </div>
+    )
+  }
+
   return (
     <div className="space-y-6 pb-10">
       {/* Top Bar - Employee Selector */}
@@ -77,18 +114,13 @@ export default function EmployeePayments() {
           </label>
           <Select
             value={selectedEmployeeId}
-            onValueChange={(v) => {
-              setSelectedEmployeeId(v)
-              setQuantities({}) // Reset form on change for demo
-              setPaidAmount(0)
-              setStatus('open')
-            }}
+            onValueChange={setSelectedEmployeeId}
           >
             <SelectTrigger className="w-full h-11">
               <SelectValue placeholder="Selecione..." />
             </SelectTrigger>
             <SelectContent>
-              {EMPLOYEES.map((emp) => (
+              {employees.map((emp) => (
                 <SelectItem key={emp.id} value={emp.id}>
                   {emp.name}
                 </SelectItem>
@@ -171,15 +203,9 @@ export default function EmployeePayments() {
           <FinancialSummary
             totalReceivable={totalReceivable}
             paidAmount={paidAmount}
-            onPaidAmountChange={(val) => {
-              setPaidAmount(val)
-              setLastUpdated(new Date())
-            }}
+            onPaidAmountChange={(val) => setPaidAmount(val)}
             status={status}
-            onStatusChange={(val) => {
-              setStatus(val)
-              setLastUpdated(new Date())
-            }}
+            onStatusChange={(val) => setStatus(val)}
             lastUpdated={lastUpdated}
           />
 
