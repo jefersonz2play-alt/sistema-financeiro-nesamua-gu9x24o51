@@ -1089,6 +1089,10 @@ video {
   width: 5rem;
 }
 
+.w-24{
+  width: 6rem;
+}
+
 .w-3{
   width: 0.75rem;
 }
@@ -1107,6 +1111,10 @@ video {
 
 .w-5{
   width: 1.25rem;
+}
+
+.w-6{
+  width: 1.5rem;
 }
 
 .w-64{
@@ -1761,6 +1769,11 @@ video {
   background-color: rgb(209 250 229 / var(--tw-bg-opacity, 1));
 }
 
+.bg-emerald-600{
+  --tw-bg-opacity: 1;
+  background-color: rgb(5 150 105 / var(--tw-bg-opacity, 1));
+}
+
 .bg-foreground{
   background-color: hsl(var(--foreground));
 }
@@ -1824,6 +1837,10 @@ video {
 
 .bg-secondary\/30{
   background-color: hsl(var(--secondary) / 0.3);
+}
+
+.bg-secondary\/50{
+  background-color: hsl(var(--secondary) / 0.5);
 }
 
 .bg-sidebar{
@@ -2020,6 +2037,10 @@ video {
   padding-left: 1rem;
 }
 
+.pl-6{
+  padding-left: 1.5rem;
+}
+
 .pl-8{
   padding-left: 2rem;
 }
@@ -2196,6 +2217,11 @@ video {
 
 .text-destructive-foreground{
   color: hsl(var(--destructive-foreground));
+}
+
+.text-emerald-500{
+  --tw-text-opacity: 1;
+  color: rgb(16 185 129 / var(--tw-text-opacity, 1));
 }
 
 .text-emerald-600{
@@ -2684,6 +2710,11 @@ video {
 .hover\:bg-emerald-200:hover{
   --tw-bg-opacity: 1;
   background-color: rgb(167 243 208 / var(--tw-bg-opacity, 1));
+}
+
+.hover\:bg-emerald-700:hover{
+  --tw-bg-opacity: 1;
+  background-color: rgb(4 120 87 / var(--tw-bg-opacity, 1));
 }
 
 .hover\:bg-muted:hover{

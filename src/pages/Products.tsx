@@ -56,6 +56,10 @@ const productSchema = z.object({
   name: z.string().min(2, 'Nome deve ter pelo menos 2 caracteres'),
   brand: z.string().min(2, 'Marca deve ter pelo menos 2 caracteres'),
   type: z.string().min(2, 'Tipo deve ter pelo menos 2 caracteres'),
+  stock: z.string().refine((val) => !isNaN(Number(val)) && Number(val) >= 0, {
+    message: 'O estoque deve ser um número válido.',
+  }),
+  price: z.string().optional(),
 })
 
 export default function Products() {
@@ -70,6 +74,8 @@ export default function Products() {
       name: '',
       brand: '',
       type: '',
+      stock: '0',
+      price: '',
     },
   })
 
@@ -80,6 +86,8 @@ export default function Products() {
         name: product.name,
         brand: product.brand,
         type: product.type,
+        stock: product.stock.toString(),
+        price: product.price ? product.price.toString() : '',
       })
     } else {
       setEditingProduct(null)
@@ -87,14 +95,24 @@ export default function Products() {
         name: '',
         brand: '',
         type: '',
+        stock: '0',
+        price: '',
       })
     }
     setIsDialogOpen(true)
   }
 
   const onSubmit = (values: z.infer<typeof productSchema>) => {
+    const productData = {
+      name: values.name,
+      brand: values.brand,
+      type: values.type,
+      stock: Number(values.stock),
+      price: values.price ? Number(values.price) : undefined,
+    }
+
     if (editingProduct) {
-      updateProduct(editingProduct.id, values)
+      updateProduct(editingProduct.id, productData)
       toast({
         title: 'Produto atualizado',
         description: 'As informações do produto foram salvas com sucesso.',
@@ -102,7 +120,7 @@ export default function Products() {
     } else {
       addProduct({
         id: Math.random().toString(36).substr(2, 9),
-        ...values,
+        ...productData,
       })
       toast({
         title: 'Produto criado',
@@ -129,7 +147,7 @@ export default function Products() {
             Produtos
           </h1>
           <p className="text-muted-foreground mt-2">
-            Gerencie o catálogo de produtos utilizados e vendidos.
+            Gerencie o catálogo e estoque de produtos.
           </p>
         </div>
         <Button
@@ -155,6 +173,7 @@ export default function Products() {
                 <TableHead>Nome</TableHead>
                 <TableHead>Marca</TableHead>
                 <TableHead>Tipo</TableHead>
+                <TableHead>Estoque</TableHead>
                 <TableHead className="text-right">Ações</TableHead>
               </TableRow>
             </TableHeader>
@@ -162,7 +181,7 @@ export default function Products() {
               {products.length === 0 ? (
                 <TableRow>
                   <TableCell
-                    colSpan={4}
+                    colSpan={5}
                     className="text-center py-8 text-muted-foreground"
                   >
                     Nenhum produto cadastrado.
@@ -176,8 +195,17 @@ export default function Products() {
                     </TableCell>
                     <TableCell>{product.brand}</TableCell>
                     <TableCell>
-                      <span className="inline-flex items-center rounded-full border px-2.5 py-0.5 text-xs font-semibold transition-colors focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 border-transparent bg-secondary text-secondary-foreground hover:bg-secondary/80">
+                      <span className="inline-flex items-center rounded-full border px-2.5 py-0.5 text-xs font-semibold transition-colors border-transparent bg-secondary text-secondary-foreground hover:bg-secondary/80">
                         {product.type}
+                      </span>
+                    </TableCell>
+                    <TableCell>
+                      <span
+                        className={
+                          product.stock < 10 ? 'text-red-500 font-bold' : ''
+                        }
+                      >
+                        {product.stock} un.
                       </span>
                     </TableCell>
                     <TableCell className="text-right">
@@ -232,7 +260,7 @@ export default function Products() {
               {editingProduct ? 'Editar Produto' : 'Novo Produto'}
             </DialogTitle>
             <DialogDescription>
-              Preencha os detalhes do produto abaixo.
+              Preencha os detalhes do produto e estoque abaixo.
             </DialogDescription>
           </DialogHeader>
           <Form {...form}>
@@ -250,32 +278,67 @@ export default function Products() {
                   </FormItem>
                 )}
               />
-              <FormField
-                control={form.control}
-                name="brand"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Marca</FormLabel>
-                    <FormControl>
-                      <Input placeholder="Ex: Nivea" {...field} />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-              <FormField
-                control={form.control}
-                name="type"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Tipo</FormLabel>
-                    <FormControl>
-                      <Input placeholder="Ex: Cabelo" {...field} />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
+              <div className="grid grid-cols-2 gap-4">
+                <FormField
+                  control={form.control}
+                  name="brand"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Marca</FormLabel>
+                      <FormControl>
+                        <Input placeholder="Ex: Nivea" {...field} />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+                <FormField
+                  control={form.control}
+                  name="type"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Tipo</FormLabel>
+                      <FormControl>
+                        <Input placeholder="Ex: Cabelo" {...field} />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+              </div>
+              <div className="grid grid-cols-2 gap-4">
+                <FormField
+                  control={form.control}
+                  name="stock"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Estoque (Qtd)</FormLabel>
+                      <FormControl>
+                        <Input type="number" {...field} />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+                <FormField
+                  control={form.control}
+                  name="price"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Preço (Opcional)</FormLabel>
+                      <FormControl>
+                        <Input
+                          placeholder="0.00"
+                          type="number"
+                          step="0.01"
+                          {...field}
+                        />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+              </div>
               <DialogFooter className="pt-4">
                 <Button type="submit" className="w-full">
                   {editingProduct ? 'Salvar Alterações' : 'Cadastrar Produto'}

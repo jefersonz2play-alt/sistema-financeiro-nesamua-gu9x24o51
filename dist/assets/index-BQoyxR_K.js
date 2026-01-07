@@ -18022,7 +18022,7 @@ function handleAndDispatchCustomEvent$1(name, handler, detail, { discrete }) {
 	if (discrete) dispatchDiscreteCustomEvent(target, event);
 	else target.dispatchEvent(event);
 }
-var Root$7 = DismissableLayer;
+var Root$8 = DismissableLayer;
 var Branch = DismissableLayerBranch;
 var useLayoutEffect2 = globalThis?.document ? import_react.useLayoutEffect : () => {};
 var import_react_dom$5 = /* @__PURE__ */ __toESM(require_react_dom(), 1);
@@ -18213,7 +18213,7 @@ var VisuallyHidden = import_react.forwardRef((props, forwardedRef) => {
 	});
 });
 VisuallyHidden.displayName = NAME$3;
-var Root$6 = VisuallyHidden;
+var Root$7 = VisuallyHidden;
 var import_react_dom$4 = /* @__PURE__ */ __toESM(require_react_dom(), 1);
 var PROVIDER_NAME$1 = "ToastProvider";
 var [Collection$1, useCollection$1, createCollectionScope$1] = createCollection("Toast");
@@ -18512,7 +18512,7 @@ var ToastImpl = import_react.forwardRef((props, forwardedRef) => {
 		onClose: handleClose,
 		children: import_react_dom$4.createPortal(/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Collection$1.ItemSlot, {
 			scope: __scopeToast,
-			children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Root$7, {
+			children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Root$8, {
 				asChild: true,
 				onEscapeKeyDown: composeEventHandlers(onEscapeKeyDown, () => {
 					if (!context.isFocusedToastEscapeKeyDownRef.current) handleClose();
@@ -18905,6 +18905,24 @@ var Calendar = createLucideIcon("calendar", [
 		key: "8toen8"
 	}]
 ]);
+var ChartColumn = createLucideIcon("chart-column", [
+	["path", {
+		d: "M3 3v16a2 2 0 0 0 2 2h16",
+		key: "c24i48"
+	}],
+	["path", {
+		d: "M18 17V9",
+		key: "2bz60n"
+	}],
+	["path", {
+		d: "M13 17V5",
+		key: "1frdt8"
+	}],
+	["path", {
+		d: "M8 17v-3",
+		key: "17ska0"
+	}]
+]);
 var Check = createLucideIcon("check", [["path", {
 	d: "M20 6 9 17l-5-5",
 	key: "1gmf2c"
@@ -18957,6 +18975,15 @@ var CircleArrowUp = createLucideIcon("circle-arrow-up", [
 		key: "1sbj14"
 	}]
 ]);
+var CircleCheck = createLucideIcon("circle-check", [["circle", {
+	cx: "12",
+	cy: "12",
+	r: "10",
+	key: "1mglay"
+}], ["path", {
+	d: "m9 12 2 2 4-4",
+	key: "dzmm74"
+}]]);
 var Copy = createLucideIcon("copy", [["rect", {
 	width: "14",
 	height: "14",
@@ -18993,6 +19020,28 @@ var DollarSign = createLucideIcon("dollar-sign", [["line", {
 	d: "M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6",
 	key: "1b0p4s"
 }]]);
+var Instagram = createLucideIcon("instagram", [
+	["rect", {
+		width: "20",
+		height: "20",
+		x: "2",
+		y: "2",
+		rx: "5",
+		ry: "5",
+		key: "2e1cvw"
+	}],
+	["path", {
+		d: "M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z",
+		key: "9exkf1"
+	}],
+	["line", {
+		x1: "17.5",
+		x2: "17.51",
+		y1: "6.5",
+		y2: "6.5",
+		key: "r4j83e"
+	}]
+]);
 var LayoutDashboard = createLucideIcon("layout-dashboard", [
 	["rect", {
 		width: "7",
@@ -19137,6 +19186,26 @@ var Search = createLucideIcon("search", [["path", {
 	r: "8",
 	key: "4ej97u"
 }]]);
+var Target = createLucideIcon("target", [
+	["circle", {
+		cx: "12",
+		cy: "12",
+		r: "10",
+		key: "1mglay"
+	}],
+	["circle", {
+		cx: "12",
+		cy: "12",
+		r: "6",
+		key: "1vlfrh"
+	}],
+	["circle", {
+		cx: "12",
+		cy: "12",
+		r: "2",
+		key: "1c9p78"
+	}]
+]);
 var Trash2 = createLucideIcon("trash-2", [
 	["path", {
 		d: "M10 11v6",
@@ -19529,12 +19598,12 @@ var lengthUnitRegex = /\d+(%|px|r?em|[sdl]?v([hwib]|min|max)|pt|pc|in|cm|mm|cap|
 var colorFunctionRegex = /^(rgba?|hsla?|hwb|(ok)?(lab|lch))\(.+\)$/;
 var shadowRegex = /^(inset_)?-?((\d+)?\.?(\d+)[a-z]+|0)_-?((\d+)?\.?(\d+)[a-z]+|0)/;
 var imageRegex = /^(url|image|image-set|cross-fade|element|(repeating-)?(linear|radial|conic)-gradient)\(.+\)$/;
-var isLength = (value) => isNumber(value) || stringLengths.has(value) || fractionRegex.test(value);
+var isLength = (value) => isNumber$1(value) || stringLengths.has(value) || fractionRegex.test(value);
 var isArbitraryLength = (value) => getIsArbitraryValue(value, "length", isLengthOnly);
-var isNumber = (value) => Boolean(value) && !Number.isNaN(Number(value));
-var isArbitraryNumber = (value) => getIsArbitraryValue(value, "number", isNumber);
+var isNumber$1 = (value) => Boolean(value) && !Number.isNaN(Number(value));
+var isArbitraryNumber = (value) => getIsArbitraryValue(value, "number", isNumber$1);
 var isInteger = (value) => Boolean(value) && Number.isInteger(Number(value));
-var isPercent = (value) => value.endsWith("%") && isNumber(value.slice(0, -1));
+var isPercent = (value) => value.endsWith("%") && isNumber$1(value.slice(0, -1));
 var isArbitraryValue = (value) => arbitraryValueRegex.test(value);
 var isTshirtSize = (value) => tshirtUnitRegex.test(value);
 var sizeLabels = /* @__PURE__ */ new Set([
@@ -19611,7 +19680,7 @@ var getDefaultConfig = () => {
 	];
 	const getNumberWithAutoAndArbitrary = () => [
 		"auto",
-		isNumber,
+		isNumber$1,
 		isArbitraryValue
 	];
 	const getPositions = () => [
@@ -19674,7 +19743,7 @@ var getDefaultConfig = () => {
 		"right",
 		"column"
 	];
-	const getNumberAndArbitrary = () => [isNumber, isArbitraryValue];
+	const getNumberAndArbitrary = () => [isNumber$1, isArbitraryValue];
 	return {
 		cacheSize: 500,
 		separator: ":",
@@ -20063,7 +20132,7 @@ var getDefaultConfig = () => {
 			] }],
 			"line-clamp": [{ "line-clamp": [
 				"none",
-				isNumber,
+				isNumber$1,
 				isArbitraryNumber
 			] }],
 			leading: [{ leading: [
@@ -21041,10 +21110,10 @@ var Observer = class {
 			if (typeof id !== "string" && typeof id !== "number") return { unwrap };
 			else return Object.assign(id, { unwrap });
 		};
-		this.custom = (jsx$23, data) => {
+		this.custom = (jsx$24, data) => {
 			const id = (data == null ? void 0 : data.id) || toastsCounter++;
 			this.create({
-				jsx: jsx$23(id),
+				jsx: jsx$24(id),
 				id,
 				...data
 			});
@@ -23180,7 +23249,7 @@ var Arrow$1 = import_react.forwardRef((props, forwardedRef) => {
 	});
 });
 Arrow$1.displayName = NAME$2;
-var Root$5 = Arrow$1;
+var Root$6 = Arrow$1;
 function useSize(element) {
 	const [size$3, setSize] = import_react.useState(void 0);
 	useLayoutEffect2(() => {
@@ -23397,7 +23466,7 @@ var PopperArrow = import_react.forwardRef(function PopperArrow2(props, forwarded
 			}[contentContext.placedSide],
 			visibility: contentContext.shouldHideArrow ? "hidden" : void 0
 		},
-		children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Root$5, {
+		children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Root$6, {
 			...arrowProps,
 			ref: forwardedRef,
 			style: {
@@ -23779,7 +23848,7 @@ var TooltipContentImpl = import_react.forwardRef((props, forwardedRef) => {
 			children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Slottable$1, { children }), /* @__PURE__ */ (0, import_jsx_runtime.jsx)(VisuallyHiddenContentContextProvider, {
 				scope: __scopeTooltip,
 				isInside: true,
-				children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Root$6, {
+				children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Root$7, {
 					id: context.contentId,
 					role: "tooltip",
 					children: ariaLabel || children
@@ -24126,13 +24195,15 @@ var INITIAL_CUSTOMERS = [{
 	name: "Roberto Santos",
 	email: "roberto@email.com",
 	phone: "(11) 99999-1111",
-	birthday: /* @__PURE__ */ new Date("1990-05-15")
+	birthday: /* @__PURE__ */ new Date("1990-05-15"),
+	instagram: "@beto.santos"
 }, {
 	id: "c2",
 	name: "Julia Lima",
 	email: "julia@email.com",
 	phone: "(11) 98888-2222",
-	birthday: /* @__PURE__ */ new Date("1995-10-20")
+	birthday: /* @__PURE__ */ new Date("1995-10-20"),
+	instagram: "@ju_lima"
 }];
 var INITIAL_TRANSACTIONS = [{
 	id: "1",
@@ -24143,7 +24214,9 @@ var INITIAL_TRANSACTIONS = [{
 	balanceAfter: 350,
 	customerId: "c2",
 	employeeId: "1",
-	employeePayment: 150
+	employeePayment: 150,
+	itemId: "s1",
+	itemType: "service"
 }, {
 	id: "2",
 	date: "2023-10-26",
@@ -24183,19 +24256,25 @@ var INITIAL_PRODUCTS = [
 		id: "p1",
 		name: "Jumbo Premium",
 		brand: "Ser Mulher",
-		type: "Fibra"
+		type: "Fibra",
+		stock: 50,
+		price: 35
 	},
 	{
 		id: "p2",
 		name: "Gel Cola",
 		brand: "Arvensis",
-		type: "Finalizador"
+		type: "Finalizador",
+		stock: 20,
+		price: 45
 	},
 	{
 		id: "p3",
 		name: "Anéis de Trança",
 		brand: "Acessórios",
-		type: "Decoração"
+		type: "Decoração",
+		stock: 100,
+		price: 15
 	}
 ];
 var DataContext = (0, import_react.createContext)(void 0);
@@ -24205,8 +24284,13 @@ function DataProvider({ children }) {
 	const [products, setProducts] = (0, import_react.useState)(INITIAL_PRODUCTS);
 	const [customers, setCustomers] = (0, import_react.useState)(INITIAL_CUSTOMERS);
 	const [services, setServices] = (0, import_react.useState)(INITIAL_SERVICES);
+	const [monthlyGoal, setMonthlyGoal] = (0, import_react.useState)(1e4);
 	const addTransaction = (transaction) => {
 		setTransactions((prev) => [...prev, transaction]);
+		if (transaction.type === "entry" && transaction.itemType === "product" && transaction.itemId && transaction.quantity) setProducts((prev) => prev.map((p) => p.id === transaction.itemId ? {
+			...p,
+			stock: p.stock - (transaction.quantity || 0)
+		} : p));
 	};
 	const addEmployee = (employee) => {
 		setEmployees((prev) => [...prev, employee]);
@@ -24216,6 +24300,24 @@ function DataProvider({ children }) {
 			...emp,
 			...data
 		} : emp));
+	};
+	const payEmployee = (id, amount) => {
+		const employee = employees.find((e) => e.id === id);
+		if (!employee) return;
+		updateEmployee(id, {
+			paidAmount: employee.paidAmount + amount,
+			status: "paid",
+			lastUpdated: (/* @__PURE__ */ new Date()).toISOString()
+		});
+		addTransaction({
+			id: Math.random().toString(36).substr(2, 9),
+			date: (/* @__PURE__ */ new Date()).toISOString().split("T")[0],
+			description: `Pagamento de Funcionário: ${employee.name}`,
+			type: "exit",
+			amount,
+			balanceAfter: 0,
+			employeeId: id
+		});
 	};
 	const addProduct = (product) => {
 		setProducts((prev) => [...prev, product]);
@@ -24259,9 +24361,12 @@ function DataProvider({ children }) {
 		products,
 		customers,
 		services,
+		monthlyGoal,
+		setMonthlyGoal,
 		addTransaction,
 		addEmployee,
 		updateEmployee,
+		payEmployee,
 		addProduct,
 		updateProduct,
 		deleteProduct,
@@ -31767,9 +31872,9 @@ function createSidecarMedium(options$1) {
 var SideCar = function(_a$1) {
 	var sideCar = _a$1.sideCar, rest = __rest(_a$1, ["sideCar"]);
 	if (!sideCar) throw new Error("Sidecar: please provide `sideCar` property to import the right car");
-	var Target = sideCar.read();
-	if (!Target) throw new Error("Sidecar medium not found");
-	return import_react.createElement(Target, __assign({}, rest));
+	var Target$1 = sideCar.read();
+	if (!Target$1) throw new Error("Sidecar medium not found");
+	return import_react.createElement(Target$1, __assign({}, rest));
 };
 SideCar.isSideCarExport = true;
 function exportSidecar(medium, exported) {
@@ -32563,7 +32668,7 @@ var DescriptionWarning$1 = ({ contentRef, descriptionId }) => {
 	]);
 	return null;
 };
-var Root$4 = Dialog$1;
+var Root$5 = Dialog$1;
 var Trigger$2 = DialogTrigger$1;
 var Portal$3 = DialogPortal$1;
 var Overlay = DialogOverlay$1;
@@ -32571,7 +32676,7 @@ var Content = DialogContent$1;
 var Title = DialogTitle$1;
 var Description = DialogDescription$1;
 var Close = DialogClose$1;
-var Dialog = Root$4;
+var Dialog = Root$5;
 var DialogTrigger = Trigger$2;
 var DialogPortal = Portal$3;
 var DialogOverlay = import_react.forwardRef(({ className, ...props }, ref) => /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Overlay, {
@@ -32664,14 +32769,14 @@ var Label$2 = import_react.forwardRef((props, forwardedRef) => {
 	});
 });
 Label$2.displayName = NAME$1;
-var Root$3 = Label$2;
+var Root$4 = Label$2;
 var labelVariants = cva("text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70");
-var Label = import_react.forwardRef(({ className, ...props }, ref) => /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Root$3, {
+var Label = import_react.forwardRef(({ className, ...props }, ref) => /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Root$4, {
 	ref,
 	className: cn(labelVariants(), className),
 	...props
 }));
-Label.displayName = Root$3.displayName;
+Label.displayName = Root$4.displayName;
 var Form = FormProvider;
 var FormFieldContext = import_react.createContext({});
 var FormField = ({ ...props }) => {
@@ -34692,7 +34797,7 @@ function PreviousMonthButton(props) {
 	const { components } = useDayPicker();
 	return import_react.createElement(components.Button, { ...props });
 }
-function Root$2(props) {
+function Root$3(props) {
 	const { rootRef, ...rest } = props;
 	return import_react.createElement("div", {
 		...rest,
@@ -34744,7 +34849,7 @@ var custom_components_exports = /* @__PURE__ */ __export({
 	NextMonthButton: () => NextMonthButton,
 	Option: () => Option,
 	PreviousMonthButton: () => PreviousMonthButton,
-	Root: () => Root$2,
+	Root: () => Root$3,
 	Select: () => Select$1,
 	Week: () => Week,
 	WeekNumber: () => WeekNumber,
@@ -36315,48 +36420,110 @@ var formSchema = object({
 	description: string().min(2, { message: "A descrição deve ter pelo menos 2 caracteres." }),
 	amount: string().refine((val) => !isNaN(Number(val)) && Number(val) > 0, { message: "O valor deve ser um número positivo." }),
 	type: _enum(["entry", "exit"], { required_error: "Selecione o tipo de movimentação." }),
+	category: _enum([
+		"service",
+		"product",
+		"other"
+	]),
 	date: date({ required_error: "Selecione uma data." }),
 	customerId: string().optional(),
 	employeeId: string().optional(),
-	employeePayment: string().optional()
+	employeePayment: string().optional(),
+	itemId: string().optional(),
+	quantity: string().optional()
 });
 function AddTransactionDialog({ onAdd }) {
 	const [open, setOpen] = (0, import_react.useState)(false);
-	const { customers, employees } = useDataStore();
+	const { customers, employees, products, services } = useDataStore();
 	const form = useForm({
 		resolver: a(formSchema),
 		defaultValues: {
 			description: "",
 			amount: "",
 			type: "entry",
+			category: "service",
 			date: /* @__PURE__ */ new Date(),
 			customerId: void 0,
 			employeeId: void 0,
-			employeePayment: ""
+			employeePayment: "",
+			itemId: void 0,
+			quantity: "1"
 		}
 	});
 	const watchType = form.watch("type");
+	const watchCategory = form.watch("category");
+	const watchItemId = form.watch("itemId");
+	const watchQuantity = form.watch("quantity");
+	(0, import_react.useEffect)(() => {
+		if (watchCategory === "product" && watchItemId && watchQuantity) {
+			const product = products.find((p) => p.id === watchItemId);
+			if (product) {
+				form.setValue("description", `Venda: ${product.name}`);
+				if (product.price) {
+					const total = product.price * (Number(watchQuantity) || 1);
+					form.setValue("amount", total.toFixed(2));
+				}
+			}
+		}
+	}, [
+		watchItemId,
+		watchCategory,
+		watchQuantity,
+		products,
+		form
+	]);
+	(0, import_react.useEffect)(() => {
+		if (watchCategory === "service" && watchItemId) {
+			const service = services.find((s$2) => s$2.id === watchItemId);
+			if (service) form.setValue("description", service.name);
+		}
+	}, [
+		watchItemId,
+		watchCategory,
+		services,
+		form
+	]);
 	function onSubmit(values) {
 		if (values.type === "entry") {
-			if (!values.customerId) {
-				form.setError("customerId", { message: "Selecione um cliente para esta entrada." });
-				return;
-			}
-			if (!values.employeeId) {
-				form.setError("employeeId", { message: "Selecione um funcionário responsável." });
-				return;
+			if (values.category === "service") {
+				if (!values.customerId) {
+					form.setError("customerId", { message: "Cliente é obrigatório para serviços." });
+					return;
+				}
+				if (!values.employeeId) {
+					form.setError("employeeId", { message: "Funcionário é obrigatório para serviços." });
+					return;
+				}
+			} else if (values.category === "product") {
+				if (!values.itemId) {
+					form.setError("itemId", { message: "Selecione o produto." });
+					return;
+				}
 			}
 		}
 		onAdd({
+			id: Math.random().toString(36).substr(2, 9),
+			date: values.date.toISOString().split("T")[0],
 			description: values.description,
-			amount: Number(values.amount),
 			type: values.type,
-			date: values.date,
+			amount: Number(values.amount),
+			balanceAfter: 0,
 			customerId: values.customerId,
 			employeeId: values.employeeId,
-			employeePayment: values.employeePayment ? Number(values.employeePayment) : 0
+			employeePayment: values.employeePayment ? Number(values.employeePayment) : 0,
+			itemId: values.itemId,
+			itemType: values.category === "other" ? void 0 : values.category,
+			quantity: values.quantity ? Number(values.quantity) : void 0
 		});
-		form.reset();
+		form.reset({
+			description: "",
+			amount: "",
+			type: "entry",
+			category: "service",
+			date: /* @__PURE__ */ new Date(),
+			quantity: "1",
+			employeePayment: ""
+		});
 		setOpen(false);
 	}
 	return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(Dialog, {
@@ -36370,32 +36537,113 @@ function AddTransactionDialog({ onAdd }) {
 			})
 		}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(DialogContent, {
 			className: "sm:max-w-[500px] rounded-xl max-h-[90vh] overflow-y-auto",
-			children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)(DialogHeader, { children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(DialogTitle, { children: "Nova Movimentação" }), /* @__PURE__ */ (0, import_jsx_runtime.jsx)(DialogDescription, { children: "Registre uma entrada de serviço ou saída de caixa." })] }), /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Form, {
+			children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)(DialogHeader, { children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(DialogTitle, { children: "Nova Movimentação" }), /* @__PURE__ */ (0, import_jsx_runtime.jsx)(DialogDescription, { children: "Registre entradas ou saídas." })] }), /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Form, {
 				...form,
 				children: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("form", {
 					onSubmit: form.handleSubmit(onSubmit),
 					className: "space-y-4",
 					children: [
-						/* @__PURE__ */ (0, import_jsx_runtime.jsx)(FormField, {
+						/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+							className: "grid grid-cols-2 gap-4",
+							children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(FormField, {
+								control: form.control,
+								name: "type",
+								render: ({ field }) => /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(FormItem, { children: [
+									/* @__PURE__ */ (0, import_jsx_runtime.jsx)(FormLabel, { children: "Tipo" }),
+									/* @__PURE__ */ (0, import_jsx_runtime.jsxs)(Select, {
+										onValueChange: field.onChange,
+										defaultValue: field.value,
+										children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(FormControl, { children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(SelectTrigger, { children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(SelectValue, { placeholder: "Selecione" }) }) }), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(SelectContent, { children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(SelectItem, {
+											value: "entry",
+											children: "Entrada"
+										}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)(SelectItem, {
+											value: "exit",
+											children: "Saída"
+										})] })]
+									}),
+									/* @__PURE__ */ (0, import_jsx_runtime.jsx)(FormMessage, {})
+								] })
+							}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)(FormField, {
+								control: form.control,
+								name: "category",
+								render: ({ field }) => /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(FormItem, { children: [
+									/* @__PURE__ */ (0, import_jsx_runtime.jsx)(FormLabel, { children: "Categoria" }),
+									/* @__PURE__ */ (0, import_jsx_runtime.jsxs)(Select, {
+										onValueChange: field.onChange,
+										defaultValue: field.value,
+										disabled: watchType === "exit",
+										children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(FormControl, { children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(SelectTrigger, { children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(SelectValue, { placeholder: "Selecione" }) }) }), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(SelectContent, { children: [
+											/* @__PURE__ */ (0, import_jsx_runtime.jsx)(SelectItem, {
+												value: "service",
+												children: "Serviço"
+											}),
+											/* @__PURE__ */ (0, import_jsx_runtime.jsx)(SelectItem, {
+												value: "product",
+												children: "Venda Produto"
+											}),
+											/* @__PURE__ */ (0, import_jsx_runtime.jsx)(SelectItem, {
+												value: "other",
+												children: "Outro"
+											})
+										] })]
+									}),
+									/* @__PURE__ */ (0, import_jsx_runtime.jsx)(FormMessage, {})
+								] })
+							})]
+						}),
+						watchType === "entry" && watchCategory === "product" && /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+							className: "grid grid-cols-2 gap-4",
+							children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(FormField, {
+								control: form.control,
+								name: "itemId",
+								render: ({ field }) => /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(FormItem, { children: [
+									/* @__PURE__ */ (0, import_jsx_runtime.jsx)(FormLabel, { children: "Produto" }),
+									/* @__PURE__ */ (0, import_jsx_runtime.jsxs)(Select, {
+										onValueChange: field.onChange,
+										defaultValue: field.value,
+										children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(FormControl, { children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(SelectTrigger, { children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(SelectValue, { placeholder: "Produto..." }) }) }), /* @__PURE__ */ (0, import_jsx_runtime.jsx)(SelectContent, { children: products.map((p) => /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(SelectItem, {
+											value: p.id,
+											children: [
+												p.name,
+												" (",
+												p.stock,
+												" un.)"
+											]
+										}, p.id)) })]
+									}),
+									/* @__PURE__ */ (0, import_jsx_runtime.jsx)(FormMessage, {})
+								] })
+							}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)(FormField, {
+								control: form.control,
+								name: "quantity",
+								render: ({ field }) => /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(FormItem, { children: [
+									/* @__PURE__ */ (0, import_jsx_runtime.jsx)(FormLabel, { children: "Qtd" }),
+									/* @__PURE__ */ (0, import_jsx_runtime.jsx)(FormControl, { children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Input, {
+										type: "number",
+										min: "1",
+										...field
+									}) }),
+									/* @__PURE__ */ (0, import_jsx_runtime.jsx)(FormMessage, {})
+								] })
+							})]
+						}),
+						watchType === "entry" && watchCategory === "service" && /* @__PURE__ */ (0, import_jsx_runtime.jsx)(FormField, {
 							control: form.control,
-							name: "type",
+							name: "itemId",
 							render: ({ field }) => /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(FormItem, { children: [
-								/* @__PURE__ */ (0, import_jsx_runtime.jsx)(FormLabel, { children: "Tipo de Movimentação" }),
+								/* @__PURE__ */ (0, import_jsx_runtime.jsx)(FormLabel, { children: "Serviço Realizado" }),
 								/* @__PURE__ */ (0, import_jsx_runtime.jsxs)(Select, {
 									onValueChange: field.onChange,
 									defaultValue: field.value,
-									children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(FormControl, { children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(SelectTrigger, { children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(SelectValue, { placeholder: "Selecione o tipo" }) }) }), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(SelectContent, { children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(SelectItem, {
-										value: "entry",
-										children: "Entrada (Serviço)"
-									}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)(SelectItem, {
-										value: "exit",
-										children: "Saída (Despesa)"
-									})] })]
+									children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(FormControl, { children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(SelectTrigger, { children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(SelectValue, { placeholder: "Selecione o serviço..." }) }) }), /* @__PURE__ */ (0, import_jsx_runtime.jsx)(SelectContent, { children: services.map((s$2) => /* @__PURE__ */ (0, import_jsx_runtime.jsx)(SelectItem, {
+										value: s$2.id,
+										children: s$2.name
+									}, s$2.id)) })]
 								}),
 								/* @__PURE__ */ (0, import_jsx_runtime.jsx)(FormMessage, {})
 							] })
 						}),
-						watchType === "entry" && /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+						watchType === "entry" && watchCategory === "service" && /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
 							className: "grid grid-cols-2 gap-4",
 							children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(FormField, {
 								control: form.control,
@@ -36435,7 +36683,7 @@ function AddTransactionDialog({ onAdd }) {
 							render: ({ field }) => /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(FormItem, { children: [
 								/* @__PURE__ */ (0, import_jsx_runtime.jsx)(FormLabel, { children: "Descrição" }),
 								/* @__PURE__ */ (0, import_jsx_runtime.jsx)(FormControl, { children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Input, {
-									placeholder: "Ex: Box Braids Jumbo",
+									placeholder: "Detalhes...",
 									...field
 								}) }),
 								/* @__PURE__ */ (0, import_jsx_runtime.jsx)(FormMessage, {})
@@ -36456,7 +36704,7 @@ function AddTransactionDialog({ onAdd }) {
 									}) }),
 									/* @__PURE__ */ (0, import_jsx_runtime.jsx)(FormMessage, {})
 								] })
-							}), watchType === "entry" && /* @__PURE__ */ (0, import_jsx_runtime.jsx)(FormField, {
+							}), watchType === "entry" && watchCategory === "service" && /* @__PURE__ */ (0, import_jsx_runtime.jsx)(FormField, {
 								control: form.control,
 								name: "employeePayment",
 								render: ({ field }) => /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(FormItem, { children: [
@@ -36469,7 +36717,7 @@ function AddTransactionDialog({ onAdd }) {
 									}) }),
 									/* @__PURE__ */ (0, import_jsx_runtime.jsx)(FormDescription, {
 										className: "text-xs",
-										children: "Valor pago ao funcionário."
+										children: "Comissão funcionário."
 									}),
 									/* @__PURE__ */ (0, import_jsx_runtime.jsx)(FormMessage, {})
 								] })
@@ -36525,120 +36773,6 @@ var Textarea = import_react.forwardRef(({ className, ...props }, ref) => {
 	});
 });
 Textarea.displayName = "Textarea";
-function Index() {
-	const { transactions, addTransaction } = useDataStore();
-	const [notes, setNotes] = (0, import_react.useState)("Conferir estoque de Jumbo para o fim de semana.");
-	const [startDate, setStartDate] = (0, import_react.useState)("2023-10-01");
-	const [endDate, setEndDate] = (0, import_react.useState)("2023-10-31");
-	const { toast: toast$2 } = useToast();
-	const processedTransactions = (0, import_react.useMemo)(() => {
-		let runningBalance = 0;
-		return transactions.sort((a$1, b$1) => new Date(a$1.date).getTime() - new Date(b$1.date).getTime()).map((t$1) => {
-			if (t$1.type === "entry") runningBalance += t$1.amount;
-			else runningBalance -= t$1.amount;
-			return {
-				...t$1,
-				balanceAfter: runningBalance
-			};
-		});
-	}, [transactions]);
-	const filteredTransactions = (0, import_react.useMemo)(() => {
-		return processedTransactions.filter((t$1) => {
-			const date$3 = t$1.date;
-			return date$3 >= startDate && date$3 <= endDate;
-		});
-	}, [
-		processedTransactions,
-		startDate,
-		endDate
-	]);
-	const initialBalance = (0, import_react.useMemo)(() => {
-		if (filteredTransactions.length === 0) return 0;
-		const first = filteredTransactions[0];
-		if (first.type === "entry") return first.balanceAfter - first.amount;
-		return first.balanceAfter + first.amount;
-	}, [filteredTransactions]);
-	const finalBalance = (0, import_react.useMemo)(() => {
-		if (filteredTransactions.length === 0) return initialBalance;
-		return filteredTransactions[filteredTransactions.length - 1].balanceAfter;
-	}, [filteredTransactions, initialBalance]);
-	const handleAddTransaction = (data) => {
-		addTransaction({
-			id: Math.random().toString(36).substr(2, 9),
-			date: data.date.toISOString().split("T")[0],
-			description: data.description,
-			type: data.type,
-			amount: data.amount,
-			balanceAfter: 0,
-			customerId: data.customerId,
-			employeeId: data.employeeId,
-			employeePayment: data.employeePayment
-		});
-		toast$2({
-			title: "Movimentação adicionada",
-			description: "O registro de caixa foi atualizado com sucesso."
-		});
-	};
-	return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-		className: "space-y-8 pb-10",
-		children: [
-			/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-				className: "flex flex-col md:flex-row md:items-end gap-4 bg-white p-6 rounded-xl shadow-subtle",
-				children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-					className: "flex-1 grid grid-cols-1 md:grid-cols-2 gap-4",
-					children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-						className: "space-y-2",
-						children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("label", {
-							className: "text-sm font-medium text-muted-foreground",
-							children: "Data Inicial"
-						}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Input, {
-							type: "date",
-							value: startDate,
-							onChange: (e) => setStartDate(e.target.value),
-							className: "border-border/60"
-						})]
-					}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-						className: "space-y-2",
-						children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("label", {
-							className: "text-sm font-medium text-muted-foreground",
-							children: "Data Final"
-						}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Input, {
-							type: "date",
-							value: endDate,
-							onChange: (e) => setEndDate(e.target.value),
-							className: "border-border/60"
-						})]
-					})]
-				}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(Button, {
-					className: "rounded-full px-8 bg-primary hover:bg-primary/90 text-primary-foreground shadow-md hover:shadow-lg transition-all",
-					onClick: () => {},
-					children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Search, { className: "w-4 h-4 mr-2" }), "Filtrar Período"]
-				})]
-			}),
-			/* @__PURE__ */ (0, import_jsx_runtime.jsx)(SummaryCards, {
-				initialBalance,
-				finalBalance
-			}),
-			/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
-				className: "flex justify-end",
-				children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(AddTransactionDialog, { onAdd: handleAddTransaction })
-			}),
-			/* @__PURE__ */ (0, import_jsx_runtime.jsx)(TransactionTable, { transactions: filteredTransactions }),
-			/* @__PURE__ */ (0, import_jsx_runtime.jsxs)(Card, {
-				className: "shadow-subtle border-none",
-				children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(CardHeader, { children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(CardTitle, {
-					className: "text-lg font-semibold",
-					children: "Observações Gerais"
-				}) }), /* @__PURE__ */ (0, import_jsx_runtime.jsx)(CardContent, { children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Textarea, {
-					placeholder: "Digite aqui observações importantes sobre o caixa do dia...",
-					className: "min-h-[120px] resize-none bg-muted/20 border-border/50 focus:border-primary/50",
-					value: notes,
-					onChange: (e) => setNotes(e.target.value)
-				}) })]
-			})
-		]
-	});
-}
 function createContextScope$1(scopeName, createContextScopeDeps = []) {
 	let defaultContexts = [];
 	function createContext3(rootComponentName, defaultContext) {
@@ -36702,6 +36836,353 @@ function composeContextScopes(...scopes) {
 	createScope.scopeName = baseScope.scopeName;
 	return createScope;
 }
+var PROGRESS_NAME = "Progress";
+var DEFAULT_MAX = 100;
+var [createProgressContext, createProgressScope] = createContextScope$1(PROGRESS_NAME);
+var [ProgressProvider, useProgressContext] = createProgressContext(PROGRESS_NAME);
+var Progress$1 = import_react.forwardRef((props, forwardedRef) => {
+	const { __scopeProgress, value: valueProp = null, max: maxProp, getValueLabel = defaultGetValueLabel, ...progressProps } = props;
+	if ((maxProp || maxProp === 0) && !isValidMaxNumber(maxProp)) console.error(getInvalidMaxError(`${maxProp}`, "Progress"));
+	const max$2 = isValidMaxNumber(maxProp) ? maxProp : DEFAULT_MAX;
+	if (valueProp !== null && !isValidValueNumber(valueProp, max$2)) console.error(getInvalidValueError(`${valueProp}`, "Progress"));
+	const value = isValidValueNumber(valueProp, max$2) ? valueProp : null;
+	const valueLabel = isNumber(value) ? getValueLabel(value, max$2) : void 0;
+	return /* @__PURE__ */ (0, import_jsx_runtime.jsx)(ProgressProvider, {
+		scope: __scopeProgress,
+		value,
+		max: max$2,
+		children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Primitive.div, {
+			"aria-valuemax": max$2,
+			"aria-valuemin": 0,
+			"aria-valuenow": isNumber(value) ? value : void 0,
+			"aria-valuetext": valueLabel,
+			role: "progressbar",
+			"data-state": getProgressState(value, max$2),
+			"data-value": value ?? void 0,
+			"data-max": max$2,
+			...progressProps,
+			ref: forwardedRef
+		})
+	});
+});
+Progress$1.displayName = PROGRESS_NAME;
+var INDICATOR_NAME = "ProgressIndicator";
+var ProgressIndicator = import_react.forwardRef((props, forwardedRef) => {
+	const { __scopeProgress, ...indicatorProps } = props;
+	const context = useProgressContext(INDICATOR_NAME, __scopeProgress);
+	return /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Primitive.div, {
+		"data-state": getProgressState(context.value, context.max),
+		"data-value": context.value ?? void 0,
+		"data-max": context.max,
+		...indicatorProps,
+		ref: forwardedRef
+	});
+});
+ProgressIndicator.displayName = INDICATOR_NAME;
+function defaultGetValueLabel(value, max$2) {
+	return `${Math.round(value / max$2 * 100)}%`;
+}
+function getProgressState(value, maxValue) {
+	return value == null ? "indeterminate" : value === maxValue ? "complete" : "loading";
+}
+function isNumber(value) {
+	return typeof value === "number";
+}
+function isValidMaxNumber(max$2) {
+	return isNumber(max$2) && !isNaN(max$2) && max$2 > 0;
+}
+function isValidValueNumber(value, max$2) {
+	return isNumber(value) && !isNaN(value) && value <= max$2 && value >= 0;
+}
+function getInvalidMaxError(propValue, componentName) {
+	return `Invalid prop \`max\` of value \`${propValue}\` supplied to \`${componentName}\`. Only numbers greater than 0 are valid max values. Defaulting to \`${DEFAULT_MAX}\`.`;
+}
+function getInvalidValueError(propValue, componentName) {
+	return `Invalid prop \`value\` of value \`${propValue}\` supplied to \`${componentName}\`. The \`value\` prop must be:
+  - a positive number
+  - less than the value passed to \`max\` (or ${DEFAULT_MAX} if no \`max\` prop is set)
+  - \`null\` or \`undefined\` if the progress is indeterminate.
+
+Defaulting to \`null\`.`;
+}
+var Root$2 = Progress$1;
+var Indicator = ProgressIndicator;
+var Progress = import_react.forwardRef(({ className, value, ...props }, ref) => /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Root$2, {
+	ref,
+	className: cn("relative h-4 w-full overflow-hidden rounded-full bg-secondary", className),
+	...props,
+	children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Indicator, {
+		className: "h-full w-full flex-1 bg-primary transition-all",
+		style: { transform: `translateX(-${100 - (value || 0)}%)` }
+	})
+}));
+Progress.displayName = Root$2.displayName;
+function GoalWidget({ currentRevenue }) {
+	const { monthlyGoal, setMonthlyGoal } = useDataStore();
+	const percentage = Math.min(currentRevenue / monthlyGoal * 100, 100);
+	return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(Card, {
+		className: "shadow-subtle border-none bg-white",
+		children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)(CardHeader, {
+			className: "flex flex-row items-center justify-between pb-2",
+			children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)(CardTitle, {
+				className: "text-sm font-medium text-muted-foreground uppercase tracking-wider flex items-center gap-2",
+				children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Target, { className: "w-4 h-4 text-primary" }), "Meta Mensal"]
+			}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("span", {
+				className: "text-xs font-bold text-primary",
+				children: [percentage.toFixed(0), "%"]
+			})]
+		}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(CardContent, { children: [
+			/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+				className: "flex items-end justify-between mb-2",
+				children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+					className: "text-2xl font-bold text-foreground",
+					children: formatCurrency(currentRevenue)
+				}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+					className: "flex items-center gap-2",
+					children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+						className: "text-xs text-muted-foreground",
+						children: "Alvo:"
+					}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+						className: "relative",
+						children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+							className: "absolute left-2 top-1/2 -translate-y-1/2 text-xs text-muted-foreground",
+							children: "R$"
+						}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Input, {
+							type: "number",
+							value: monthlyGoal,
+							onChange: (e) => setMonthlyGoal(Number(e.target.value)),
+							className: "h-8 w-24 pl-6 text-xs text-right border-none bg-secondary/50 focus:bg-white transition-colors"
+						})]
+					})]
+				})]
+			}),
+			/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Progress, {
+				value: percentage,
+				className: "h-2 bg-secondary"
+			}),
+			/* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
+				className: "text-xs text-muted-foreground mt-2",
+				children: currentRevenue >= monthlyGoal ? "Parabéns! Meta atingida!" : `Faltam ${formatCurrency(monthlyGoal - currentRevenue)} para atingir a meta.`
+			})
+		] })]
+	});
+}
+function ProfitabilityCharts({ transactions, products, services }) {
+	const topProducts = (0, import_react.useMemo)(() => {
+		const productSales = {};
+		transactions.forEach((t$1) => {
+			if (t$1.type === "entry" && t$1.itemType === "product" && t$1.itemId && t$1.quantity) productSales[t$1.itemId] = (productSales[t$1.itemId] || 0) + t$1.quantity;
+		});
+		return Object.entries(productSales).map(([id, qty]) => ({
+			...products.find((p) => p.id === id),
+			qty
+		})).filter((item) => item.id).sort((a$1, b$1) => b$1.qty - a$1.qty).slice(0, 5);
+	}, [transactions, products]);
+	const topServices = (0, import_react.useMemo)(() => {
+		const serviceRevenue = {};
+		transactions.forEach((t$1) => {
+			if (t$1.type === "entry" && t$1.itemType === "service" && t$1.itemId) serviceRevenue[t$1.itemId] = (serviceRevenue[t$1.itemId] || 0) + t$1.amount;
+		});
+		return Object.entries(serviceRevenue).map(([id, amount]) => ({
+			...services.find((s$2) => s$2.id === id),
+			amount
+		})).filter((item) => item.id).sort((a$1, b$1) => b$1.amount - a$1.amount).slice(0, 5);
+	}, [transactions, services]);
+	return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+		className: "grid grid-cols-1 md:grid-cols-2 gap-6",
+		children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)(Card, {
+			className: "shadow-subtle border-none",
+			children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(CardHeader, { children: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(CardTitle, {
+				className: "text-base font-semibold flex items-center gap-2",
+				children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(TrendingUp, { className: "w-4 h-4 text-emerald-500" }), "Produtos Mais Vendidos"]
+			}) }), /* @__PURE__ */ (0, import_jsx_runtime.jsx)(CardContent, { children: topProducts.length === 0 ? /* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
+				className: "text-sm text-muted-foreground text-center py-4",
+				children: "Nenhuma venda registrada."
+			}) : /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+				className: "space-y-4",
+				children: topProducts.map((item, index$1) => /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+					className: "flex items-center justify-between",
+					children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+						className: "flex items-center gap-3",
+						children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+							className: "w-6 h-6 rounded-full bg-secondary flex items-center justify-center text-xs font-bold text-muted-foreground",
+							children: index$1 + 1
+						}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
+							className: "text-sm font-medium",
+							children: item.name
+						}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
+							className: "text-xs text-muted-foreground",
+							children: item.brand
+						})] })]
+					}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+						className: "text-right",
+						children: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("p", {
+							className: "text-sm font-bold",
+							children: [item.qty, " un."]
+						})
+					})]
+				}, item.id))
+			}) })]
+		}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(Card, {
+			className: "shadow-subtle border-none",
+			children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(CardHeader, { children: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(CardTitle, {
+				className: "text-base font-semibold flex items-center gap-2",
+				children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(ChartColumn, { className: "w-4 h-4 text-primary" }), "Serviços Mais Rentáveis"]
+			}) }), /* @__PURE__ */ (0, import_jsx_runtime.jsx)(CardContent, { children: topServices.length === 0 ? /* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
+				className: "text-sm text-muted-foreground text-center py-4",
+				children: "Nenhum serviço registrado."
+			}) : /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+				className: "space-y-4",
+				children: topServices.map((item, index$1) => /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+					className: "flex items-center justify-between",
+					children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+						className: "flex items-center gap-3",
+						children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+							className: "w-6 h-6 rounded-full bg-secondary flex items-center justify-center text-xs font-bold text-muted-foreground",
+							children: index$1 + 1
+						}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
+							className: "text-sm font-medium",
+							children: item.name
+						}) })]
+					}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+						className: "text-right",
+						children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
+							className: "text-sm font-bold text-emerald-600",
+							children: formatCurrency(item.amount)
+						})
+					})]
+				}, item.id))
+			}) })]
+		})]
+	});
+}
+function Index() {
+	const { transactions, addTransaction, products, services } = useDataStore();
+	const [notes, setNotes] = (0, import_react.useState)("Conferir estoque de Jumbo para o fim de semana.");
+	const [startDate, setStartDate] = (0, import_react.useState)("2023-10-01");
+	const [endDate, setEndDate] = (0, import_react.useState)("2023-12-31");
+	const { toast: toast$2 } = useToast();
+	const processedTransactions = (0, import_react.useMemo)(() => {
+		let runningBalance = 0;
+		return transactions.sort((a$1, b$1) => new Date(a$1.date).getTime() - new Date(b$1.date).getTime()).map((t$1) => {
+			if (t$1.type === "entry") runningBalance += t$1.amount;
+			else runningBalance -= t$1.amount;
+			return {
+				...t$1,
+				balanceAfter: runningBalance
+			};
+		});
+	}, [transactions]);
+	const filteredTransactions = (0, import_react.useMemo)(() => {
+		return processedTransactions.filter((t$1) => {
+			const date$3 = t$1.date;
+			return date$3 >= startDate && date$3 <= endDate;
+		});
+	}, [
+		processedTransactions,
+		startDate,
+		endDate
+	]);
+	const initialBalance = (0, import_react.useMemo)(() => {
+		if (filteredTransactions.length === 0) return 0;
+		const first = filteredTransactions[0];
+		if (first.type === "entry") return first.balanceAfter - first.amount;
+		return first.balanceAfter + first.amount;
+	}, [filteredTransactions]);
+	const finalBalance = (0, import_react.useMemo)(() => {
+		if (filteredTransactions.length === 0) return initialBalance;
+		return filteredTransactions[filteredTransactions.length - 1].balanceAfter;
+	}, [filteredTransactions, initialBalance]);
+	const currentRevenue = (0, import_react.useMemo)(() => {
+		return filteredTransactions.filter((t$1) => t$1.type === "entry").reduce((sum, t$1) => sum + t$1.amount, 0);
+	}, [filteredTransactions]);
+	const handleAddTransaction = (data) => {
+		addTransaction(data);
+		toast$2({
+			title: "Movimentação adicionada",
+			description: "O registro de caixa foi atualizado com sucesso."
+		});
+	};
+	return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+		className: "space-y-8 pb-10",
+		children: [
+			/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+				className: "flex flex-col md:flex-row justify-between items-start md:items-center gap-4",
+				children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("h1", {
+					className: "text-3xl font-bold tracking-tight text-foreground",
+					children: "Painel Financeiro"
+				}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
+					className: "text-muted-foreground mt-1",
+					children: "Visão geral de saúde financeira e performance."
+				})] }), /* @__PURE__ */ (0, import_jsx_runtime.jsx)(AddTransactionDialog, { onAdd: handleAddTransaction })]
+			}),
+			/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+				className: "grid grid-cols-1 lg:grid-cols-3 gap-6",
+				children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+					className: "lg:col-span-2 space-y-6",
+					children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(SummaryCards, {
+						initialBalance,
+						finalBalance
+					})
+				}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+					className: "lg:col-span-1",
+					children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(GoalWidget, { currentRevenue })
+				})]
+			}),
+			/* @__PURE__ */ (0, import_jsx_runtime.jsx)(ProfitabilityCharts, {
+				transactions: filteredTransactions,
+				products,
+				services
+			}),
+			/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+				className: "flex flex-col md:flex-row md:items-end gap-4 bg-white p-6 rounded-xl shadow-subtle",
+				children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+					className: "flex-1 grid grid-cols-1 md:grid-cols-2 gap-4",
+					children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+						className: "space-y-2",
+						children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("label", {
+							className: "text-sm font-medium text-muted-foreground",
+							children: "Data Inicial"
+						}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Input, {
+							type: "date",
+							value: startDate,
+							onChange: (e) => setStartDate(e.target.value),
+							className: "border-border/60"
+						})]
+					}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+						className: "space-y-2",
+						children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("label", {
+							className: "text-sm font-medium text-muted-foreground",
+							children: "Data Final"
+						}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Input, {
+							type: "date",
+							value: endDate,
+							onChange: (e) => setEndDate(e.target.value),
+							className: "border-border/60"
+						})]
+					})]
+				}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(Button, {
+					className: "rounded-full px-8 bg-secondary text-secondary-foreground hover:bg-secondary/80 shadow-sm",
+					onClick: () => {},
+					children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Search, { className: "w-4 h-4 mr-2" }), "Filtrar Período"]
+				})]
+			}),
+			/* @__PURE__ */ (0, import_jsx_runtime.jsx)(TransactionTable, { transactions: filteredTransactions }),
+			/* @__PURE__ */ (0, import_jsx_runtime.jsxs)(Card, {
+				className: "shadow-subtle border-none",
+				children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(CardHeader, { children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(CardTitle, {
+					className: "text-lg font-semibold",
+					children: "Observações Gerais"
+				}) }), /* @__PURE__ */ (0, import_jsx_runtime.jsx)(CardContent, { children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Textarea, {
+					placeholder: "Digite aqui observações importantes sobre o caixa do dia...",
+					className: "min-h-[120px] resize-none bg-muted/20 border-border/50 focus:border-primary/50",
+					value: notes,
+					onChange: (e) => setNotes(e.target.value)
+				}) })]
+			})
+		]
+	});
+}
 /**
 * @license React
 * use-sync-external-store-shim.development.js
@@ -36737,7 +37218,7 @@ var require_use_sync_external_store_shim_development = /* @__PURE__ */ __commonJ
 				value,
 				getSnapshot
 			]);
-			useEffect$4(function() {
+			useEffect$5(function() {
 				checkIfSnapshotChanged(inst) && forceUpdate({ inst });
 				return subscribe$1(function() {
 					checkIfSnapshotChanged(inst) && forceUpdate({ inst });
@@ -36760,7 +37241,7 @@ var require_use_sync_external_store_shim_development = /* @__PURE__ */ __commonJ
 			return getSnapshot();
 		}
 		"undefined" !== typeof __REACT_DEVTOOLS_GLOBAL_HOOK__ && "function" === typeof __REACT_DEVTOOLS_GLOBAL_HOOK__.registerInternalModuleStart && __REACT_DEVTOOLS_GLOBAL_HOOK__.registerInternalModuleStart(Error());
-		var React$30 = require_react(), objectIs = "function" === typeof Object.is ? Object.is : is, useState$13 = React$30.useState, useEffect$4 = React$30.useEffect, useLayoutEffect$2 = React$30.useLayoutEffect, useDebugValue = React$30.useDebugValue, didWarnOld18Alpha = !1, didWarnUncachedGetSnapshot = !1, shim = "undefined" === typeof window || "undefined" === typeof window.document || "undefined" === typeof window.document.createElement ? useSyncExternalStore$1 : useSyncExternalStore$2;
+		var React$30 = require_react(), objectIs = "function" === typeof Object.is ? Object.is : is, useState$13 = React$30.useState, useEffect$5 = React$30.useEffect, useLayoutEffect$2 = React$30.useLayoutEffect, useDebugValue = React$30.useDebugValue, didWarnOld18Alpha = !1, didWarnUncachedGetSnapshot = !1, shim = "undefined" === typeof window || "undefined" === typeof window.document || "undefined" === typeof window.document.createElement ? useSyncExternalStore$1 : useSyncExternalStore$2;
 		exports.useSyncExternalStore = void 0 !== React$30.useSyncExternalStore ? React$30.useSyncExternalStore : shim;
 		"undefined" !== typeof __REACT_DEVTOOLS_GLOBAL_HOOK__ && "function" === typeof __REACT_DEVTOOLS_GLOBAL_HOOK__.registerInternalModuleStop && __REACT_DEVTOOLS_GLOBAL_HOOK__.registerInternalModuleStop(Error());
 	})();
@@ -37045,7 +37526,7 @@ function FinancialSummary({ totalReceivable, paidAmount, onPaidAmountChange, sta
 	});
 }
 function EmployeePayments() {
-	const { employees, services, transactions, updateEmployee } = useDataStore();
+	const { employees, services, transactions, updateEmployee, payEmployee } = useDataStore();
 	const [selectedEmployeeId, setSelectedEmployeeId] = (0, import_react.useState)("");
 	const [quantities, setQuantities] = (0, import_react.useState)({});
 	const [paidAmount, setPaidAmount] = (0, import_react.useState)(0);
@@ -37091,8 +37572,27 @@ function EmployeePayments() {
 		});
 		setLastUpdated(/* @__PURE__ */ new Date());
 		toast$2({
-			title: "Pagamento Salvo",
-			description: `Os dados de pagamento de ${selectedEmployee?.name} foram atualizados.`
+			title: "Dados Salvos",
+			description: `As informações de ${selectedEmployee?.name} foram atualizadas.`
+		});
+	};
+	const handleConfirmPayment = () => {
+		if (!selectedEmployeeId) return;
+		const amountToPay = totalReceivable - paidAmount;
+		if (amountToPay <= 0) {
+			toast$2({
+				title: "Nada a pagar",
+				description: "Não há saldo pendente para este funcionário.",
+				variant: "destructive"
+			});
+			return;
+		}
+		payEmployee(selectedEmployeeId, amountToPay);
+		setPaidAmount((prev) => prev + amountToPay);
+		setStatus("paid");
+		toast$2({
+			title: "Pagamento Realizado",
+			description: `O pagamento de ${formatCurrency(amountToPay)} foi registrado e o gasto lançado no caixa.`
 		});
 	};
 	const copyPix = () => {
@@ -37128,13 +37628,18 @@ function EmployeePayments() {
 						children: emp.name
 					}, emp.id)) })]
 				})]
-			}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+			}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
 				className: "flex items-center gap-2",
-				children: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(Button, {
+				children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)(Button, {
 					onClick: handleSave,
-					className: "rounded-full bg-primary hover:bg-primary/90 text-primary-foreground px-8",
-					children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Save, { className: "w-4 h-4 mr-2" }), "Salvar Alterações"]
-				})
+					variant: "outline",
+					className: "rounded-full px-6",
+					children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Save, { className: "w-4 h-4 mr-2" }), "Salvar Rascunho"]
+				}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(Button, {
+					onClick: handleConfirmPayment,
+					className: "rounded-full bg-emerald-600 hover:bg-emerald-700 text-white px-6 shadow-md",
+					children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(CircleCheck, { className: "w-4 h-4 mr-2" }), "Confirmar Pagamento"]
+				})]
 			})]
 		}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
 			className: "grid grid-cols-1 lg:grid-cols-3 gap-6",
@@ -37194,7 +37699,8 @@ function EmployeePayments() {
 						onPaidAmountChange: (val) => setPaidAmount(val),
 						status,
 						onStatusChange: (val) => setStatus(val),
-						lastUpdated
+						lastUpdated,
+						readOnly: false
 					}),
 					/* @__PURE__ */ (0, import_jsx_runtime.jsxs)(Card, {
 						className: "shadow-subtle border-none mb-6",
@@ -37486,7 +37992,7 @@ var useDialogScope = createDialogScope();
 var AlertDialog$1 = (props) => {
 	const { __scopeAlertDialog, ...alertDialogProps } = props;
 	const dialogScope = useDialogScope(__scopeAlertDialog);
-	return /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Root$4, {
+	return /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Root$5, {
 		...dialogScope,
 		...alertDialogProps,
 		modal: true
@@ -37678,7 +38184,9 @@ AlertDialogCancel.displayName = Cancel.displayName;
 var productSchema = object({
 	name: string().min(2, "Nome deve ter pelo menos 2 caracteres"),
 	brand: string().min(2, "Marca deve ter pelo menos 2 caracteres"),
-	type: string().min(2, "Tipo deve ter pelo menos 2 caracteres")
+	type: string().min(2, "Tipo deve ter pelo menos 2 caracteres"),
+	stock: string().refine((val) => !isNaN(Number(val)) && Number(val) >= 0, { message: "O estoque deve ser um número válido." }),
+	price: string().optional()
 });
 function Products() {
 	const { products, addProduct, updateProduct, deleteProduct } = useDataStore();
@@ -37690,7 +38198,9 @@ function Products() {
 		defaultValues: {
 			name: "",
 			brand: "",
-			type: ""
+			type: "",
+			stock: "0",
+			price: ""
 		}
 	});
 	const handleOpenDialog = (product) => {
@@ -37699,21 +38209,32 @@ function Products() {
 			form.reset({
 				name: product.name,
 				brand: product.brand,
-				type: product.type
+				type: product.type,
+				stock: product.stock.toString(),
+				price: product.price ? product.price.toString() : ""
 			});
 		} else {
 			setEditingProduct(null);
 			form.reset({
 				name: "",
 				brand: "",
-				type: ""
+				type: "",
+				stock: "0",
+				price: ""
 			});
 		}
 		setIsDialogOpen(true);
 	};
 	const onSubmit = (values) => {
+		const productData = {
+			name: values.name,
+			brand: values.brand,
+			type: values.type,
+			stock: Number(values.stock),
+			price: values.price ? Number(values.price) : void 0
+		};
 		if (editingProduct) {
-			updateProduct(editingProduct.id, values);
+			updateProduct(editingProduct.id, productData);
 			toast$2({
 				title: "Produto atualizado",
 				description: "As informações do produto foram salvas com sucesso."
@@ -37721,7 +38242,7 @@ function Products() {
 		} else {
 			addProduct({
 				id: Math.random().toString(36).substr(2, 9),
-				...values
+				...productData
 			});
 			toast$2({
 				title: "Produto criado",
@@ -37747,7 +38268,7 @@ function Products() {
 					children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Package, { className: "h-8 w-8 text-primary" }), "Produtos"]
 				}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
 					className: "text-muted-foreground mt-2",
-					children: "Gerencie o catálogo de produtos utilizados e vendidos."
+					children: "Gerencie o catálogo e estoque de produtos."
 				})] }), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(Button, {
 					onClick: () => handleOpenDialog(),
 					className: "rounded-full shadow-lg",
@@ -37760,12 +38281,13 @@ function Products() {
 					/* @__PURE__ */ (0, import_jsx_runtime.jsx)(TableHead, { children: "Nome" }),
 					/* @__PURE__ */ (0, import_jsx_runtime.jsx)(TableHead, { children: "Marca" }),
 					/* @__PURE__ */ (0, import_jsx_runtime.jsx)(TableHead, { children: "Tipo" }),
+					/* @__PURE__ */ (0, import_jsx_runtime.jsx)(TableHead, { children: "Estoque" }),
 					/* @__PURE__ */ (0, import_jsx_runtime.jsx)(TableHead, {
 						className: "text-right",
 						children: "Ações"
 					})
 				] }) }), /* @__PURE__ */ (0, import_jsx_runtime.jsx)(TableBody, { children: products.length === 0 ? /* @__PURE__ */ (0, import_jsx_runtime.jsx)(TableRow, { children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(TableCell, {
-					colSpan: 4,
+					colSpan: 5,
 					className: "text-center py-8 text-muted-foreground",
 					children: "Nenhum produto cadastrado."
 				}) }) : products.map((product) => /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(TableRow, { children: [
@@ -37775,8 +38297,12 @@ function Products() {
 					}),
 					/* @__PURE__ */ (0, import_jsx_runtime.jsx)(TableCell, { children: product.brand }),
 					/* @__PURE__ */ (0, import_jsx_runtime.jsx)(TableCell, { children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
-						className: "inline-flex items-center rounded-full border px-2.5 py-0.5 text-xs font-semibold transition-colors focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 border-transparent bg-secondary text-secondary-foreground hover:bg-secondary/80",
+						className: "inline-flex items-center rounded-full border px-2.5 py-0.5 text-xs font-semibold transition-colors border-transparent bg-secondary text-secondary-foreground hover:bg-secondary/80",
 						children: product.type
+					}) }),
+					/* @__PURE__ */ (0, import_jsx_runtime.jsx)(TableCell, { children: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("span", {
+						className: product.stock < 10 ? "text-red-500 font-bold" : "",
+						children: [product.stock, " un."]
 					}) }),
 					/* @__PURE__ */ (0, import_jsx_runtime.jsx)(TableCell, {
 						className: "text-right",
@@ -37813,7 +38339,7 @@ function Products() {
 				onOpenChange: setIsDialogOpen,
 				children: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(DialogContent, {
 					className: "sm:max-w-[425px]",
-					children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)(DialogHeader, { children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(DialogTitle, { children: editingProduct ? "Editar Produto" : "Novo Produto" }), /* @__PURE__ */ (0, import_jsx_runtime.jsx)(DialogDescription, { children: "Preencha os detalhes do produto abaixo." })] }), /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Form, {
+					children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)(DialogHeader, { children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(DialogTitle, { children: editingProduct ? "Editar Produto" : "Novo Produto" }), /* @__PURE__ */ (0, import_jsx_runtime.jsx)(DialogDescription, { children: "Preencha os detalhes do produto e estoque abaixo." })] }), /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Form, {
 						...form,
 						children: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("form", {
 							onSubmit: form.handleSubmit(onSubmit),
@@ -37831,29 +38357,59 @@ function Products() {
 										/* @__PURE__ */ (0, import_jsx_runtime.jsx)(FormMessage, {})
 									] })
 								}),
-								/* @__PURE__ */ (0, import_jsx_runtime.jsx)(FormField, {
-									control: form.control,
-									name: "brand",
-									render: ({ field }) => /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(FormItem, { children: [
-										/* @__PURE__ */ (0, import_jsx_runtime.jsx)(FormLabel, { children: "Marca" }),
-										/* @__PURE__ */ (0, import_jsx_runtime.jsx)(FormControl, { children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Input, {
-											placeholder: "Ex: Nivea",
-											...field
-										}) }),
-										/* @__PURE__ */ (0, import_jsx_runtime.jsx)(FormMessage, {})
-									] })
+								/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+									className: "grid grid-cols-2 gap-4",
+									children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(FormField, {
+										control: form.control,
+										name: "brand",
+										render: ({ field }) => /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(FormItem, { children: [
+											/* @__PURE__ */ (0, import_jsx_runtime.jsx)(FormLabel, { children: "Marca" }),
+											/* @__PURE__ */ (0, import_jsx_runtime.jsx)(FormControl, { children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Input, {
+												placeholder: "Ex: Nivea",
+												...field
+											}) }),
+											/* @__PURE__ */ (0, import_jsx_runtime.jsx)(FormMessage, {})
+										] })
+									}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)(FormField, {
+										control: form.control,
+										name: "type",
+										render: ({ field }) => /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(FormItem, { children: [
+											/* @__PURE__ */ (0, import_jsx_runtime.jsx)(FormLabel, { children: "Tipo" }),
+											/* @__PURE__ */ (0, import_jsx_runtime.jsx)(FormControl, { children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Input, {
+												placeholder: "Ex: Cabelo",
+												...field
+											}) }),
+											/* @__PURE__ */ (0, import_jsx_runtime.jsx)(FormMessage, {})
+										] })
+									})]
 								}),
-								/* @__PURE__ */ (0, import_jsx_runtime.jsx)(FormField, {
-									control: form.control,
-									name: "type",
-									render: ({ field }) => /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(FormItem, { children: [
-										/* @__PURE__ */ (0, import_jsx_runtime.jsx)(FormLabel, { children: "Tipo" }),
-										/* @__PURE__ */ (0, import_jsx_runtime.jsx)(FormControl, { children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Input, {
-											placeholder: "Ex: Cabelo",
-											...field
-										}) }),
-										/* @__PURE__ */ (0, import_jsx_runtime.jsx)(FormMessage, {})
-									] })
+								/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+									className: "grid grid-cols-2 gap-4",
+									children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(FormField, {
+										control: form.control,
+										name: "stock",
+										render: ({ field }) => /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(FormItem, { children: [
+											/* @__PURE__ */ (0, import_jsx_runtime.jsx)(FormLabel, { children: "Estoque (Qtd)" }),
+											/* @__PURE__ */ (0, import_jsx_runtime.jsx)(FormControl, { children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Input, {
+												type: "number",
+												...field
+											}) }),
+											/* @__PURE__ */ (0, import_jsx_runtime.jsx)(FormMessage, {})
+										] })
+									}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)(FormField, {
+										control: form.control,
+										name: "price",
+										render: ({ field }) => /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(FormItem, { children: [
+											/* @__PURE__ */ (0, import_jsx_runtime.jsx)(FormLabel, { children: "Preço (Opcional)" }),
+											/* @__PURE__ */ (0, import_jsx_runtime.jsx)(FormControl, { children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Input, {
+												placeholder: "0.00",
+												type: "number",
+												step: "0.01",
+												...field
+											}) }),
+											/* @__PURE__ */ (0, import_jsx_runtime.jsx)(FormMessage, {})
+										] })
+									})]
 								}),
 								/* @__PURE__ */ (0, import_jsx_runtime.jsx)(DialogFooter, {
 									className: "pt-4",
@@ -37875,7 +38431,8 @@ var customerSchema = object({
 	name: string().min(2, "Nome deve ter pelo menos 2 caracteres"),
 	email: string().email("Email inválido"),
 	phone: string().min(10, "Telefone inválido"),
-	birthday: date({ required_error: "Data de nascimento é obrigatória" })
+	birthday: date({ required_error: "Data de nascimento é obrigatória" }),
+	instagram: string().optional()
 });
 function Customers() {
 	const { customers, addCustomer, updateCustomer, deleteCustomer } = useDataStore();
@@ -37889,7 +38446,8 @@ function Customers() {
 			name: "",
 			email: "",
 			phone: "",
-			birthday: /* @__PURE__ */ new Date()
+			birthday: /* @__PURE__ */ new Date(),
+			instagram: ""
 		}
 	});
 	const filteredCustomers = (0, import_react.useMemo)(() => {
@@ -37902,7 +38460,8 @@ function Customers() {
 				name: customer.name,
 				email: customer.email,
 				phone: customer.phone,
-				birthday: new Date(customer.birthday)
+				birthday: new Date(customer.birthday),
+				instagram: customer.instagram || ""
 			});
 		} else {
 			setEditingCustomer(null);
@@ -37910,7 +38469,8 @@ function Customers() {
 				name: "",
 				email: "",
 				phone: "",
-				birthday: /* @__PURE__ */ new Date()
+				birthday: /* @__PURE__ */ new Date(),
+				instagram: ""
 			});
 		}
 		setIsDialogOpen(true);
@@ -37977,13 +38537,14 @@ function Customers() {
 					/* @__PURE__ */ (0, import_jsx_runtime.jsx)(TableHead, { children: "Nome" }),
 					/* @__PURE__ */ (0, import_jsx_runtime.jsx)(TableHead, { children: "Email" }),
 					/* @__PURE__ */ (0, import_jsx_runtime.jsx)(TableHead, { children: "Telefone" }),
+					/* @__PURE__ */ (0, import_jsx_runtime.jsx)(TableHead, { children: "Instagram" }),
 					/* @__PURE__ */ (0, import_jsx_runtime.jsx)(TableHead, { children: "Aniversário" }),
 					/* @__PURE__ */ (0, import_jsx_runtime.jsx)(TableHead, {
 						className: "text-right",
 						children: "Ações"
 					})
 				] }) }), /* @__PURE__ */ (0, import_jsx_runtime.jsx)(TableBody, { children: filteredCustomers.length === 0 ? /* @__PURE__ */ (0, import_jsx_runtime.jsx)(TableRow, { children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(TableCell, {
-					colSpan: 5,
+					colSpan: 6,
 					className: "text-center py-8 text-muted-foreground",
 					children: "Nenhum cliente encontrado."
 				}) }) : filteredCustomers.map((customer) => /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(TableRow, { children: [
@@ -37993,6 +38554,16 @@ function Customers() {
 					}),
 					/* @__PURE__ */ (0, import_jsx_runtime.jsx)(TableCell, { children: customer.email }),
 					/* @__PURE__ */ (0, import_jsx_runtime.jsx)(TableCell, { children: customer.phone }),
+					/* @__PURE__ */ (0, import_jsx_runtime.jsx)(TableCell, { children: customer.instagram ? /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+						className: "flex items-center gap-1 text-primary",
+						children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Instagram, { className: "w-3 h-3" }), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+							className: "text-sm",
+							children: customer.instagram
+						})]
+					}) : /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+						className: "text-muted-foreground text-xs",
+						children: "-"
+					}) }),
 					/* @__PURE__ */ (0, import_jsx_runtime.jsx)(TableCell, { children: format(new Date(customer.birthday), "dd/MM/yyyy") }),
 					/* @__PURE__ */ (0, import_jsx_runtime.jsx)(TableCell, {
 						className: "text-right",
@@ -38059,17 +38630,31 @@ function Customers() {
 										/* @__PURE__ */ (0, import_jsx_runtime.jsx)(FormMessage, {})
 									] })
 								}),
-								/* @__PURE__ */ (0, import_jsx_runtime.jsx)(FormField, {
-									control: form.control,
-									name: "phone",
-									render: ({ field }) => /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(FormItem, { children: [
-										/* @__PURE__ */ (0, import_jsx_runtime.jsx)(FormLabel, { children: "Telefone / WhatsApp" }),
-										/* @__PURE__ */ (0, import_jsx_runtime.jsx)(FormControl, { children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Input, {
-											placeholder: "Ex: (11) 99999-9999",
-											...field
-										}) }),
-										/* @__PURE__ */ (0, import_jsx_runtime.jsx)(FormMessage, {})
-									] })
+								/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+									className: "grid grid-cols-2 gap-4",
+									children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(FormField, {
+										control: form.control,
+										name: "phone",
+										render: ({ field }) => /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(FormItem, { children: [
+											/* @__PURE__ */ (0, import_jsx_runtime.jsx)(FormLabel, { children: "Telefone" }),
+											/* @__PURE__ */ (0, import_jsx_runtime.jsx)(FormControl, { children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Input, {
+												placeholder: "(11) 99999-9999",
+												...field
+											}) }),
+											/* @__PURE__ */ (0, import_jsx_runtime.jsx)(FormMessage, {})
+										] })
+									}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)(FormField, {
+										control: form.control,
+										name: "instagram",
+										render: ({ field }) => /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(FormItem, { children: [
+											/* @__PURE__ */ (0, import_jsx_runtime.jsx)(FormLabel, { children: "Instagram" }),
+											/* @__PURE__ */ (0, import_jsx_runtime.jsx)(FormControl, { children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Input, {
+												placeholder: "@usuario",
+												...field
+											}) }),
+											/* @__PURE__ */ (0, import_jsx_runtime.jsx)(FormMessage, {})
+										] })
+									})]
 								}),
 								/* @__PURE__ */ (0, import_jsx_runtime.jsx)(FormField, {
 									control: form.control,
@@ -38535,7 +39120,7 @@ var Separator = import_react.forwardRef(({ className, orientation = "horizontal"
 	...props
 }));
 Separator.displayName = Root.displayName;
-var Sheet = Root$4;
+var Sheet = Root$5;
 var SheetPortal = Portal$3;
 var SheetOverlay = import_react.forwardRef(({ className, ...props }, ref) => /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Overlay, {
 	className: cn("fixed inset-0 z-50 bg-black/80  data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0", className),
@@ -39211,4 +39796,4 @@ var App = () => /* @__PURE__ */ (0, import_jsx_runtime.jsx)(BrowserRouter, {
 var App_default = App;
 (0, import_client.createRoot)(document.getElementById("root")).render(/* @__PURE__ */ (0, import_jsx_runtime.jsx)(App_default, {}));
 
-//# sourceMappingURL=index-BIYJNNqH.js.map
+//# sourceMappingURL=index-BQoyxR_K.js.map

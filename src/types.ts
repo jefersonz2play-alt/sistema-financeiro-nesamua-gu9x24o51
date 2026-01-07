@@ -12,6 +12,9 @@ export interface Transaction {
   customerId?: string // Linked customer
   employeeId?: string // Linked employee
   employeePayment?: number // Payment allocated to employee
+  itemId?: string // Linked product or service ID
+  itemType?: 'product' | 'service' // Type of item
+  quantity?: number // Quantity sold (for products)
 }
 
 export interface Employee {
@@ -38,6 +41,8 @@ export interface Product {
   name: string
   brand: string
   type: string
+  stock: number
+  price?: number
 }
 
 export interface Customer {
@@ -46,6 +51,7 @@ export interface Customer {
   email: string
   phone: string
   birthday: Date
+  instagram?: string
 }
 
 export interface Service {

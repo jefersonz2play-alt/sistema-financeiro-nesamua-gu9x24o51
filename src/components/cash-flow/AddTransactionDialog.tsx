@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import * as z from 'zod'
@@ -41,6 +41,7 @@ import {
 import { Calendar } from '@/components/ui/calendar'
 import { cn } from '@/lib/utils'
 import useDataStore from '@/stores/useDataStore'
+import { Transaction } from '@/types'
 
 const formSchema = z.object({
   description: z.string().min(2, {
@@ -52,29 +53,24 @@ const formSchema = z.object({
   type: z.enum(['entry', 'exit'], {
     required_error: 'Selecione o tipo de movimentação.',
   }),
+  category: z.enum(['service', 'product', 'other']),
   date: z.date({
     required_error: 'Selecione uma data.',
   }),
   customerId: z.string().optional(),
   employeeId: z.string().optional(),
   employeePayment: z.string().optional(),
+  itemId: z.string().optional(),
+  quantity: z.string().optional(),
 })
 
 interface AddTransactionDialogProps {
-  onAdd: (data: {
-    description: string
-    amount: number
-    type: 'entry' | 'exit'
-    date: Date
-    customerId?: string
-    employeeId?: string
-    employeePayment?: number
-  }) => void
+  onAdd: (data: Transaction) => void
 }
 
 export function AddTransactionDialog({ onAdd }: AddTransactionDialogProps) {
   const [open, setOpen] = useState(false)
-  const { customers, employees } = useDataStore()
+  const { customers, employees, products, services } = useDataStore()
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -82,44 +78,100 @@ export function AddTransactionDialog({ onAdd }: AddTransactionDialogProps) {
       description: '',
       amount: '',
       type: 'entry',
+      category: 'service',
       date: new Date(),
       customerId: undefined,
       employeeId: undefined,
       employeePayment: '',
+      itemId: undefined,
+      quantity: '1',
     },
   })
 
   const watchType = form.watch('type')
+  const watchCategory = form.watch('category')
+  const watchItemId = form.watch('itemId')
+  const watchQuantity = form.watch('quantity')
+
+  // Auto-fill product info
+  useEffect(() => {
+    if (watchCategory === 'product' && watchItemId && watchQuantity) {
+      const product = products.find((p) => p.id === watchItemId)
+      if (product) {
+        form.setValue('description', `Venda: ${product.name}`)
+        if (product.price) {
+          const total = product.price * (Number(watchQuantity) || 1)
+          form.setValue('amount', total.toFixed(2))
+        }
+      }
+    }
+  }, [watchItemId, watchCategory, watchQuantity, products, form])
+
+  // Auto-fill service info
+  useEffect(() => {
+    if (watchCategory === 'service' && watchItemId) {
+      const service = services.find((s) => s.id === watchItemId)
+      if (service) {
+        form.setValue('description', service.name)
+        // Usually services have variable prices, but if we had a price we could set it
+      }
+    }
+  }, [watchItemId, watchCategory, services, form])
 
   function onSubmit(values: z.infer<typeof formSchema>) {
-    // Validation for associations if it is an entry
+    // Validation
     if (values.type === 'entry') {
-      if (!values.customerId) {
-        form.setError('customerId', {
-          message: 'Selecione um cliente para esta entrada.',
-        })
-        return
-      }
-      if (!values.employeeId) {
-        form.setError('employeeId', {
-          message: 'Selecione um funcionário responsável.',
-        })
-        return
+      if (values.category === 'service') {
+        if (!values.customerId) {
+          form.setError('customerId', {
+            message: 'Cliente é obrigatório para serviços.',
+          })
+          return
+        }
+        if (!values.employeeId) {
+          form.setError('employeeId', {
+            message: 'Funcionário é obrigatório para serviços.',
+          })
+          return
+        }
+      } else if (values.category === 'product') {
+        if (!values.itemId) {
+          form.setError('itemId', { message: 'Selecione o produto.' })
+          return
+        }
       }
     }
 
-    onAdd({
+    const newTransaction: Transaction = {
+      id: Math.random().toString(36).substr(2, 9),
+      date: values.date.toISOString().split('T')[0],
       description: values.description,
-      amount: Number(values.amount),
       type: values.type,
-      date: values.date,
+      amount: Number(values.amount),
+      balanceAfter: 0,
       customerId: values.customerId,
       employeeId: values.employeeId,
       employeePayment: values.employeePayment
         ? Number(values.employeePayment)
         : 0,
+      itemId: values.itemId,
+      itemType:
+        values.category === 'other'
+          ? undefined
+          : (values.category as 'product' | 'service'),
+      quantity: values.quantity ? Number(values.quantity) : undefined,
+    }
+
+    onAdd(newTransaction)
+    form.reset({
+      description: '',
+      amount: '',
+      type: 'entry',
+      category: 'service',
+      date: new Date(),
+      quantity: '1',
+      employeePayment: '',
     })
-    form.reset()
     setOpen(false)
   }
 
@@ -134,38 +186,140 @@ export function AddTransactionDialog({ onAdd }: AddTransactionDialogProps) {
       <DialogContent className="sm:max-w-[500px] rounded-xl max-h-[90vh] overflow-y-auto">
         <DialogHeader>
           <DialogTitle>Nova Movimentação</DialogTitle>
-          <DialogDescription>
-            Registre uma entrada de serviço ou saída de caixa.
-          </DialogDescription>
+          <DialogDescription>Registre entradas ou saídas.</DialogDescription>
         </DialogHeader>
         <Form {...form}>
           <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
-            <FormField
-              control={form.control}
-              name="type"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Tipo de Movimentação</FormLabel>
-                  <Select
-                    onValueChange={field.onChange}
-                    defaultValue={field.value}
-                  >
-                    <FormControl>
-                      <SelectTrigger>
-                        <SelectValue placeholder="Selecione o tipo" />
-                      </SelectTrigger>
-                    </FormControl>
-                    <SelectContent>
-                      <SelectItem value="entry">Entrada (Serviço)</SelectItem>
-                      <SelectItem value="exit">Saída (Despesa)</SelectItem>
-                    </SelectContent>
-                  </Select>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
+            <div className="grid grid-cols-2 gap-4">
+              <FormField
+                control={form.control}
+                name="type"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Tipo</FormLabel>
+                    <Select
+                      onValueChange={field.onChange}
+                      defaultValue={field.value}
+                    >
+                      <FormControl>
+                        <SelectTrigger>
+                          <SelectValue placeholder="Selecione" />
+                        </SelectTrigger>
+                      </FormControl>
+                      <SelectContent>
+                        <SelectItem value="entry">Entrada</SelectItem>
+                        <SelectItem value="exit">Saída</SelectItem>
+                      </SelectContent>
+                    </Select>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
 
-            {watchType === 'entry' && (
+              <FormField
+                control={form.control}
+                name="category"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Categoria</FormLabel>
+                    <Select
+                      onValueChange={field.onChange}
+                      defaultValue={field.value}
+                      disabled={watchType === 'exit'}
+                    >
+                      <FormControl>
+                        <SelectTrigger>
+                          <SelectValue placeholder="Selecione" />
+                        </SelectTrigger>
+                      </FormControl>
+                      <SelectContent>
+                        <SelectItem value="service">Serviço</SelectItem>
+                        <SelectItem value="product">Venda Produto</SelectItem>
+                        <SelectItem value="other">Outro</SelectItem>
+                      </SelectContent>
+                    </Select>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+            </div>
+
+            {watchType === 'entry' && watchCategory === 'product' && (
+              <div className="grid grid-cols-2 gap-4">
+                <FormField
+                  control={form.control}
+                  name="itemId"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Produto</FormLabel>
+                      <Select
+                        onValueChange={field.onChange}
+                        defaultValue={field.value}
+                      >
+                        <FormControl>
+                          <SelectTrigger>
+                            <SelectValue placeholder="Produto..." />
+                          </SelectTrigger>
+                        </FormControl>
+                        <SelectContent>
+                          {products.map((p) => (
+                            <SelectItem key={p.id} value={p.id}>
+                              {p.name} ({p.stock} un.)
+                            </SelectItem>
+                          ))}
+                        </SelectContent>
+                      </Select>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+                <FormField
+                  control={form.control}
+                  name="quantity"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Qtd</FormLabel>
+                      <FormControl>
+                        <Input type="number" min="1" {...field} />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+              </div>
+            )}
+
+            {watchType === 'entry' && watchCategory === 'service' && (
+              <FormField
+                control={form.control}
+                name="itemId"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Serviço Realizado</FormLabel>
+                    <Select
+                      onValueChange={field.onChange}
+                      defaultValue={field.value}
+                    >
+                      <FormControl>
+                        <SelectTrigger>
+                          <SelectValue placeholder="Selecione o serviço..." />
+                        </SelectTrigger>
+                      </FormControl>
+                      <SelectContent>
+                        {services.map((s) => (
+                          <SelectItem key={s.id} value={s.id}>
+                            {s.name}
+                          </SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+            )}
+
+            {watchType === 'entry' && watchCategory === 'service' && (
               <div className="grid grid-cols-2 gap-4">
                 <FormField
                   control={form.control}
@@ -231,7 +385,7 @@ export function AddTransactionDialog({ onAdd }: AddTransactionDialogProps) {
                 <FormItem>
                   <FormLabel>Descrição</FormLabel>
                   <FormControl>
-                    <Input placeholder="Ex: Box Braids Jumbo" {...field} />
+                    <Input placeholder="Detalhes..." {...field} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -258,7 +412,7 @@ export function AddTransactionDialog({ onAdd }: AddTransactionDialogProps) {
                 )}
               />
 
-              {watchType === 'entry' && (
+              {watchType === 'entry' && watchCategory === 'service' && (
                 <FormField
                   control={form.control}
                   name="employeePayment"
@@ -274,7 +428,7 @@ export function AddTransactionDialog({ onAdd }: AddTransactionDialogProps) {
                         />
                       </FormControl>
                       <FormDescription className="text-xs">
-                        Valor pago ao funcionário.
+                        Comissão funcionário.
                       </FormDescription>
                       <FormMessage />
                     </FormItem>

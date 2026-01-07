@@ -1,5 +1,13 @@
 import { useState, useMemo } from 'react'
-import { Plus, Pencil, Trash2, Users, Search, CalendarIcon } from 'lucide-react'
+import {
+  Plus,
+  Pencil,
+  Trash2,
+  Users,
+  Search,
+  CalendarIcon,
+  Instagram,
+} from 'lucide-react'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import * as z from 'zod'
@@ -67,6 +75,7 @@ const customerSchema = z.object({
   birthday: z.date({
     required_error: 'Data de nascimento é obrigatória',
   }),
+  instagram: z.string().optional(),
 })
 
 export default function Customers() {
@@ -84,6 +93,7 @@ export default function Customers() {
       email: '',
       phone: '',
       birthday: new Date(),
+      instagram: '',
     },
   })
 
@@ -104,6 +114,7 @@ export default function Customers() {
         email: customer.email,
         phone: customer.phone,
         birthday: new Date(customer.birthday),
+        instagram: customer.instagram || '',
       })
     } else {
       setEditingCustomer(null)
@@ -112,6 +123,7 @@ export default function Customers() {
         email: '',
         phone: '',
         birthday: new Date(),
+        instagram: '',
       })
     }
     setIsDialogOpen(true)
@@ -190,6 +202,7 @@ export default function Customers() {
                 <TableHead>Nome</TableHead>
                 <TableHead>Email</TableHead>
                 <TableHead>Telefone</TableHead>
+                <TableHead>Instagram</TableHead>
                 <TableHead>Aniversário</TableHead>
                 <TableHead className="text-right">Ações</TableHead>
               </TableRow>
@@ -198,7 +211,7 @@ export default function Customers() {
               {filteredCustomers.length === 0 ? (
                 <TableRow>
                   <TableCell
-                    colSpan={5}
+                    colSpan={6}
                     className="text-center py-8 text-muted-foreground"
                   >
                     Nenhum cliente encontrado.
@@ -212,6 +225,16 @@ export default function Customers() {
                     </TableCell>
                     <TableCell>{customer.email}</TableCell>
                     <TableCell>{customer.phone}</TableCell>
+                    <TableCell>
+                      {customer.instagram ? (
+                        <div className="flex items-center gap-1 text-primary">
+                          <Instagram className="w-3 h-3" />
+                          <span className="text-sm">{customer.instagram}</span>
+                        </div>
+                      ) : (
+                        <span className="text-muted-foreground text-xs">-</span>
+                      )}
+                    </TableCell>
                     <TableCell>
                       {format(new Date(customer.birthday), 'dd/MM/yyyy')}
                     </TableCell>
@@ -298,19 +321,35 @@ export default function Customers() {
                   </FormItem>
                 )}
               />
-              <FormField
-                control={form.control}
-                name="phone"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Telefone / WhatsApp</FormLabel>
-                    <FormControl>
-                      <Input placeholder="Ex: (11) 99999-9999" {...field} />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
+              <div className="grid grid-cols-2 gap-4">
+                <FormField
+                  control={form.control}
+                  name="phone"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Telefone</FormLabel>
+                      <FormControl>
+                        <Input placeholder="(11) 99999-9999" {...field} />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+                <FormField
+                  control={form.control}
+                  name="instagram"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Instagram</FormLabel>
+                      <FormControl>
+                        <Input placeholder="@usuario" {...field} />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+              </div>
+
               <FormField
                 control={form.control}
                 name="birthday"

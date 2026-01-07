@@ -10,7 +10,7 @@ import {
 import { Button } from '@/components/ui/button'
 import { Textarea } from '@/components/ui/textarea'
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
-import { Copy, Save } from 'lucide-react'
+import { Copy, Save, CheckCircle2 } from 'lucide-react'
 import { useToast } from '@/hooks/use-toast'
 import { ProductionTable } from '@/components/employees/ProductionTable'
 import { FinancialSummary } from '@/components/employees/FinancialSummary'
@@ -18,7 +18,8 @@ import useDataStore from '@/stores/useDataStore'
 import { formatCurrency } from '@/lib/utils'
 
 export default function EmployeePayments() {
-  const { employees, services, transactions, updateEmployee } = useDataStore()
+  const { employees, services, transactions, updateEmployee, payEmployee } =
+    useDataStore()
   const [selectedEmployeeId, setSelectedEmployeeId] = useState<string>('')
 
   // Local state for editing before saving
@@ -83,16 +84,41 @@ export default function EmployeePayments() {
 
     updateEmployee(selectedEmployeeId, {
       quantities,
-      paidAmount,
-      status,
+      paidAmount, // Should this be updated manually here? Maybe just sync quantities
+      status, // Status might be manually updated too
       lastUpdated: new Date().toISOString(),
     })
 
     setLastUpdated(new Date())
 
     toast({
-      title: 'Pagamento Salvo',
-      description: `Os dados de pagamento de ${selectedEmployee?.name} foram atualizados.`,
+      title: 'Dados Salvos',
+      description: `As informações de ${selectedEmployee?.name} foram atualizadas.`,
+    })
+  }
+
+  const handleConfirmPayment = () => {
+    if (!selectedEmployeeId) return
+    const amountToPay = totalReceivable - paidAmount
+
+    if (amountToPay <= 0) {
+      toast({
+        title: 'Nada a pagar',
+        description: 'Não há saldo pendente para este funcionário.',
+        variant: 'destructive',
+      })
+      return
+    }
+
+    payEmployee(selectedEmployeeId, amountToPay)
+
+    // Local update to reflect changes immediately
+    setPaidAmount((prev) => prev + amountToPay)
+    setStatus('paid')
+
+    toast({
+      title: 'Pagamento Realizado',
+      description: `O pagamento de ${formatCurrency(amountToPay)} foi registrado e o gasto lançado no caixa.`,
     })
   }
 
@@ -141,10 +167,18 @@ export default function EmployeePayments() {
         <div className="flex items-center gap-2">
           <Button
             onClick={handleSave}
-            className="rounded-full bg-primary hover:bg-primary/90 text-primary-foreground px-8"
+            variant="outline"
+            className="rounded-full px-6"
           >
             <Save className="w-4 h-4 mr-2" />
-            Salvar Alterações
+            Salvar Rascunho
+          </Button>
+          <Button
+            onClick={handleConfirmPayment}
+            className="rounded-full bg-emerald-600 hover:bg-emerald-700 text-white px-6 shadow-md"
+          >
+            <CheckCircle2 className="w-4 h-4 mr-2" />
+            Confirmar Pagamento
           </Button>
         </div>
       </div>
@@ -217,6 +251,7 @@ export default function EmployeePayments() {
             status={status}
             onStatusChange={(val) => setStatus(val)}
             lastUpdated={lastUpdated}
+            readOnly={false}
           />
 
           <Card className="shadow-subtle border-none mb-6">

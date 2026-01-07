@@ -13,9 +13,12 @@ interface DataContextType {
   products: Product[]
   customers: Customer[]
   services: Service[]
+  monthlyGoal: number
+  setMonthlyGoal: (goal: number) => void
   addTransaction: (transaction: Transaction) => void
   addEmployee: (employee: Employee) => void
   updateEmployee: (id: string, data: Partial<Employee>) => void
+  payEmployee: (id: string, amount: number) => void
   addProduct: (product: Product) => void
   updateProduct: (id: string, data: Partial<Product>) => void
   deleteProduct: (id: string) => void
@@ -59,6 +62,7 @@ const INITIAL_CUSTOMERS: Customer[] = [
     email: 'roberto@email.com',
     phone: '(11) 99999-1111',
     birthday: new Date('1990-05-15'),
+    instagram: '@beto.santos',
   },
   {
     id: 'c2',
@@ -66,6 +70,7 @@ const INITIAL_CUSTOMERS: Customer[] = [
     email: 'julia@email.com',
     phone: '(11) 98888-2222',
     birthday: new Date('1995-10-20'),
+    instagram: '@ju_lima',
   },
 ]
 
@@ -80,6 +85,8 @@ const INITIAL_TRANSACTIONS: Transaction[] = [
     customerId: 'c2',
     employeeId: '1',
     employeePayment: 150.0,
+    itemId: 's1',
+    itemType: 'service',
   },
   {
     id: '2',
@@ -124,18 +131,24 @@ const INITIAL_PRODUCTS: Product[] = [
     name: 'Jumbo Premium',
     brand: 'Ser Mulher',
     type: 'Fibra',
+    stock: 50,
+    price: 35.0,
   },
   {
     id: 'p2',
     name: 'Gel Cola',
     brand: 'Arvensis',
     type: 'Finalizador',
+    stock: 20,
+    price: 45.0,
   },
   {
     id: 'p3',
     name: 'Anéis de Trança',
     brand: 'Acessórios',
     type: 'Decoração',
+    stock: 100,
+    price: 15.0,
   },
 ]
 
@@ -148,9 +161,26 @@ export function DataProvider({ children }: { children: ReactNode }) {
   const [products, setProducts] = useState<Product[]>(INITIAL_PRODUCTS)
   const [customers, setCustomers] = useState<Customer[]>(INITIAL_CUSTOMERS)
   const [services, setServices] = useState<Service[]>(INITIAL_SERVICES)
+  const [monthlyGoal, setMonthlyGoal] = useState<number>(10000)
 
   const addTransaction = (transaction: Transaction) => {
     setTransactions((prev) => [...prev, transaction])
+
+    // Decrement stock if product sale
+    if (
+      transaction.type === 'entry' &&
+      transaction.itemType === 'product' &&
+      transaction.itemId &&
+      transaction.quantity
+    ) {
+      setProducts((prev) =>
+        prev.map((p) =>
+          p.id === transaction.itemId
+            ? { ...p, stock: p.stock - (transaction.quantity || 0) }
+            : p,
+        ),
+      )
+    }
   }
 
   const addEmployee = (employee: Employee) => {
@@ -161,6 +191,31 @@ export function DataProvider({ children }: { children: ReactNode }) {
     setEmployees((prev) =>
       prev.map((emp) => (emp.id === id ? { ...emp, ...data } : emp)),
     )
+  }
+
+  const payEmployee = (id: string, amount: number) => {
+    const employee = employees.find((e) => e.id === id)
+    if (!employee) return
+
+    // Update Employee Status
+    updateEmployee(id, {
+      paidAmount: employee.paidAmount + amount,
+      status: 'paid', // Assuming full payment or tracking partial manually in updateEmployee
+      lastUpdated: new Date().toISOString(),
+    })
+
+    // Create Expense Transaction
+    const transaction: Transaction = {
+      id: Math.random().toString(36).substr(2, 9),
+      date: new Date().toISOString().split('T')[0],
+      description: `Pagamento de Funcionário: ${employee.name}`,
+      type: 'exit',
+      amount: amount,
+      balanceAfter: 0, // Calculated later
+      employeeId: id,
+    }
+
+    addTransaction(transaction)
   }
 
   const addProduct = (product: Product) => {
@@ -214,9 +269,12 @@ export function DataProvider({ children }: { children: ReactNode }) {
         products,
         customers,
         services,
+        monthlyGoal,
+        setMonthlyGoal,
         addTransaction,
         addEmployee,
         updateEmployee,
+        payEmployee,
         addProduct,
         updateProduct,
         deleteProduct,
