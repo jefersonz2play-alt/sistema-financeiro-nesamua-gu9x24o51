@@ -1,10 +1,11 @@
-import { useMemo } from 'react'
-import { useSearchParams, useNavigate } from 'react-router-dom'
-import { subDays, format } from 'date-fns'
-import { ptBR } from 'date-fns/locale'
-import { Printer, ArrowLeft } from 'lucide-react'
-
-import { Button } from '@/components/ui/button'
+import { useState, useMemo } from 'react'
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from '@/components/ui/card'
 import {
   Table,
   TableBody,
@@ -13,193 +14,158 @@ import {
   TableHeader,
   TableRow,
 } from '@/components/ui/table'
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
+import { Input } from '@/components/ui/input'
+import { Button } from '@/components/ui/button'
+import { CalendarIcon, Download } from 'lucide-react'
 import useDataStore from '@/stores/useDataStore'
 import { formatCurrency } from '@/lib/utils'
 
 export default function EmployeeReport() {
-  const [searchParams] = useSearchParams()
-  const navigate = useNavigate()
-  const { transactions, employees, services } = useDataStore()
+  const { employees, transactions } = useDataStore()
+  const [startDate, setStartDate] = useState(
+    new Date(new Date().getFullYear(), new Date().getMonth(), 1)
+      .toISOString()
+      .split('T')[0],
+  )
+  const [endDate, setEndDate] = useState(new Date().toISOString().split('T')[0])
 
-  const startParam = searchParams.get('startDate')
-  const endParam = searchParams.get('endDate')
-
-  const { start, end } = useMemo(() => {
-    if (startParam && endParam) {
-      return { start: new Date(startParam), end: new Date(endParam) }
-    }
-    const days = parseInt(searchParams.get('days') || '30')
-    const endDate = new Date()
-    const startDate = subDays(endDate, days)
-    return { start: startDate, end: endDate }
-  }, [startParam, endParam, searchParams])
-
-  // Group transactions by Employee
   const reportData = useMemo(() => {
-    const startDateStr = start.toISOString().split('T')[0]
-    const endDateStr = end.toISOString().split('T')[0]
-
     return employees
       .map((emp) => {
-        const empTransactions = transactions
-          .filter(
-            (t) =>
-              t.employeeId === emp.id &&
-              t.type === 'entry' &&
-              t.itemType === 'service' &&
-              t.date >= startDateStr &&
-              t.date <= endDateStr,
-          )
-          .sort(
-            (a, b) => new Date(b.date).getTime() - new Date(a.date).getTime(),
-          )
+        const empTransactions = transactions.filter((t) => {
+          const inRange = t.date >= startDate && t.date <= endDate
+          const isRelevantType =
+            t.type === 'entry' || (t.type === 'exit' && t.itemType === 'bonus')
 
-        const totalRevenue = empTransactions.reduce(
-          (sum, t) => sum + t.amount,
-          0,
-        )
-        const totalCommission = empTransactions.reduce(
-          (sum, t) => sum + (t.employeePayment || 0),
-          0,
-        )
-        const avgTicket =
-          empTransactions.length > 0 ? totalRevenue / empTransactions.length : 0
+          if (!inRange || !isRelevantType) return false
+
+          if (t.splits && t.splits.length > 0) {
+            return t.splits.some((s) => s.employeeId === emp.id)
+          }
+          return t.employeeId === emp.id
+        })
+
+        const totalEarnings = empTransactions.reduce((sum, t) => {
+          let amount = 0
+          if (t.splits && t.splits.length > 0) {
+            const split = t.splits.find((s) => s.employeeId === emp.id)
+            if (split) amount = split.amount
+          } else {
+            amount = t.employeePayment || 0
+          }
+          return sum + amount
+        }, 0)
 
         return {
-          employee: emp,
-          transactions: empTransactions,
-          totalRevenue,
-          totalCommission,
-          avgTicket,
+          id: emp.id,
+          name: emp.name,
+          count: empTransactions.length,
+          totalEarnings,
+          avgTicket:
+            empTransactions.length > 0
+              ? totalEarnings / empTransactions.length
+              : 0,
         }
       })
-      .filter((data) => data.transactions.length > 0)
-  }, [employees, transactions, start, end])
+      .sort((a, b) => b.totalEarnings - a.totalEarnings)
+  }, [employees, transactions, startDate, endDate])
 
-  const getServiceName = (id?: string) =>
-    services.find((s) => s.id === id)?.name || 'Serviço'
-
-  const handlePrint = () => {
-    window.print()
-  }
+  const totalPeriodEarnings = reportData.reduce(
+    (acc, curr) => acc + curr.totalEarnings,
+    0,
+  )
 
   return (
-    <div className="space-y-8">
-      <div className="flex items-center justify-between no-print">
-        <Button variant="ghost" onClick={() => navigate(-1)} className="gap-2">
-          <ArrowLeft className="w-4 h-4" /> Voltar
-        </Button>
-        <Button onClick={handlePrint} className="gap-2">
-          <Printer className="w-4 h-4" /> Imprimir Relatório
-        </Button>
+    <div className="space-y-6 pb-10">
+      <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
+        <div>
+          <h1 className="text-3xl font-bold tracking-tight">
+            Relatório de Funcionários
+          </h1>
+          <p className="text-muted-foreground mt-1">
+            Detalhamento de ganhos e comissões por período.
+          </p>
+        </div>
+
+        <div className="flex items-center gap-2 bg-card p-2 rounded-lg border border-border shadow-sm">
+          <CalendarIcon className="w-4 h-4 text-muted-foreground" />
+          <Input
+            type="date"
+            value={startDate}
+            onChange={(e) => setStartDate(e.target.value)}
+            className="h-8 w-auto border-none bg-transparent shadow-none focus-visible:ring-0"
+          />
+          <span className="text-muted-foreground">-</span>
+          <Input
+            type="date"
+            value={endDate}
+            onChange={(e) => setEndDate(e.target.value)}
+            className="h-8 w-auto border-none bg-transparent shadow-none focus-visible:ring-0"
+          />
+        </div>
       </div>
 
-      <Card className="border-none shadow-none print:shadow-none">
-        <CardHeader className="text-center md:text-left border-b pb-6">
-          <div>
-            <CardTitle className="text-2xl font-bold">
-              Relatório de Desempenho da Equipe
+      <div className="grid gap-6 md:grid-cols-3">
+        <Card className="shadow-subtle border-none">
+          <CardHeader className="pb-2">
+            <CardTitle className="text-sm font-medium text-muted-foreground uppercase">
+              Total de Comissões
             </CardTitle>
-            <p className="text-muted-foreground mt-1">
-              Período: {format(start, 'dd/MM/yyyy')} até{' '}
-              {format(end, 'dd/MM/yyyy')}
-            </p>
-          </div>
-        </CardHeader>
-        <CardContent className="p-0 pt-6 space-y-8">
-          {reportData.length === 0 ? (
-            <div className="text-center py-8 text-muted-foreground">
-              Nenhum registro de atendimento encontrado para os funcionários
-              neste período.
+          </CardHeader>
+          <CardContent>
+            <div className="text-2xl font-bold">
+              {formatCurrency(totalPeriodEarnings)}
             </div>
-          ) : (
-            reportData.map(
-              ({
-                employee,
-                transactions,
-                totalRevenue,
-                totalCommission,
-                avgTicket,
-              }) => (
-                <div key={employee.id} className="space-y-4 page-break">
-                  <div className="bg-muted/30 p-4 rounded-lg flex flex-col md:flex-row justify-between items-start md:items-center">
-                    <div>
-                      <h3 className="text-lg font-bold">{employee.name}</h3>
-                      <p className="text-sm text-muted-foreground">
-                        {employee.email}
-                      </p>
-                    </div>
-                    <div className="flex gap-6 mt-2 md:mt-0">
-                      <div className="text-right">
-                        <p className="text-xs text-muted-foreground uppercase">
-                          Atendimentos
-                        </p>
-                        <p className="font-bold">{transactions.length}</p>
-                      </div>
-                      <div className="text-right">
-                        <p className="text-xs text-muted-foreground uppercase">
-                          Ticket Médio
-                        </p>
-                        <p className="font-bold">{formatCurrency(avgTicket)}</p>
-                      </div>
-                      <div className="text-right">
-                        <p className="text-xs text-muted-foreground uppercase">
-                          Gerado (Bruto)
-                        </p>
-                        <p className="font-bold">
-                          {formatCurrency(totalRevenue)}
-                        </p>
-                      </div>
-                      <div className="text-right">
-                        <p className="text-xs text-muted-foreground uppercase">
-                          Comissões
-                        </p>
-                        <p className="font-bold text-emerald-600">
-                          {formatCurrency(totalCommission)}
-                        </p>
-                      </div>
-                    </div>
-                  </div>
+            <p className="text-xs text-muted-foreground mt-1">
+              No período selecionado
+            </p>
+          </CardContent>
+        </Card>
+      </div>
 
-                  <Table>
-                    <TableHeader>
-                      <TableRow>
-                        <TableHead>Data</TableHead>
-                        <TableHead>Serviço</TableHead>
-                        <TableHead>Descrição</TableHead>
-                        <TableHead className="text-right">Valor</TableHead>
-                        <TableHead className="text-right">Comissão</TableHead>
-                      </TableRow>
-                    </TableHeader>
-                    <TableBody>
-                      {transactions.map((t) => (
-                        <TableRow key={t.id}>
-                          <TableCell>
-                            {format(new Date(t.date), 'dd/MM/yyyy', {
-                              locale: ptBR,
-                            })}
-                          </TableCell>
-                          <TableCell className="font-medium">
-                            {getServiceName(t.itemId)}
-                          </TableCell>
-                          <TableCell className="text-muted-foreground text-xs max-w-[200px] truncate">
-                            {t.description}
-                          </TableCell>
-                          <TableCell className="text-right">
-                            {formatCurrency(t.amount)}
-                          </TableCell>
-                          <TableCell className="text-right text-emerald-600 font-medium">
-                            {formatCurrency(t.employeePayment || 0)}
-                          </TableCell>
-                        </TableRow>
-                      ))}
-                    </TableBody>
-                  </Table>
-                </div>
-              ),
-            )
-          )}
+      <Card className="shadow-subtle border-none">
+        <CardHeader>
+          <CardTitle>Desempenho Individual</CardTitle>
+          <CardDescription>
+            Lista de funcionários e seus ganhos baseados nas movimentações.
+          </CardDescription>
+        </CardHeader>
+        <CardContent>
+          <Table>
+            <TableHeader>
+              <TableRow>
+                <TableHead>Funcionário</TableHead>
+                <TableHead className="text-center">Atendimentos</TableHead>
+                <TableHead className="text-right">Ticket Médio</TableHead>
+                <TableHead className="text-right">Total Ganho</TableHead>
+              </TableRow>
+            </TableHeader>
+            <TableBody>
+              {reportData.length === 0 ? (
+                <TableRow>
+                  <TableCell
+                    colSpan={4}
+                    className="h-24 text-center text-muted-foreground"
+                  >
+                    Nenhum registro encontrado neste período.
+                  </TableCell>
+                </TableRow>
+              ) : (
+                reportData.map((item) => (
+                  <TableRow key={item.id}>
+                    <TableCell className="font-medium">{item.name}</TableCell>
+                    <TableCell className="text-center">{item.count}</TableCell>
+                    <TableCell className="text-right">
+                      {formatCurrency(item.avgTicket)}
+                    </TableCell>
+                    <TableCell className="text-right font-bold text-emerald-600">
+                      {formatCurrency(item.totalEarnings)}
+                    </TableCell>
+                  </TableRow>
+                ))
+              )}
+            </TableBody>
+          </Table>
         </CardContent>
       </Card>
     </div>

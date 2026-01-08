@@ -66,9 +66,25 @@ export default function EmployeePayments() {
 
   const commissionFromTransactions = useMemo(() => {
     if (!selectedEmployeeId) return 0
-    return transactions
-      .filter((t) => t.employeeId === selectedEmployeeId && t.employeePayment)
-      .reduce((sum, t) => sum + (t.employeePayment || 0), 0)
+    return transactions.reduce((sum, t) => {
+      // Avoid double counting payments made to the employee as earnings
+      if (t.description.startsWith('Pagamento de Funcionário')) return sum
+
+      // Only count if type is entry (service) or exit (bonus)
+      // Standard supplier payments (exit) shouldn't count, but typically don't have employeeId set in splits
+      if (t.type === 'exit' && t.itemType !== 'bonus') return sum
+
+      let amount = 0
+      if (t.splits && t.splits.length > 0) {
+        const split = t.splits.find((s) => s.employeeId === selectedEmployeeId)
+        if (split) amount = split.amount
+      } else if (t.employeeId === selectedEmployeeId) {
+        // Legacy fallback
+        amount = t.employeePayment || 0
+      }
+
+      return sum + amount
+    }, 0)
   }, [transactions, selectedEmployeeId])
 
   const totalReceivable = commissionFromQuantities + commissionFromTransactions

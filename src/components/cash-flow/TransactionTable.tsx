@@ -22,6 +22,11 @@ import {
 import { Transaction, PaymentMethod } from '@/types'
 import useDataStore from '@/stores/useDataStore'
 import { EditTransactionDialog } from './EditTransactionDialog'
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipTrigger,
+} from '@/components/ui/tooltip'
 
 export type TransactionType = 'entry' | 'exit'
 export type { Transaction }
@@ -61,16 +66,28 @@ export function TransactionTable({ transactions }: TransactionTableProps) {
         const empId = transaction.splits[0].employeeId
         return employees.find((e) => e.id === empId)?.name || 'Func. Removido'
       }
+
+      const employeeNames = transaction.splits
+        .map((s) => {
+          const emp = employees.find((e) => e.id === s.employeeId)
+          return `${emp?.name || 'Desconhecido'} (${formatCurrency(s.amount)})`
+        })
+        .join(' | ')
+
       return (
-        <div
-          className="flex items-center gap-1"
-          title={transaction.splits
-            .map((s) => employees.find((e) => e.id === s.employeeId)?.name)
-            .join(', ')}
-        >
-          <Users className="w-3 h-3 text-primary" />
-          <span>{transaction.splits.length} funcionários</span>
-        </div>
+        <Tooltip>
+          <TooltipTrigger asChild>
+            <div className="flex items-center gap-1 cursor-help">
+              <Users className="w-3 h-3 text-primary" />
+              <span className="font-medium">
+                {transaction.splits.length} funcionários
+              </span>
+            </div>
+          </TooltipTrigger>
+          <TooltipContent>
+            <p className="text-xs">{employeeNames}</p>
+          </TooltipContent>
+        </Tooltip>
       )
     }
 

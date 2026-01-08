@@ -66,7 +66,6 @@ const formSchema = z
     ),
     cardFee: z.string().optional(),
     customerId: z.string().optional(),
-    // Replace single employeeId with splits array
     splits: z
       .array(
         z.object({
@@ -446,7 +445,7 @@ export function AddTransactionDialog({ onAdd }: AddTransactionDialogProps) {
                 {/* Dynamic Employees Fields */}
                 <div className="space-y-2">
                   <div className="flex items-center justify-between">
-                    <FormLabel>Profissionais e Comissões</FormLabel>
+                    <FormLabel>Profissionais e Repasses</FormLabel>
                     {fields.length < 4 && (
                       <Button
                         type="button"
@@ -456,7 +455,7 @@ export function AddTransactionDialog({ onAdd }: AddTransactionDialogProps) {
                         onClick={() => append({ employeeId: '', amount: '' })}
                       >
                         <UserPlus className="w-3 h-3 mr-1" />
-                        Adicionar
+                        Adicionar ({fields.length}/4)
                       </Button>
                     )}
                   </div>
@@ -501,8 +500,13 @@ export function AddTransactionDialog({ onAdd }: AddTransactionDialogProps) {
                             <FormItem>
                               <FormControl>
                                 <Input
-                                  placeholder="R$ Repasse"
+                                  placeholder="R$ Valor"
                                   type="number"
+                                  className={cn(
+                                    watchType === 'entry'
+                                      ? 'focus-visible:ring-emerald-400'
+                                      : 'focus-visible:ring-rose-400',
+                                  )}
                                   {...field}
                                 />
                               </FormControl>
@@ -526,7 +530,8 @@ export function AddTransactionDialog({ onAdd }: AddTransactionDialogProps) {
                     </div>
                   ))}
                   <FormMessage>
-                    {form.formState.errors.splits?.message}
+                    {form.formState.errors.splits?.message ||
+                      form.formState.errors.splits?.root?.message}
                   </FormMessage>
                 </div>
               </div>

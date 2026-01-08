@@ -37002,7 +37002,7 @@ function EditTransactionDialog({ transaction }) {
 			quantity: transaction.quantity?.toString() || "1"
 		}
 	});
-	const { fields, append, remove, replace } = useFieldArray({
+	const { fields, append, remove } = useFieldArray({
 		control: form.control,
 		name: "splits"
 	});
@@ -37243,7 +37243,7 @@ function EditTransactionDialog({ transaction }) {
 								children: [
 									/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
 										className: "flex items-center justify-between",
-										children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(FormLabel, { children: "Profissionais e Comissões" }), fields.length < 4 && /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(Button, {
+										children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(FormLabel, { children: "Profissionais e Repasses" }), fields.length < 4 && /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(Button, {
 											type: "button",
 											variant: "ghost",
 											size: "sm",
@@ -37252,7 +37252,12 @@ function EditTransactionDialog({ transaction }) {
 												employeeId: "",
 												amount: ""
 											}),
-											children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(UserPlus, { className: "w-3 h-3 mr-1" }), "Adicionar"]
+											children: [
+												/* @__PURE__ */ (0, import_jsx_runtime.jsx)(UserPlus, { className: "w-3 h-3 mr-1" }),
+												"Adicionar (",
+												fields.length,
+												"/4)"
+											]
 										})]
 									}),
 									fields.map((field, index$1) => /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
@@ -37279,8 +37284,9 @@ function EditTransactionDialog({ transaction }) {
 													control: form.control,
 													name: `splits.${index$1}.amount`,
 													render: ({ field: field$1 }) => /* @__PURE__ */ (0, import_jsx_runtime.jsx)(FormItem, { children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(FormControl, { children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Input, {
-														placeholder: "R$ Repasse",
+														placeholder: "R$ Valor",
 														type: "number",
+														className: cn(watchType === "entry" ? "focus-visible:ring-emerald-400" : "focus-visible:ring-rose-400"),
 														...field$1
 													}) }) })
 												})
@@ -37298,7 +37304,7 @@ function EditTransactionDialog({ transaction }) {
 											})
 										]
 									}, field.id)),
-									/* @__PURE__ */ (0, import_jsx_runtime.jsx)(FormMessage, { children: form.formState.errors.splits?.message })
+									/* @__PURE__ */ (0, import_jsx_runtime.jsx)(FormMessage, { children: form.formState.errors.splits?.message || form.formState.errors.splits?.root?.message })
 								]
 							})]
 						}),
@@ -37466,11 +37472,22 @@ function TransactionTable({ transactions }) {
 				const empId = transaction.splits[0].employeeId;
 				return employees.find((e) => e.id === empId)?.name || "Func. Removido";
 			}
-			return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-				className: "flex items-center gap-1",
-				title: transaction.splits.map((s$2) => employees.find((e) => e.id === s$2.employeeId)?.name).join(", "),
-				children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Users, { className: "w-3 h-3 text-primary" }), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("span", { children: [transaction.splits.length, " funcionários"] })]
-			});
+			const employeeNames = transaction.splits.map((s$2) => {
+				return `${employees.find((e) => e.id === s$2.employeeId)?.name || "Desconhecido"} (${formatCurrency(s$2.amount)})`;
+			}).join(" | ");
+			return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(Tooltip, { children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(TooltipTrigger, {
+				asChild: true,
+				children: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+					className: "flex items-center gap-1 cursor-help",
+					children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Users, { className: "w-3 h-3 text-primary" }), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("span", {
+						className: "font-medium",
+						children: [transaction.splits.length, " funcionários"]
+					})]
+				})
+			}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)(TooltipContent, { children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
+				className: "text-xs",
+				children: employeeNames
+			}) })] });
 		}
 		if (!transaction.employeeId) return "-";
 		return employees.find((e) => e.id === transaction.employeeId)?.name || "Func. Removido";
@@ -37907,7 +37924,7 @@ function AddTransactionDialog({ onAdd }) {
 								children: [
 									/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
 										className: "flex items-center justify-between",
-										children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(FormLabel, { children: "Profissionais e Comissões" }), fields.length < 4 && /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(Button, {
+										children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(FormLabel, { children: "Profissionais e Repasses" }), fields.length < 4 && /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(Button, {
 											type: "button",
 											variant: "ghost",
 											size: "sm",
@@ -37916,7 +37933,12 @@ function AddTransactionDialog({ onAdd }) {
 												employeeId: "",
 												amount: ""
 											}),
-											children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(UserPlus, { className: "w-3 h-3 mr-1" }), "Adicionar"]
+											children: [
+												/* @__PURE__ */ (0, import_jsx_runtime.jsx)(UserPlus, { className: "w-3 h-3 mr-1" }),
+												"Adicionar (",
+												fields.length,
+												"/4)"
+											]
 										})]
 									}),
 									fields.map((field, index$1) => /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
@@ -37943,8 +37965,9 @@ function AddTransactionDialog({ onAdd }) {
 													control: form.control,
 													name: `splits.${index$1}.amount`,
 													render: ({ field: field$1 }) => /* @__PURE__ */ (0, import_jsx_runtime.jsx)(FormItem, { children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(FormControl, { children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Input, {
-														placeholder: "R$ Repasse",
+														placeholder: "R$ Valor",
 														type: "number",
+														className: cn(watchType === "entry" ? "focus-visible:ring-emerald-400" : "focus-visible:ring-rose-400"),
 														...field$1
 													}) }) })
 												})
@@ -37962,7 +37985,7 @@ function AddTransactionDialog({ onAdd }) {
 											})
 										]
 									}, field.id)),
-									/* @__PURE__ */ (0, import_jsx_runtime.jsx)(FormMessage, { children: form.formState.errors.splits?.message })
+									/* @__PURE__ */ (0, import_jsx_runtime.jsx)(FormMessage, { children: form.formState.errors.splits?.message || form.formState.errors.splits?.root?.message })
 								]
 							})]
 						}),
@@ -38540,7 +38563,7 @@ var require_use_sync_external_store_shim_development = /* @__PURE__ */ __commonJ
 				var cachedValue = getSnapshot();
 				objectIs(value, cachedValue) || (console.error("The result of getSnapshot should be cached to avoid an infinite loop"), didWarnUncachedGetSnapshot = !0);
 			}
-			cachedValue = useState$16({ inst: {
+			cachedValue = useState$17({ inst: {
 				value,
 				getSnapshot
 			} });
@@ -38577,7 +38600,7 @@ var require_use_sync_external_store_shim_development = /* @__PURE__ */ __commonJ
 			return getSnapshot();
 		}
 		"undefined" !== typeof __REACT_DEVTOOLS_GLOBAL_HOOK__ && "function" === typeof __REACT_DEVTOOLS_GLOBAL_HOOK__.registerInternalModuleStart && __REACT_DEVTOOLS_GLOBAL_HOOK__.registerInternalModuleStart(Error());
-		var React$30 = require_react(), objectIs = "function" === typeof Object.is ? Object.is : is, useState$16 = React$30.useState, useEffect$6 = React$30.useEffect, useLayoutEffect$2 = React$30.useLayoutEffect, useDebugValue = React$30.useDebugValue, didWarnOld18Alpha = !1, didWarnUncachedGetSnapshot = !1, shim = "undefined" === typeof window || "undefined" === typeof window.document || "undefined" === typeof window.document.createElement ? useSyncExternalStore$1 : useSyncExternalStore$2;
+		var React$30 = require_react(), objectIs = "function" === typeof Object.is ? Object.is : is, useState$17 = React$30.useState, useEffect$6 = React$30.useEffect, useLayoutEffect$2 = React$30.useLayoutEffect, useDebugValue = React$30.useDebugValue, didWarnOld18Alpha = !1, didWarnUncachedGetSnapshot = !1, shim = "undefined" === typeof window || "undefined" === typeof window.document || "undefined" === typeof window.document.createElement ? useSyncExternalStore$1 : useSyncExternalStore$2;
 		exports.useSyncExternalStore = void 0 !== React$30.useSyncExternalStore ? React$30.useSyncExternalStore : shim;
 		"undefined" !== typeof __REACT_DEVTOOLS_GLOBAL_HOOK__ && "function" === typeof __REACT_DEVTOOLS_GLOBAL_HOOK__.registerInternalModuleStop && __REACT_DEVTOOLS_GLOBAL_HOOK__.registerInternalModuleStop(Error());
 	})();
@@ -38897,7 +38920,16 @@ function EmployeePayments() {
 	}, [quantities, services]);
 	const commissionFromTransactions = (0, import_react.useMemo)(() => {
 		if (!selectedEmployeeId) return 0;
-		return transactions.filter((t$1) => t$1.employeeId === selectedEmployeeId && t$1.employeePayment).reduce((sum, t$1) => sum + (t$1.employeePayment || 0), 0);
+		return transactions.reduce((sum, t$1) => {
+			if (t$1.description.startsWith("Pagamento de Funcionário")) return sum;
+			if (t$1.type === "exit" && t$1.itemType !== "bonus") return sum;
+			let amount = 0;
+			if (t$1.splits && t$1.splits.length > 0) {
+				const split = t$1.splits.find((s$2) => s$2.employeeId === selectedEmployeeId);
+				if (split) amount = split.amount;
+			} else if (t$1.employeeId === selectedEmployeeId) amount = t$1.employeePayment || 0;
+			return sum + amount;
+		}, 0);
 	}, [transactions, selectedEmployeeId]);
 	const totalReceivable = commissionFromQuantities + commissionFromTransactions;
 	const handleSave = () => {
@@ -42178,176 +42210,134 @@ function SalesReport() {
 	});
 }
 function EmployeeReport() {
-	const [searchParams] = useSearchParams();
-	const navigate = useNavigate();
-	const { transactions, employees, services } = useDataStore();
-	const startParam = searchParams.get("startDate");
-	const endParam = searchParams.get("endDate");
-	const { start, end } = (0, import_react.useMemo)(() => {
-		if (startParam && endParam) return {
-			start: new Date(startParam),
-			end: new Date(endParam)
-		};
-		const days = parseInt(searchParams.get("days") || "30");
-		const endDate = /* @__PURE__ */ new Date();
-		return {
-			start: subDays(endDate, days),
-			end: endDate
-		};
-	}, [
-		startParam,
-		endParam,
-		searchParams
-	]);
+	const { employees, transactions } = useDataStore();
+	const [startDate, setStartDate] = (0, import_react.useState)(new Date((/* @__PURE__ */ new Date()).getFullYear(), (/* @__PURE__ */ new Date()).getMonth(), 1).toISOString().split("T")[0]);
+	const [endDate, setEndDate] = (0, import_react.useState)((/* @__PURE__ */ new Date()).toISOString().split("T")[0]);
 	const reportData = (0, import_react.useMemo)(() => {
-		const startDateStr = start.toISOString().split("T")[0];
-		const endDateStr = end.toISOString().split("T")[0];
 		return employees.map((emp) => {
-			const empTransactions = transactions.filter((t$1) => t$1.employeeId === emp.id && t$1.type === "entry" && t$1.itemType === "service" && t$1.date >= startDateStr && t$1.date <= endDateStr).sort((a$1, b$1) => new Date(b$1.date).getTime() - new Date(a$1.date).getTime());
-			const totalRevenue = empTransactions.reduce((sum, t$1) => sum + t$1.amount, 0);
+			const empTransactions = transactions.filter((t$1) => {
+				const inRange = t$1.date >= startDate && t$1.date <= endDate;
+				const isRelevantType = t$1.type === "entry" || t$1.type === "exit" && t$1.itemType === "bonus";
+				if (!inRange || !isRelevantType) return false;
+				if (t$1.splits && t$1.splits.length > 0) return t$1.splits.some((s$2) => s$2.employeeId === emp.id);
+				return t$1.employeeId === emp.id;
+			});
+			const totalEarnings = empTransactions.reduce((sum, t$1) => {
+				let amount = 0;
+				if (t$1.splits && t$1.splits.length > 0) {
+					const split = t$1.splits.find((s$2) => s$2.employeeId === emp.id);
+					if (split) amount = split.amount;
+				} else amount = t$1.employeePayment || 0;
+				return sum + amount;
+			}, 0);
 			return {
-				employee: emp,
-				transactions: empTransactions,
-				totalRevenue,
-				totalCommission: empTransactions.reduce((sum, t$1) => sum + (t$1.employeePayment || 0), 0),
-				avgTicket: empTransactions.length > 0 ? totalRevenue / empTransactions.length : 0
+				id: emp.id,
+				name: emp.name,
+				count: empTransactions.length,
+				totalEarnings,
+				avgTicket: empTransactions.length > 0 ? totalEarnings / empTransactions.length : 0
 			};
-		}).filter((data) => data.transactions.length > 0);
+		}).sort((a$1, b$1) => b$1.totalEarnings - a$1.totalEarnings);
 	}, [
 		employees,
 		transactions,
-		start,
-		end
+		startDate,
+		endDate
 	]);
-	const getServiceName = (id) => services.find((s$2) => s$2.id === id)?.name || "Serviço";
-	const handlePrint = () => {
-		window.print();
-	};
+	const totalPeriodEarnings = reportData.reduce((acc, curr) => acc + curr.totalEarnings, 0);
 	return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-		className: "space-y-8",
-		children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-			className: "flex items-center justify-between no-print",
-			children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)(Button, {
-				variant: "ghost",
-				onClick: () => navigate(-1),
-				className: "gap-2",
-				children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(ArrowLeft, { className: "w-4 h-4" }), " Voltar"]
-			}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(Button, {
-				onClick: handlePrint,
-				className: "gap-2",
-				children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Printer, { className: "w-4 h-4" }), " Imprimir Relatório"]
-			})]
-		}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(Card, {
-			className: "border-none shadow-none print:shadow-none",
-			children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(CardHeader, {
-				className: "text-center md:text-left border-b pb-6",
-				children: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(CardTitle, {
-					className: "text-2xl font-bold",
-					children: "Relatório de Desempenho da Equipe"
-				}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("p", {
+		className: "space-y-6 pb-10",
+		children: [
+			/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+				className: "flex flex-col md:flex-row justify-between items-start md:items-center gap-4",
+				children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("h1", {
+					className: "text-3xl font-bold tracking-tight",
+					children: "Relatório de Funcionários"
+				}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
 					className: "text-muted-foreground mt-1",
+					children: "Detalhamento de ganhos e comissões por período."
+				})] }), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+					className: "flex items-center gap-2 bg-card p-2 rounded-lg border border-border shadow-sm",
 					children: [
-						"Período: ",
-						format(start, "dd/MM/yyyy"),
-						" até",
-						" ",
-						format(end, "dd/MM/yyyy")
+						/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Calendar, { className: "w-4 h-4 text-muted-foreground" }),
+						/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Input, {
+							type: "date",
+							value: startDate,
+							onChange: (e) => setStartDate(e.target.value),
+							className: "h-8 w-auto border-none bg-transparent shadow-none focus-visible:ring-0"
+						}),
+						/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+							className: "text-muted-foreground",
+							children: "-"
+						}),
+						/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Input, {
+							type: "date",
+							value: endDate,
+							onChange: (e) => setEndDate(e.target.value),
+							className: "h-8 w-auto border-none bg-transparent shadow-none focus-visible:ring-0"
+						})
 					]
-				})] })
-			}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)(CardContent, {
-				className: "p-0 pt-6 space-y-8",
-				children: reportData.length === 0 ? /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
-					className: "text-center py-8 text-muted-foreground",
-					children: "Nenhum registro de atendimento encontrado para os funcionários neste período."
-				}) : reportData.map(({ employee, transactions: transactions$1, totalRevenue, totalCommission, avgTicket }) => /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-					className: "space-y-4 page-break",
-					children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-						className: "bg-muted/30 p-4 rounded-lg flex flex-col md:flex-row justify-between items-start md:items-center",
-						children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("h3", {
-							className: "text-lg font-bold",
-							children: employee.name
-						}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
-							className: "text-sm text-muted-foreground",
-							children: employee.email
-						})] }), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-							className: "flex gap-6 mt-2 md:mt-0",
-							children: [
-								/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-									className: "text-right",
-									children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
-										className: "text-xs text-muted-foreground uppercase",
-										children: "Atendimentos"
-									}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
-										className: "font-bold",
-										children: transactions$1.length
-									})]
-								}),
-								/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-									className: "text-right",
-									children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
-										className: "text-xs text-muted-foreground uppercase",
-										children: "Ticket Médio"
-									}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
-										className: "font-bold",
-										children: formatCurrency(avgTicket)
-									})]
-								}),
-								/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-									className: "text-right",
-									children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
-										className: "text-xs text-muted-foreground uppercase",
-										children: "Gerado (Bruto)"
-									}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
-										className: "font-bold",
-										children: formatCurrency(totalRevenue)
-									})]
-								}),
-								/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-									className: "text-right",
-									children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
-										className: "text-xs text-muted-foreground uppercase",
-										children: "Comissões"
-									}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
-										className: "font-bold text-emerald-600",
-										children: formatCurrency(totalCommission)
-									})]
-								})
-							]
-						})]
-					}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(Table, { children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(TableHeader, { children: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(TableRow, { children: [
-						/* @__PURE__ */ (0, import_jsx_runtime.jsx)(TableHead, { children: "Data" }),
-						/* @__PURE__ */ (0, import_jsx_runtime.jsx)(TableHead, { children: "Serviço" }),
-						/* @__PURE__ */ (0, import_jsx_runtime.jsx)(TableHead, { children: "Descrição" }),
-						/* @__PURE__ */ (0, import_jsx_runtime.jsx)(TableHead, {
-							className: "text-right",
-							children: "Valor"
-						}),
-						/* @__PURE__ */ (0, import_jsx_runtime.jsx)(TableHead, {
-							className: "text-right",
-							children: "Comissão"
+				})]
+			}),
+			/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+				className: "grid gap-6 md:grid-cols-3",
+				children: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(Card, {
+					className: "shadow-subtle border-none",
+					children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(CardHeader, {
+						className: "pb-2",
+						children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(CardTitle, {
+							className: "text-sm font-medium text-muted-foreground uppercase",
+							children: "Total de Comissões"
 						})
-					] }) }), /* @__PURE__ */ (0, import_jsx_runtime.jsx)(TableBody, { children: transactions$1.map((t$1) => /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(TableRow, { children: [
-						/* @__PURE__ */ (0, import_jsx_runtime.jsx)(TableCell, { children: format(new Date(t$1.date), "dd/MM/yyyy", { locale: ptBR }) }),
-						/* @__PURE__ */ (0, import_jsx_runtime.jsx)(TableCell, {
-							className: "font-medium",
-							children: getServiceName(t$1.itemId)
-						}),
-						/* @__PURE__ */ (0, import_jsx_runtime.jsx)(TableCell, {
-							className: "text-muted-foreground text-xs max-w-[200px] truncate",
-							children: t$1.description
-						}),
-						/* @__PURE__ */ (0, import_jsx_runtime.jsx)(TableCell, {
-							className: "text-right",
-							children: formatCurrency(t$1.amount)
-						}),
-						/* @__PURE__ */ (0, import_jsx_runtime.jsx)(TableCell, {
-							className: "text-right text-emerald-600 font-medium",
-							children: formatCurrency(t$1.employeePayment || 0)
-						})
-					] }, t$1.id)) })] })]
-				}, employee.id))
-			})]
-		})]
+					}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(CardContent, { children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+						className: "text-2xl font-bold",
+						children: formatCurrency(totalPeriodEarnings)
+					}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
+						className: "text-xs text-muted-foreground mt-1",
+						children: "No período selecionado"
+					})] })]
+				})
+			}),
+			/* @__PURE__ */ (0, import_jsx_runtime.jsxs)(Card, {
+				className: "shadow-subtle border-none",
+				children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)(CardHeader, { children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(CardTitle, { children: "Desempenho Individual" }), /* @__PURE__ */ (0, import_jsx_runtime.jsx)(CardDescription, { children: "Lista de funcionários e seus ganhos baseados nas movimentações." })] }), /* @__PURE__ */ (0, import_jsx_runtime.jsx)(CardContent, { children: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(Table, { children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(TableHeader, { children: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(TableRow, { children: [
+					/* @__PURE__ */ (0, import_jsx_runtime.jsx)(TableHead, { children: "Funcionário" }),
+					/* @__PURE__ */ (0, import_jsx_runtime.jsx)(TableHead, {
+						className: "text-center",
+						children: "Atendimentos"
+					}),
+					/* @__PURE__ */ (0, import_jsx_runtime.jsx)(TableHead, {
+						className: "text-right",
+						children: "Ticket Médio"
+					}),
+					/* @__PURE__ */ (0, import_jsx_runtime.jsx)(TableHead, {
+						className: "text-right",
+						children: "Total Ganho"
+					})
+				] }) }), /* @__PURE__ */ (0, import_jsx_runtime.jsx)(TableBody, { children: reportData.length === 0 ? /* @__PURE__ */ (0, import_jsx_runtime.jsx)(TableRow, { children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(TableCell, {
+					colSpan: 4,
+					className: "h-24 text-center text-muted-foreground",
+					children: "Nenhum registro encontrado neste período."
+				}) }) : reportData.map((item) => /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(TableRow, { children: [
+					/* @__PURE__ */ (0, import_jsx_runtime.jsx)(TableCell, {
+						className: "font-medium",
+						children: item.name
+					}),
+					/* @__PURE__ */ (0, import_jsx_runtime.jsx)(TableCell, {
+						className: "text-center",
+						children: item.count
+					}),
+					/* @__PURE__ */ (0, import_jsx_runtime.jsx)(TableCell, {
+						className: "text-right",
+						children: formatCurrency(item.avgTicket)
+					}),
+					/* @__PURE__ */ (0, import_jsx_runtime.jsx)(TableCell, {
+						className: "text-right font-bold text-emerald-600",
+						children: formatCurrency(item.totalEarnings)
+					})
+				] }, item.id)) })] }) })]
+			})
+		]
 	});
 }
 function ProtectedRoute({ children, allowedRoles }) {
@@ -42479,4 +42469,4 @@ var App = () => /* @__PURE__ */ (0, import_jsx_runtime.jsx)(BrowserRouter, {
 var App_default = App;
 (0, import_client.createRoot)(document.getElementById("root")).render(/* @__PURE__ */ (0, import_jsx_runtime.jsx)(App_default, {}));
 
-//# sourceMappingURL=index-DxdBWgF0.js.map
+//# sourceMappingURL=index-CB92WDpd.js.map
