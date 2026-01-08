@@ -32,8 +32,8 @@ export default function Login() {
     // Simulate network delay for better UX
     setTimeout(() => {
       try {
-        // Hardcoded Admin
-        if (email === 'admin@airbnb.com' && password === 'admin') {
+        // Secure Admin Login
+        if (email === 'admin@airbnb.com' && password === 'Van@87297136') {
           login({
             id: 'admin',
             name: 'Administrador',
@@ -42,13 +42,13 @@ export default function Login() {
           })
           toast({
             title: 'Bem-vindo!',
-            description: 'Login realizado com sucesso.',
+            description: 'Login administrativo realizado com sucesso.',
           })
           navigate('/')
           return
         }
 
-        // Check Employees safely
+        // Check Employees
         const employee = employees?.find(
           (emp) => emp.email === email && emp.password === password,
         )
@@ -72,7 +72,7 @@ export default function Login() {
         toast({
           variant: 'destructive',
           title: 'Erro no login',
-          description: 'Credenciais inválidas. Verifique seu e-mail e senha.',
+          description: 'Credenciais inválidas. Verifique seus dados.',
         })
       } catch (error) {
         console.error('Login error:', error)
@@ -173,14 +173,6 @@ export default function Login() {
                   Cadastre-se
                 </Link>
               </p>
-            </div>
-
-            <div className="text-center text-sm text-muted-foreground/60 space-y-1 mt-4 pt-4 border-t border-border/40 w-full">
-              <p>Credenciais Demo:</p>
-              <p className="font-mono text-xs">
-                Admin: admin@airbnb.com / admin
-              </p>
-              <p className="font-mono text-xs">Func: ana@airbnb.com / 123</p>
             </div>
           </CardFooter>
         </form>

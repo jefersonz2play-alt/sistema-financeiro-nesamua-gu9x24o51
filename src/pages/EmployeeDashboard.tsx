@@ -3,12 +3,13 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import { ProductionTable } from '@/components/employees/ProductionTable'
 import { FinancialSummary } from '@/components/employees/FinancialSummary'
+import { EmployeeHistoryTable } from '@/components/employees/EmployeeHistoryTable'
 import useAuthStore from '@/stores/useAuthStore'
 import useDataStore from '@/stores/useDataStore'
 
 export default function EmployeeDashboard() {
   const { user } = useAuthStore()
-  const { employees, services } = useDataStore()
+  const { employees, services, transactions, customers } = useDataStore()
 
   const employeeData = useMemo(() => {
     return employees.find((emp) => emp.id === user?.id)
@@ -23,6 +24,25 @@ export default function EmployeeDashboard() {
       return total + service.payout * (quantities[service.id] || 0)
     }, 0)
   }, [quantities, services])
+
+  const employeeTransactions = useMemo(() => {
+    if (!user?.id) return []
+    return transactions.filter((t) => {
+      // Relevant types: entry (service) or exit (bonus)
+      // Exclude generic exits unless it's a bonus
+      if (t.type === 'exit' && t.itemType !== 'bonus') return false
+
+      if (t.splits && t.splits.length > 0) {
+        return t.splits.some((s) => s.employeeId === user.id)
+      }
+      return t.employeeId === user.id
+    })
+  }, [transactions, user?.id])
+
+  const getCustomerName = (id?: string) => {
+    if (!id) return '-'
+    return customers.find((c) => c.id === id)?.name || 'Cliente Removido'
+  }
 
   if (!employeeData) {
     return <div className="p-8 text-center">Carregando dados...</div>
@@ -92,6 +112,12 @@ export default function EmployeeDashboard() {
             quantities={employeeData.quantities}
             onQuantityChange={() => {}}
             readOnly={true}
+          />
+
+          <EmployeeHistoryTable
+            transactions={employeeTransactions}
+            employeeId={employeeData.id}
+            getCustomerName={getCustomerName}
           />
         </div>
       </div>
