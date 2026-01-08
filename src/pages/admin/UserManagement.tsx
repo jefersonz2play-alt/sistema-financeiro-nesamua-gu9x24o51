@@ -1,4 +1,4 @@
-import { useState, useMemo } from 'react'
+import { useState } from 'react'
 import {
   Users,
   Plus,
@@ -90,11 +90,6 @@ export default function UserManagement() {
   const [isDialogOpen, setIsDialogOpen] = useState(false)
   const [editingUser, setEditingUser] = useState<Employee | null>(null)
 
-  // Restricted Access Control
-  if (user?.email !== 'admin@airbnb.com') {
-    return <Navigate to="/" replace />
-  }
-
   const form = useForm<z.infer<typeof userSchema>>({
     resolver: zodResolver(userSchema),
     defaultValues: {
@@ -105,6 +100,11 @@ export default function UserManagement() {
       role: 'employee',
     },
   })
+
+  // Restricted Access Control
+  if (user?.email !== 'admin@airbnb.com') {
+    return <Navigate to="/" replace />
+  }
 
   const handleOpenDialog = (userToEdit?: Employee) => {
     if (userToEdit) {
