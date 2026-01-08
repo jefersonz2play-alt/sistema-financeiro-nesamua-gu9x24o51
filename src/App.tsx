@@ -12,6 +12,8 @@ import Services from './pages/Services'
 import Appointments from './pages/Appointments'
 import ManagerDashboard from './pages/ManagerDashboard'
 import Login from './pages/Login'
+import SignUp from './pages/SignUp'
+import ForgotPassword from './pages/ForgotPassword'
 import NotFound from './pages/NotFound'
 import Layout from './components/Layout'
 import AttendanceReport from './pages/reports/AttendanceReport'
@@ -31,7 +33,10 @@ const App = () => (
           <Toaster />
           <Sonner />
           <Routes>
+            {/* Public Routes */}
             <Route path="/login" element={<Login />} />
+            <Route path="/signup" element={<SignUp />} />
+            <Route path="/forgot-password" element={<ForgotPassword />} />
 
             <Route
               element={

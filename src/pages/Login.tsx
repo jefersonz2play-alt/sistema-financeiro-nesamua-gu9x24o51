@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { useNavigate } from 'react-router-dom'
+import { useNavigate, Link } from 'react-router-dom'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
@@ -90,7 +90,7 @@ export default function Login() {
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-background px-4">
-      <Card className="w-full max-w-md shadow-2xl border-border/50 bg-card">
+      <Card className="w-full max-w-md shadow-2xl border-border/50 bg-card animate-fade-in">
         <CardHeader className="space-y-2 text-center pb-8">
           <div className="flex justify-center mb-4">
             <div className="w-16 h-16 bg-primary/20 rounded-full flex items-center justify-center border-2 border-primary">
@@ -129,6 +129,12 @@ export default function Login() {
                 <Label htmlFor="password" className="text-foreground">
                   Senha
                 </Label>
+                <Link
+                  to="/forgot-password"
+                  className="text-sm font-medium text-primary hover:underline"
+                >
+                  Esqueci minha senha
+                </Link>
               </div>
               <Input
                 id="password"
@@ -156,7 +162,20 @@ export default function Login() {
                 'Acessar Sistema'
               )}
             </Button>
-            <div className="text-center text-sm text-muted-foreground/60 space-y-1">
+
+            <div className="w-full text-center mt-2">
+              <p className="text-sm text-muted-foreground">
+                Não tem uma conta?{' '}
+                <Link
+                  to="/signup"
+                  className="text-primary font-semibold hover:underline"
+                >
+                  Cadastre-se
+                </Link>
+              </p>
+            </div>
+
+            <div className="text-center text-sm text-muted-foreground/60 space-y-1 mt-4 pt-4 border-t border-border/40 w-full">
               <p>Credenciais Demo:</p>
               <p className="font-mono text-xs">
                 Admin: admin@airbnb.com / admin
