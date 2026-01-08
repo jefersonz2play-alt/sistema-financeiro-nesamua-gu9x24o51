@@ -90,9 +90,13 @@ export function EmployeeHistoryTable({
                       isPaid = !!split.isPaid
                     }
                   } else if (t.employeeId === employeeId) {
+                    // Fallback for legacy
                     amount = t.employeePayment || 0
                     isPaid = !!t.isPaid
                   }
+
+                  // Skip if no amount is related to this employee (should have been filtered, but safety first)
+                  if (amount === 0 && t.type !== 'entry') return null
 
                   return (
                     <TableRow key={t.id} className="hover:bg-muted/10">

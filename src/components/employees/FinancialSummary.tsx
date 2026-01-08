@@ -21,15 +21,16 @@ interface FinancialSummaryProps {
 }
 
 export function FinancialSummary({
-  totalReceivable,
-  paidAmount,
+  totalReceivable = 0,
+  paidAmount = 0,
   onPaidAmountChange,
-  status,
+  status = 'open',
   onStatusChange,
   lastUpdated,
   readOnly = false,
 }: FinancialSummaryProps) {
   const openAmount = totalReceivable - paidAmount
+  const safeLastUpdated = lastUpdated instanceof Date ? lastUpdated : new Date()
 
   return (
     <Card className="shadow-subtle border-none bg-card">
@@ -99,8 +100,8 @@ export function FinancialSummary({
             </SelectContent>
           </Select>
           <p className="text-[10px] text-muted-foreground text-right mt-1">
-            Atualizado: {lastUpdated.toLocaleDateString()}{' '}
-            {lastUpdated.toLocaleTimeString()}
+            Atualizado: {safeLastUpdated.toLocaleDateString()}{' '}
+            {safeLastUpdated.toLocaleTimeString()}
           </p>
         </div>
       </CardContent>

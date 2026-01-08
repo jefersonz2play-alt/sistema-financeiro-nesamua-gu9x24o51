@@ -28,25 +28,27 @@ export function EmployeePerformance({
   endDate,
 }: EmployeePerformanceProps) {
   const stats = useMemo(() => {
+    if (!employees || !transactions) return []
+
     const employeeStats = employees.map((emp) => {
-      // Filter transactions related to this employee (either via splits or primary employeeId)
+      // Filter transactions related to this employee
       const empTransactions = transactions.filter((t) => {
         const isEntry = t.type === 'entry'
         const inRange = t.date >= startDate && t.date <= endDate
         if (!isEntry || !inRange) return false
 
-        // Check if employee is in splits
+        // Check splits
         if (t.splits && t.splits.length > 0) {
           return t.splits.some((s) => s.employeeId === emp.id)
         }
 
-        // Fallback check for primary employeeId
+        // Fallback check
         return t.employeeId === emp.id
       })
 
       const count = empTransactions.length
 
-      // Calculate revenue based on the specific share (repasse) for this employee
+      // Calculate revenue based on specific share
       const totalRevenue = empTransactions.reduce((sum, t) => {
         if (t.splits && t.splits.length > 0) {
           const split = t.splits.find((s) => s.employeeId === emp.id)

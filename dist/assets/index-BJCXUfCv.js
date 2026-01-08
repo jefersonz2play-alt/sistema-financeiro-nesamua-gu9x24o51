@@ -38825,8 +38825,9 @@ var AvatarFallback = import_react.forwardRef(({ className, ...props }, ref) => /
 	...props
 }));
 AvatarFallback.displayName = Fallback.displayName;
-function FinancialSummary({ totalReceivable, paidAmount, onPaidAmountChange, status, onStatusChange, lastUpdated, readOnly = false }) {
+function FinancialSummary({ totalReceivable = 0, paidAmount = 0, onPaidAmountChange, status = "open", onStatusChange, lastUpdated, readOnly = false }) {
 	const openAmount = totalReceivable - paidAmount;
+	const safeLastUpdated = lastUpdated instanceof Date ? lastUpdated : /* @__PURE__ */ new Date();
 	return /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Card, {
 		className: "shadow-subtle border-none bg-card",
 		children: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(CardContent, {
@@ -38904,9 +38905,9 @@ function FinancialSummary({ totalReceivable, paidAmount, onPaidAmountChange, sta
 							className: "text-[10px] text-muted-foreground text-right mt-1",
 							children: [
 								"Atualizado: ",
-								lastUpdated.toLocaleDateString(),
+								safeLastUpdated.toLocaleDateString(),
 								" ",
-								lastUpdated.toLocaleTimeString()
+								safeLastUpdated.toLocaleTimeString()
 							]
 						})
 					]
@@ -38978,6 +38979,7 @@ function EmployeeHistoryTable({ transactions, employeeId, getCustomerName }) {
 						amount = t$1.employeePayment || 0;
 						isPaid = !!t$1.isPaid;
 					}
+					if (amount === 0 && t$1.type !== "entry") return null;
 					return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(TableRow, {
 						className: "hover:bg-muted/10",
 						children: [
@@ -39039,43 +39041,41 @@ var AlertDescription = import_react.forwardRef(({ className, ...props }, ref) =>
 }));
 AlertDescription.displayName = "AlertDescription";
 function PaymentAlert() {
-	const alertInfo = (0, import_react.useMemo)(() => {
-		const today = /* @__PURE__ */ new Date();
-		const currentDay = today.getDate();
-		const currentMonth = today.getMonth();
-		const currentYear = today.getFullYear();
-		const lastDayOfMonth = new Date(currentYear, currentMonth + 1, 0).getDate();
-		if (currentDay === 14) return {
-			show: true,
-			title: "Lembrete de Pagamento",
-			description: "Os pagamentos quinzenais (ciclo 1 a 15) devem ser realizados amanhã (dia 15).",
-			type: "mid-month"
-		};
-		if (currentDay === lastDayOfMonth - 1) return {
-			show: true,
-			title: "Fechamento de Mês",
-			description: `Os pagamentos do segundo ciclo (16 a ${lastDayOfMonth}) devem ser realizados amanhã.`,
-			type: "end-month"
-		};
-		if (currentDay === 15) return {
-			show: true,
-			title: "Dia de Pagamento",
-			description: "Hoje é dia de realizar os pagamentos quinzenais.",
-			type: "mid-month-today"
-		};
-		if (currentDay === lastDayOfMonth) return {
-			show: true,
-			title: "Dia de Pagamento",
-			description: "Hoje é dia de realizar o fechamento mensal dos pagamentos.",
-			type: "end-month-today"
-		};
-		return {
-			show: false,
-			title: "",
-			description: "",
-			type: ""
-		};
-	}, []);
+	const today = /* @__PURE__ */ new Date();
+	const currentDay = today.getDate();
+	const currentMonth = today.getMonth();
+	const currentYear = today.getFullYear();
+	const lastDayOfMonth = new Date(currentYear, currentMonth + 1, 0).getDate();
+	let alertInfo = {
+		show: false,
+		title: "",
+		description: "",
+		type: ""
+	};
+	if (currentDay === 14) alertInfo = {
+		show: true,
+		title: "Lembrete de Pagamento",
+		description: "Os pagamentos quinzenais (ciclo 1 a 15) devem ser realizados amanhã (dia 15).",
+		type: "mid-month-warning"
+	};
+	else if (currentDay === 15) alertInfo = {
+		show: true,
+		title: "Dia de Pagamento",
+		description: "Hoje é dia de realizar os pagamentos quinzenais.",
+		type: "mid-month-today"
+	};
+	else if (currentDay === lastDayOfMonth) alertInfo = {
+		show: true,
+		title: "Fechamento de Mês",
+		description: "Hoje é dia de realizar o fechamento mensal e pagamentos.",
+		type: "end-month-today"
+	};
+	else if (currentDay === lastDayOfMonth - 1) alertInfo = {
+		show: true,
+		title: "Lembrete de Fechamento",
+		description: "Os pagamentos do segundo ciclo devem ser realizados amanhã (fim do mês).",
+		type: "end-month-warning"
+	};
 	if (!alertInfo.show) return null;
 	return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(Alert, {
 		className: "mb-6 border-l-4 border-l-amber-500 bg-amber-500/10",
@@ -39093,11 +39093,11 @@ function PaymentAlert() {
 	});
 }
 function EmployeePayments() {
-	const { employees, transactions, customers, updateEmployee, payEmployee } = useDataStore();
+	const { employees, transactions, customers, payEmployee } = useDataStore();
 	const [selectedEmployeeId, setSelectedEmployeeId] = (0, import_react.useState)("");
 	const { toast: toast$2 } = useToast();
 	(0, import_react.useEffect)(() => {
-		if (employees.length > 0 && !selectedEmployeeId) setSelectedEmployeeId(employees[0].id);
+		if (employees && employees.length > 0 && !selectedEmployeeId) setSelectedEmployeeId(employees[0].id);
 	}, [employees, selectedEmployeeId]);
 	const selectedEmployee = (0, import_react.useMemo)(() => employees.find((e) => e.id === selectedEmployeeId), [employees, selectedEmployeeId]);
 	const employeeTransactions = (0, import_react.useMemo)(() => {
@@ -39172,7 +39172,7 @@ function EmployeePayments() {
 		if (!id) return "-";
 		return customers.find((c) => c.id === id)?.name || "Cliente Removido";
 	};
-	if (employees.length === 0) return /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+	if (!employees || employees.length === 0) return /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
 		className: "p-8 text-center text-muted-foreground",
 		children: "Nenhum funcionário cadastrado."
 	});
@@ -39213,12 +39213,12 @@ function EmployeePayments() {
 					})
 				})]
 			}),
-			/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+			selectedEmployee && /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
 				className: "grid grid-cols-1 lg:grid-cols-3 gap-6",
 				children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
 					className: "space-y-6 lg:col-span-1",
 					children: [
-						selectedEmployee && /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(Card, {
+						/* @__PURE__ */ (0, import_jsx_runtime.jsxs)(Card, {
 							className: "shadow-subtle border-none bg-card",
 							children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)(CardHeader, {
 								className: "flex flex-row items-center gap-4",
@@ -39291,9 +39291,9 @@ function EmployeePayments() {
 						totalReceivable: pendingTotal + selectedEmployee.paidAmount,
 						paidAmount: selectedEmployee.paidAmount,
 						onPaidAmountChange: () => {},
-						status: selectedEmployee?.status || "open",
+						status: selectedEmployee.status || "open",
 						onStatusChange: () => {},
-						lastUpdated: selectedEmployee?.lastUpdated ? new Date(selectedEmployee.lastUpdated) : /* @__PURE__ */ new Date(),
+						lastUpdated: selectedEmployee.lastUpdated ? new Date(selectedEmployee.lastUpdated) : /* @__PURE__ */ new Date(),
 						readOnly: true
 					}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)(EmployeeHistoryTable, {
 						transactions: employeeTransactions,
@@ -40975,6 +40975,7 @@ function InventoryInsights({ products, transactions, startDate, endDate }) {
 }
 function EmployeePerformance({ employees, transactions, startDate, endDate }) {
 	const stats = (0, import_react.useMemo)(() => {
+		if (!employees || !transactions) return [];
 		return employees.map((emp) => {
 			const empTransactions = transactions.filter((t$1) => {
 				const isEntry = t$1.type === "entry";
@@ -41382,41 +41383,51 @@ function Login() {
 		e.preventDefault();
 		setIsLoading(true);
 		setTimeout(() => {
-			if (email$1 === "admin@airbnb.com" && password === "admin") {
-				login({
-					id: "admin",
-					name: "Administrador",
-					email: "admin@airbnb.com",
-					role: "manager"
-				});
+			try {
+				if (email$1 === "admin@airbnb.com" && password === "admin") {
+					login({
+						id: "admin",
+						name: "Administrador",
+						email: "admin@airbnb.com",
+						role: "manager"
+					});
+					toast$2({
+						title: "Bem-vindo!",
+						description: "Login realizado com sucesso."
+					});
+					navigate("/");
+					return;
+				}
+				const employee = employees?.find((emp) => emp.email === email$1 && emp.password === password);
+				if (employee) {
+					login({
+						id: employee.id,
+						name: employee.name,
+						email: employee.email,
+						role: "employee"
+					});
+					toast$2({
+						title: `Olá, ${employee.name}`,
+						description: "Login realizado com sucesso."
+					});
+					navigate("/dashboard");
+					return;
+				}
 				toast$2({
-					title: "Bem-vindo!",
-					description: "Login realizado com sucesso."
+					variant: "destructive",
+					title: "Erro no login",
+					description: "Credenciais inválidas. Verifique seu e-mail e senha."
 				});
-				navigate("/");
-				return;
-			}
-			const employee = employees.find((emp) => emp.email === email$1 && emp.password === password);
-			if (employee) {
-				login({
-					id: employee.id,
-					name: employee.name,
-					email: employee.email,
-					role: "employee"
-				});
+			} catch (error) {
+				console.error("Login error:", error);
 				toast$2({
-					title: `Olá, ${employee.name}`,
-					description: "Login realizado com sucesso."
+					variant: "destructive",
+					title: "Erro no sistema",
+					description: "Ocorreu um erro ao tentar fazer login. Tente novamente."
 				});
-				navigate("/dashboard");
-				return;
+			} finally {
+				setIsLoading(false);
 			}
-			toast$2({
-				variant: "destructive",
-				title: "Erro no login",
-				description: "Credenciais inválidas. Verifique seu e-mail e senha."
-			});
-			setIsLoading(false);
 		}, 1e3);
 	};
 	return /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
@@ -41432,7 +41443,7 @@ function Login() {
 							className: "w-16 h-16 bg-primary/20 rounded-full flex items-center justify-center border-2 border-primary",
 							children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)("img", {
 								src: "https://img.usecurling.com/i?q=braids&color=rose",
-								alt: "Logo",
+								alt: "Logo Studio Nesamua",
 								className: "w-10 h-10 opacity-90"
 							})
 						})
@@ -42733,4 +42744,4 @@ var App = () => /* @__PURE__ */ (0, import_jsx_runtime.jsx)(BrowserRouter, {
 var App_default = App;
 (0, import_client.createRoot)(document.getElementById("root")).render(/* @__PURE__ */ (0, import_jsx_runtime.jsx)(App_default, {}));
 
-//# sourceMappingURL=index-BAku3dfN.js.map
+//# sourceMappingURL=index-BJCXUfCv.js.map

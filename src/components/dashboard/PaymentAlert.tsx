@@ -1,61 +1,55 @@
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert'
 import { AlertCircle, CalendarClock } from 'lucide-react'
-import { useMemo } from 'react'
 
 export function PaymentAlert() {
-  const alertInfo = useMemo(() => {
-    const today = new Date()
-    const currentDay = today.getDate()
-    const currentMonth = today.getMonth()
-    const currentYear = today.getFullYear()
+  const today = new Date()
+  const currentDay = today.getDate()
+  const currentMonth = today.getMonth()
+  const currentYear = today.getFullYear()
 
-    // Last day of the current month
-    const lastDayOfMonth = new Date(currentYear, currentMonth + 1, 0).getDate()
+  // Last day of the current month
+  const lastDayOfMonth = new Date(currentYear, currentMonth + 1, 0).getDate()
 
-    // Alert logic for 15th (Trigger on 14th)
-    if (currentDay === 14) {
-      return {
-        show: true,
-        title: 'Lembrete de Pagamento',
-        description:
-          'Os pagamentos quinzenais (ciclo 1 a 15) devem ser realizados amanhã (dia 15).',
-        type: 'mid-month',
-      }
+  let alertInfo = { show: false, title: '', description: '', type: '' }
+
+  // 1. Alert on the 14th (One day before the 15th)
+  if (currentDay === 14) {
+    alertInfo = {
+      show: true,
+      title: 'Lembrete de Pagamento',
+      description:
+        'Os pagamentos quinzenais (ciclo 1 a 15) devem ser realizados amanhã (dia 15).',
+      type: 'mid-month-warning',
     }
-
-    // Alert logic for End of Month (Trigger 1 day before last day)
-    // E.g., if last day is 30, trigger on 29
-    if (currentDay === lastDayOfMonth - 1) {
-      return {
-        show: true,
-        title: 'Fechamento de Mês',
-        description: `Os pagamentos do segundo ciclo (16 a ${lastDayOfMonth}) devem ser realizados amanhã.`,
-        type: 'end-month',
-      }
+  }
+  // 2. Alert on the 15th (Payment Day)
+  else if (currentDay === 15) {
+    alertInfo = {
+      show: true,
+      title: 'Dia de Pagamento',
+      description: 'Hoje é dia de realizar os pagamentos quinzenais.',
+      type: 'mid-month-today',
     }
-
-    // Show on the day of payment as well
-    if (currentDay === 15) {
-      return {
-        show: true,
-        title: 'Dia de Pagamento',
-        description: 'Hoje é dia de realizar os pagamentos quinzenais.',
-        type: 'mid-month-today',
-      }
+  }
+  // 3. Alert on the Last Day (End of Month Payment)
+  else if (currentDay === lastDayOfMonth) {
+    alertInfo = {
+      show: true,
+      title: 'Fechamento de Mês',
+      description: 'Hoje é dia de realizar o fechamento mensal e pagamentos.',
+      type: 'end-month-today',
     }
-
-    if (currentDay === lastDayOfMonth) {
-      return {
-        show: true,
-        title: 'Dia de Pagamento',
-        description:
-          'Hoje é dia de realizar o fechamento mensal dos pagamentos.',
-        type: 'end-month-today',
-      }
+  }
+  // 4. Alert one day before Last Day
+  else if (currentDay === lastDayOfMonth - 1) {
+    alertInfo = {
+      show: true,
+      title: 'Lembrete de Fechamento',
+      description:
+        'Os pagamentos do segundo ciclo devem ser realizados amanhã (fim do mês).',
+      type: 'end-month-warning',
     }
-
-    return { show: false, title: '', description: '', type: '' }
-  }, [])
+  }
 
   if (!alertInfo.show) return null
 

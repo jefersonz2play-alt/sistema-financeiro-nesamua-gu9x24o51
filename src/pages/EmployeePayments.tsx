@@ -18,14 +18,13 @@ import useDataStore from '@/stores/useDataStore'
 import { formatCurrency } from '@/lib/utils'
 
 export default function EmployeePayments() {
-  const { employees, transactions, customers, updateEmployee, payEmployee } =
-    useDataStore()
+  const { employees, transactions, customers, payEmployee } = useDataStore()
   const [selectedEmployeeId, setSelectedEmployeeId] = useState<string>('')
   const { toast } = useToast()
 
-  // Ensure an employee is selected
+  // Ensure an employee is selected safely
   useEffect(() => {
-    if (employees.length > 0 && !selectedEmployeeId) {
+    if (employees && employees.length > 0 && !selectedEmployeeId) {
       setSelectedEmployeeId(employees[0].id)
     }
   }, [employees, selectedEmployeeId])
@@ -40,6 +39,7 @@ export default function EmployeePayments() {
     if (!selectedEmployeeId) return []
     return transactions.filter((t) => {
       // Relevant types: entry (service) or exit (bonus)
+      // Exclude generic exits unless it's a bonus
       if (t.type === 'exit' && t.itemType !== 'bonus') return false
 
       if (t.splits && t.splits.length > 0) {
@@ -54,6 +54,7 @@ export default function EmployeePayments() {
     useMemo(() => {
       const today = new Date()
       const day = today.getDate()
+      // First cycle: 1-15. Second cycle: 16-End
       const isFirstCycle = day <= 15
 
       const periodLabel = isFirstCycle
@@ -150,7 +151,7 @@ export default function EmployeePayments() {
     return customers.find((c) => c.id === id)?.name || 'Cliente Removido'
   }
 
-  if (employees.length === 0) {
+  if (!employees || employees.length === 0) {
     return (
       <div className="p-8 text-center text-muted-foreground">
         Nenhum funcionário cadastrado.
@@ -195,9 +196,9 @@ export default function EmployeePayments() {
         </div>
       </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-        <div className="space-y-6 lg:col-span-1">
-          {selectedEmployee && (
+      {selectedEmployee && (
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+          <div className="space-y-6 lg:col-span-1">
             <Card className="shadow-subtle border-none bg-card">
               <CardHeader className="flex flex-row items-center gap-4">
                 <Avatar className="w-16 h-16 border-4 border-secondary shadow-md">
@@ -236,66 +237,65 @@ export default function EmployeePayments() {
                 </div>
               </CardContent>
             </Card>
-          )}
 
-          <Card className="shadow-subtle border-none bg-primary/5 border-l-4 border-l-primary">
-            <CardHeader className="pb-2">
-              <CardTitle className="text-sm font-medium text-muted-foreground uppercase tracking-wider flex items-center gap-2">
-                <CalendarRange className="w-4 h-4 text-primary" />
-                Total do Ciclo Atual
-              </CardTitle>
-            </CardHeader>
-            <CardContent>
-              <div className="text-2xl font-bold text-foreground">
-                {formatCurrency(periodTotal)}
-              </div>
-              <p className="text-xs text-muted-foreground mt-1">
-                {currentPeriodLabel}
-              </p>
-            </CardContent>
-          </Card>
+            <Card className="shadow-subtle border-none bg-primary/5 border-l-4 border-l-primary">
+              <CardHeader className="pb-2">
+                <CardTitle className="text-sm font-medium text-muted-foreground uppercase tracking-wider flex items-center gap-2">
+                  <CalendarRange className="w-4 h-4 text-primary" />
+                  Total do Ciclo Atual
+                </CardTitle>
+              </CardHeader>
+              <CardContent>
+                <div className="text-2xl font-bold text-foreground">
+                  {formatCurrency(periodTotal)}
+                </div>
+                <p className="text-xs text-muted-foreground mt-1">
+                  {currentPeriodLabel}
+                </p>
+              </CardContent>
+            </Card>
 
-          <Card className="shadow-subtle border-none bg-amber-500/5 border-l-4 border-l-amber-500">
-            <CardHeader className="pb-2">
-              <CardTitle className="text-sm font-medium text-muted-foreground uppercase tracking-wider flex items-center gap-2">
-                <Wallet className="w-4 h-4 text-amber-500" />
-                Saldo Pendente Total
-              </CardTitle>
-            </CardHeader>
-            <CardContent>
-              <div className="text-2xl font-bold text-foreground">
-                {formatCurrency(pendingTotal)}
-              </div>
-              <p className="text-xs text-muted-foreground mt-1">
-                Acumulado (todos os ciclos)
-              </p>
-            </CardContent>
-          </Card>
+            <Card className="shadow-subtle border-none bg-amber-500/5 border-l-4 border-l-amber-500">
+              <CardHeader className="pb-2">
+                <CardTitle className="text-sm font-medium text-muted-foreground uppercase tracking-wider flex items-center gap-2">
+                  <Wallet className="w-4 h-4 text-amber-500" />
+                  Saldo Pendente Total
+                </CardTitle>
+              </CardHeader>
+              <CardContent>
+                <div className="text-2xl font-bold text-foreground">
+                  {formatCurrency(pendingTotal)}
+                </div>
+                <p className="text-xs text-muted-foreground mt-1">
+                  Acumulado (todos os ciclos)
+                </p>
+              </CardContent>
+            </Card>
+          </div>
+
+          <div className="space-y-6 lg:col-span-2">
+            <FinancialSummary
+              totalReceivable={pendingTotal + selectedEmployee.paidAmount}
+              paidAmount={selectedEmployee.paidAmount}
+              onPaidAmountChange={() => {}}
+              status={selectedEmployee.status || 'open'}
+              onStatusChange={() => {}}
+              lastUpdated={
+                selectedEmployee.lastUpdated
+                  ? new Date(selectedEmployee.lastUpdated)
+                  : new Date()
+              }
+              readOnly={true}
+            />
+
+            <EmployeeHistoryTable
+              transactions={employeeTransactions}
+              employeeId={selectedEmployeeId}
+              getCustomerName={getCustomerName}
+            />
+          </div>
         </div>
-
-        <div className="space-y-6 lg:col-span-2">
-          {/* Legacy Financial Summary - kept for read-only view of aggregate data if needed, but primary focus is history */}
-          <FinancialSummary
-            totalReceivable={pendingTotal + selectedEmployee!.paidAmount} // Approx logic
-            paidAmount={selectedEmployee!.paidAmount}
-            onPaidAmountChange={() => {}}
-            status={selectedEmployee?.status || 'open'}
-            onStatusChange={() => {}}
-            lastUpdated={
-              selectedEmployee?.lastUpdated
-                ? new Date(selectedEmployee.lastUpdated)
-                : new Date()
-            }
-            readOnly={true}
-          />
-
-          <EmployeeHistoryTable
-            transactions={employeeTransactions}
-            employeeId={selectedEmployeeId}
-            getCustomerName={getCustomerName}
-          />
-        </div>
-      </div>
+      )}
     </div>
   )
 }

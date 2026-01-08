@@ -29,50 +29,62 @@ export default function Login() {
     e.preventDefault()
     setIsLoading(true)
 
-    // Simulate network delay
+    // Simulate network delay for better UX
     setTimeout(() => {
-      // Hardcoded Admin
-      if (email === 'admin@airbnb.com' && password === 'admin') {
-        login({
-          id: 'admin',
-          name: 'Administrador',
-          email: 'admin@airbnb.com',
-          role: 'manager',
-        })
-        toast({
-          title: 'Bem-vindo!',
-          description: 'Login realizado com sucesso.',
-        })
-        navigate('/')
-        return
-      }
+      try {
+        // Hardcoded Admin
+        if (email === 'admin@airbnb.com' && password === 'admin') {
+          login({
+            id: 'admin',
+            name: 'Administrador',
+            email: 'admin@airbnb.com',
+            role: 'manager',
+          })
+          toast({
+            title: 'Bem-vindo!',
+            description: 'Login realizado com sucesso.',
+          })
+          navigate('/')
+          return
+        }
 
-      // Check Employees
-      const employee = employees.find(
-        (emp) => emp.email === email && emp.password === password,
-      )
-      if (employee) {
-        login({
-          id: employee.id,
-          name: employee.name,
-          email: employee.email,
-          role: 'employee',
-        })
-        toast({
-          title: `Olá, ${employee.name}`,
-          description: 'Login realizado com sucesso.',
-        })
-        navigate('/dashboard')
-        return
-      }
+        // Check Employees safely
+        const employee = employees?.find(
+          (emp) => emp.email === email && emp.password === password,
+        )
 
-      // Login Failed
-      toast({
-        variant: 'destructive',
-        title: 'Erro no login',
-        description: 'Credenciais inválidas. Verifique seu e-mail e senha.',
-      })
-      setIsLoading(false)
+        if (employee) {
+          login({
+            id: employee.id,
+            name: employee.name,
+            email: employee.email,
+            role: 'employee',
+          })
+          toast({
+            title: `Olá, ${employee.name}`,
+            description: 'Login realizado com sucesso.',
+          })
+          navigate('/dashboard')
+          return
+        }
+
+        // Login Failed
+        toast({
+          variant: 'destructive',
+          title: 'Erro no login',
+          description: 'Credenciais inválidas. Verifique seu e-mail e senha.',
+        })
+      } catch (error) {
+        console.error('Login error:', error)
+        toast({
+          variant: 'destructive',
+          title: 'Erro no sistema',
+          description:
+            'Ocorreu um erro ao tentar fazer login. Tente novamente.',
+        })
+      } finally {
+        setIsLoading(false)
+      }
     }, 1000)
   }
 
@@ -84,7 +96,7 @@ export default function Login() {
             <div className="w-16 h-16 bg-primary/20 rounded-full flex items-center justify-center border-2 border-primary">
               <img
                 src="https://img.usecurling.com/i?q=braids&color=rose"
-                alt="Logo"
+                alt="Logo Studio Nesamua"
                 className="w-10 h-10 opacity-90"
               />
             </div>

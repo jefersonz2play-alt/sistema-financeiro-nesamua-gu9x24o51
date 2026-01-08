@@ -242,7 +242,7 @@ export function DataProvider({ children }: { children: ReactNode }) {
     // Update Employee Status
     updateEmployee(id, {
       paidAmount: employee.paidAmount + amount,
-      status: 'paid', // Assuming full payment or tracking partial manually in updateEmployee
+      status: 'paid', // Assuming full payment
       lastUpdated: new Date().toISOString(),
     })
 
