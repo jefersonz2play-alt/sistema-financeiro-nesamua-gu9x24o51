@@ -6,6 +6,7 @@ import Index from './pages/Index'
 import EmployeePayments from './pages/EmployeePayments'
 import EmployeeDashboard from './pages/EmployeeDashboard'
 import RegisterEmployee from './pages/RegisterEmployee'
+import UserManagement from './pages/admin/UserManagement'
 import Products from './pages/Products'
 import Customers from './pages/Customers'
 import Services from './pages/Services'
@@ -105,6 +106,15 @@ const App = () => (
                 element={
                   <ProtectedRoute allowedRoles={['manager']}>
                     <RegisterEmployee />
+                  </ProtectedRoute>
+                }
+              />
+              {/* Super Admin Route */}
+              <Route
+                path="/admin/users"
+                element={
+                  <ProtectedRoute allowedRoles={['manager']}>
+                    <UserManagement />
                   </ProtectedRoute>
                 }
               />

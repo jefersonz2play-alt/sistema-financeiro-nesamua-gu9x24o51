@@ -27,6 +27,7 @@ interface DataContextType {
   updateTransaction: (id: string, data: Partial<Transaction>) => void
   addEmployee: (employee: Employee) => void
   updateEmployee: (id: string, data: Partial<Employee>) => void
+  deleteEmployee: (id: string) => void
   payEmployee: (id: string, amount: number, transactionIds?: string[]) => void
   addProduct: (product: Product) => void
   updateProduct: (id: string, data: Partial<Product>) => void
@@ -49,6 +50,7 @@ const INITIAL_EMPLOYEES: Employee[] = [
     pix: '123.456.789-00',
     email: 'ana@nesamua.com',
     password: '123',
+    role: 'manager',
     quantities: { s1: 5, s2: 3 },
     paidAmount: 100,
     status: 'partial',
@@ -60,6 +62,7 @@ const INITIAL_EMPLOYEES: Employee[] = [
     pix: 'ana.silva@email.com',
     email: 'carlos@nesamua.com',
     password: '123',
+    role: 'employee',
     quantities: { s3: 2 },
     paidAmount: 0,
     status: 'open',
@@ -231,6 +234,10 @@ export function DataProvider({ children }: { children: ReactNode }) {
     )
   }
 
+  const deleteEmployee = (id: string) => {
+    setEmployees((prev) => prev.filter((e) => e.id !== id))
+  }
+
   const payEmployee = (
     id: string,
     amount: number,
@@ -357,6 +364,7 @@ export function DataProvider({ children }: { children: ReactNode }) {
         updateTransaction,
         addEmployee,
         updateEmployee,
+        deleteEmployee,
         payEmployee,
         addProduct,
         updateProduct,

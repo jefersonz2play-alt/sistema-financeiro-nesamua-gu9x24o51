@@ -65,6 +65,7 @@ export default function RegisterEmployee() {
         email: values.email,
         pix: values.pix,
         password: values.password,
+        role: 'employee', // Default role for standard registration
         quantities: {},
         paidAmount: 0,
         status: 'open',
@@ -87,10 +88,10 @@ export default function RegisterEmployee() {
     <div className="max-w-3xl mx-auto pb-10">
       <div className="mb-6">
         <h1 className="text-3xl font-bold tracking-tight text-foreground">
-          Gerenciamento de Equipe
+          Novo Colaborador
         </h1>
         <p className="text-muted-foreground mt-2">
-          Adicione novos funcionários e configure suas credenciais de acesso.
+          Adicione novos funcionários para a equipe.
         </p>
       </div>
 
@@ -98,7 +99,7 @@ export default function RegisterEmployee() {
         <CardHeader>
           <CardTitle className="flex items-center gap-2">
             <UserPlus className="w-5 h-5 text-primary" />
-            Novo Colaborador
+            Dados do Funcionário
           </CardTitle>
           <CardDescription>
             Preencha as informações abaixo para criar uma nova conta de
@@ -108,7 +109,7 @@ export default function RegisterEmployee() {
         <CardContent>
           <Form {...form}>
             <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <div className="grid grid-cols-1 gap-6">
                 <FormField
                   control={form.control}
                   name="name"
@@ -123,19 +124,39 @@ export default function RegisterEmployee() {
                   )}
                 />
 
-                <FormField
-                  control={form.control}
-                  name="email"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>Email (Usuário de Acesso)</FormLabel>
-                      <FormControl>
-                        <Input placeholder="joao@empresa.com" {...field} />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                  <FormField
+                    control={form.control}
+                    name="email"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Email (Usuário de Acesso)</FormLabel>
+                        <FormControl>
+                          <Input placeholder="joao@empresa.com" {...field} />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+
+                  <FormField
+                    control={form.control}
+                    name="password"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Senha de Acesso</FormLabel>
+                        <FormControl>
+                          <Input
+                            type="password"
+                            placeholder="••••••"
+                            {...field}
+                          />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                </div>
 
                 <FormField
                   control={form.control}
@@ -151,27 +172,6 @@ export default function RegisterEmployee() {
                       </FormControl>
                       <FormDescription>
                         Utilizada para realizar os pagamentos.
-                      </FormDescription>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-
-                <FormField
-                  control={form.control}
-                  name="password"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>Senha de Acesso</FormLabel>
-                      <FormControl>
-                        <Input
-                          type="password"
-                          placeholder="••••••"
-                          {...field}
-                        />
-                      </FormControl>
-                      <FormDescription>
-                        Senha inicial para o funcionário acessar o sistema.
                       </FormDescription>
                       <FormMessage />
                     </FormItem>

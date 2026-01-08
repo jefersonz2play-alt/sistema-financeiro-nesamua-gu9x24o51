@@ -58,13 +58,18 @@ export default function Login() {
             id: employee.id,
             name: employee.name,
             email: employee.email,
-            role: 'employee',
+            role: employee.role, // Use role from employee data
           })
           toast({
             title: `Olá, ${employee.name}`,
             description: 'Login realizado com sucesso.',
           })
-          navigate('/dashboard')
+
+          if (employee.role === 'manager') {
+            navigate('/')
+          } else {
+            navigate('/dashboard')
+          }
           return
         }
 

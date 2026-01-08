@@ -50,6 +50,7 @@ export interface Employee {
   pix: string
   email: string
   password?: string
+  role: 'manager' | 'employee' // Added role for RBAC
   quantities: Record<string, number> // key is Service ID
   paidAmount: number
   status: 'paid' | 'partial' | 'open'

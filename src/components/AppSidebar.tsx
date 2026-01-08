@@ -8,6 +8,7 @@ import {
   UserCheck,
   CalendarClock,
   PieChart,
+  Shield,
 } from 'lucide-react'
 import {
   Sidebar,
@@ -69,11 +70,20 @@ export function AppSidebar() {
       icon: Package,
     },
     {
-      title: 'Funcionários',
+      title: 'Equipe',
       url: '/employees/new',
       icon: UserCheck,
     },
   ]
+
+  // Add User Management for Super Admin
+  if (user?.email === 'admin@airbnb.com') {
+    managerItems.push({
+      title: 'Gestão de Usuários',
+      url: '/admin/users',
+      icon: Shield,
+    })
+  }
 
   const employeeItems = [
     {
