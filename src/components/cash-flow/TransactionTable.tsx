@@ -18,6 +18,7 @@ import {
   Link as LinkIcon,
   Sparkles,
   Users,
+  Trash2,
 } from 'lucide-react'
 import { Transaction, PaymentMethod } from '@/types'
 import useDataStore from '@/stores/useDataStore'
@@ -27,6 +28,19 @@ import {
   TooltipContent,
   TooltipTrigger,
 } from '@/components/ui/tooltip'
+import { Button } from '@/components/ui/button'
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from '@/components/ui/alert-dialog'
+import { useToast } from '@/hooks/use-toast'
 
 export type TransactionType = 'entry' | 'exit'
 export type { Transaction }
@@ -53,7 +67,8 @@ const getPaymentMethodLabel = (method?: PaymentMethod) => {
 }
 
 export function TransactionTable({ transactions }: TransactionTableProps) {
-  const { customers, employees } = useDataStore()
+  const { customers, employees, deleteTransaction } = useDataStore()
+  const { toast } = useToast()
 
   const getCustomerName = (id?: string) => {
     if (!id) return '-'
@@ -99,6 +114,14 @@ export function TransactionTable({ transactions }: TransactionTableProps) {
     )
   }
 
+  const handleDelete = (id: string) => {
+    deleteTransaction(id)
+    toast({
+      title: 'Transação removida',
+      description: 'O registro foi apagado do fluxo de caixa.',
+    })
+  }
+
   return (
     <Card className="shadow-subtle border-none overflow-hidden bg-card">
       <CardHeader className="bg-card border-b border-border/50">
@@ -121,7 +144,7 @@ export function TransactionTable({ transactions }: TransactionTableProps) {
                 <TableHead className="text-right">Taxas</TableHead>
                 <TableHead className="text-right">Valor Líquido</TableHead>
                 <TableHead className="text-right">Saldo</TableHead>
-                <TableHead className="w-[50px]"></TableHead>
+                <TableHead className="w-[80px] text-right">Ações</TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>
@@ -221,8 +244,41 @@ export function TransactionTable({ transactions }: TransactionTableProps) {
                       <TableCell className="text-right font-semibold text-muted-foreground">
                         {formatCurrency(transaction.balanceAfter)}
                       </TableCell>
-                      <TableCell>
-                        <EditTransactionDialog transaction={transaction} />
+                      <TableCell className="text-right">
+                        <div className="flex justify-end gap-1">
+                          <EditTransactionDialog transaction={transaction} />
+                          <AlertDialog>
+                            <AlertDialogTrigger asChild>
+                              <Button
+                                variant="ghost"
+                                size="icon"
+                                className="h-8 w-8 text-destructive hover:bg-destructive/10"
+                              >
+                                <Trash2 className="h-4 w-4" />
+                              </Button>
+                            </AlertDialogTrigger>
+                            <AlertDialogContent>
+                              <AlertDialogHeader>
+                                <AlertDialogTitle>
+                                  Excluir Transação?
+                                </AlertDialogTitle>
+                                <AlertDialogDescription>
+                                  Esta ação não pode ser desfeita. O registro
+                                  financeiro será removido permanentemente.
+                                </AlertDialogDescription>
+                              </AlertDialogHeader>
+                              <AlertDialogFooter>
+                                <AlertDialogCancel>Cancelar</AlertDialogCancel>
+                                <AlertDialogAction
+                                  onClick={() => handleDelete(transaction.id)}
+                                  className="bg-destructive hover:bg-destructive/90"
+                                >
+                                  Excluir
+                                </AlertDialogAction>
+                              </AlertDialogFooter>
+                            </AlertDialogContent>
+                          </AlertDialog>
+                        </div>
                       </TableCell>
                     </TableRow>
                   )

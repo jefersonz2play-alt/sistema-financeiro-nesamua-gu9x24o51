@@ -12,6 +12,7 @@ import {
   Customer,
   Service,
   Appointment,
+  Budget,
 } from '@/types'
 
 interface DataContextType {
@@ -21,10 +22,12 @@ interface DataContextType {
   customers: Customer[]
   services: Service[]
   appointments: Appointment[]
+  budgets: Budget[]
   monthlyGoal: number
   setMonthlyGoal: (goal: number) => void
   addTransaction: (transaction: Transaction) => void
   updateTransaction: (id: string, data: Partial<Transaction>) => void
+  deleteTransaction: (id: string) => void
   addEmployee: (employee: Employee) => void
   updateEmployee: (id: string, data: Partial<Employee>) => void
   deleteEmployee: (id: string) => void
@@ -41,6 +44,9 @@ interface DataContextType {
   addAppointment: (appointment: Appointment) => void
   updateAppointment: (id: string, data: Partial<Appointment>) => void
   deleteAppointment: (id: string) => void
+  addBudget: (budget: Budget) => void
+  updateBudget: (id: string, data: Partial<Budget>) => void
+  deleteBudget: (id: string) => void
 }
 
 const INITIAL_EMPLOYEES: Employee[] = [
@@ -196,6 +202,7 @@ export function DataProvider({ children }: { children: ReactNode }) {
   const [services, setServices] = useState<Service[]>(INITIAL_SERVICES)
   const [appointments, setAppointments] =
     useState<Appointment[]>(INITIAL_APPOINTMENTS)
+  const [budgets, setBudgets] = useState<Budget[]>([])
   const [monthlyGoal, setMonthlyGoal] = useState<number>(10000)
 
   const addTransaction = (transaction: Transaction) => {
@@ -222,6 +229,10 @@ export function DataProvider({ children }: { children: ReactNode }) {
     setTransactions((prev) =>
       prev.map((t) => (t.id === id ? { ...t, ...data } : t)),
     )
+  }
+
+  const deleteTransaction = (id: string) => {
+    setTransactions((prev) => prev.filter((t) => t.id !== id))
   }
 
   const addEmployee = (employee: Employee) => {
@@ -348,6 +359,18 @@ export function DataProvider({ children }: { children: ReactNode }) {
     setAppointments((prev) => prev.filter((a) => a.id !== id))
   }
 
+  const addBudget = (budget: Budget) => {
+    setBudgets((prev) => [...prev, budget])
+  }
+
+  const updateBudget = (id: string, data: Partial<Budget>) => {
+    setBudgets((prev) => prev.map((b) => (b.id === id ? { ...b, ...data } : b)))
+  }
+
+  const deleteBudget = (id: string) => {
+    setBudgets((prev) => prev.filter((b) => b.id !== id))
+  }
+
   return createElement(
     DataContext.Provider,
     {
@@ -358,10 +381,12 @@ export function DataProvider({ children }: { children: ReactNode }) {
         customers,
         services,
         appointments,
+        budgets,
         monthlyGoal,
         setMonthlyGoal,
         addTransaction,
         updateTransaction,
+        deleteTransaction,
         addEmployee,
         updateEmployee,
         deleteEmployee,
@@ -378,6 +403,9 @@ export function DataProvider({ children }: { children: ReactNode }) {
         addAppointment,
         updateAppointment,
         deleteAppointment,
+        addBudget,
+        updateBudget,
+        deleteBudget,
       },
     },
     children,

@@ -9,6 +9,7 @@ import {
   CalendarClock,
   PieChart,
   Shield,
+  FileText,
 } from 'lucide-react'
 import {
   Sidebar,
@@ -43,6 +44,11 @@ export function AppSidebar() {
       title: 'Fluxo de Caixa',
       url: '/',
       icon: ArrowLeftRight,
+    },
+    {
+      title: 'Orçamentos',
+      url: '/budgets',
+      icon: FileText,
     },
     {
       title: 'Agendamentos',

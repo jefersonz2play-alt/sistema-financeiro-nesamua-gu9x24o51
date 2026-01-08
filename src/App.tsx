@@ -11,6 +11,7 @@ import Products from './pages/Products'
 import Customers from './pages/Customers'
 import Services from './pages/Services'
 import Appointments from './pages/Appointments'
+import Budgets from './pages/Budgets'
 import ManagerDashboard from './pages/ManagerDashboard'
 import Login from './pages/Login'
 import ForgotPassword from './pages/ForgotPassword'
@@ -98,6 +99,14 @@ const App = () => (
                 element={
                   <ProtectedRoute allowedRoles={['manager']}>
                     <Appointments />
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path="/budgets"
+                element={
+                  <ProtectedRoute allowedRoles={['manager']}>
+                    <Budgets />
                   </ProtectedRoute>
                 }
               />

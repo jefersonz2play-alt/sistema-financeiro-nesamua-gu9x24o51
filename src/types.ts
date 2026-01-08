@@ -89,3 +89,22 @@ export interface Service {
   description: string
   payout: number
 }
+
+export interface BudgetItem {
+  type: 'service' | 'product'
+  id: string
+  name: string
+  price: number
+  quantity: number
+}
+
+export interface Budget {
+  id: string
+  customerId: string
+  items: BudgetItem[]
+  totalAmount: number
+  paymentMethod: PaymentMethod
+  scheduledDate: string
+  createdAt: string
+  status: 'draft' | 'converted'
+}
