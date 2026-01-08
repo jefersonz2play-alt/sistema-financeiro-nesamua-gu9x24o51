@@ -87,10 +87,10 @@ export default function RegisterEmployee() {
     <div className="max-w-3xl mx-auto pb-10">
       <div className="mb-6">
         <h1 className="text-3xl font-bold tracking-tight text-foreground">
-          Novo Funcionário
+          Gerenciamento de Equipe
         </h1>
         <p className="text-muted-foreground mt-2">
-          Cadastre novos membros da equipe e credenciais de acesso.
+          Adicione novos funcionários e configure suas credenciais de acesso.
         </p>
       </div>
 
@@ -98,7 +98,7 @@ export default function RegisterEmployee() {
         <CardHeader>
           <CardTitle className="flex items-center gap-2">
             <UserPlus className="w-5 h-5 text-primary" />
-            Dados do Colaborador
+            Novo Colaborador
           </CardTitle>
           <CardDescription>
             Preencha as informações abaixo para criar uma nova conta de

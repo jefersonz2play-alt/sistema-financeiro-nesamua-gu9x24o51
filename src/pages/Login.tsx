@@ -162,18 +162,6 @@ export default function Login() {
                 'Acessar Sistema'
               )}
             </Button>
-
-            <div className="w-full text-center mt-2">
-              <p className="text-sm text-muted-foreground">
-                Não tem uma conta?{' '}
-                <Link
-                  to="/signup"
-                  className="text-primary font-semibold hover:underline"
-                >
-                  Cadastre-se
-                </Link>
-              </p>
-            </div>
           </CardFooter>
         </form>
       </Card>
