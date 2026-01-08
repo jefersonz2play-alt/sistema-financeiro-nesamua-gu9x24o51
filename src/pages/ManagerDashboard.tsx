@@ -9,6 +9,7 @@ import { InventoryInsights } from '@/components/dashboard/InventoryInsights'
 import { EmployeePerformance } from '@/components/dashboard/EmployeePerformance'
 import { ProductMargins } from '@/components/dashboard/ProductMargins'
 import { FinancialOverview } from '@/components/dashboard/FinancialOverview'
+import { PaymentAlert } from '@/components/dashboard/PaymentAlert'
 
 export default function ManagerDashboard() {
   const { transactions, products, employees } = useDataStore()
@@ -34,6 +35,8 @@ export default function ManagerDashboard() {
 
   return (
     <div className="space-y-8 pb-10">
+      <PaymentAlert />
+
       <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
         <div>
           <h1 className="text-3xl font-bold tracking-tight text-foreground flex items-center gap-2">

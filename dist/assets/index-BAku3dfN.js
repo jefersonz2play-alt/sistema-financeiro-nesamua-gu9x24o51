@@ -18918,6 +18918,24 @@ var ArrowLeft = createLucideIcon("arrow-left", [["path", {
 	d: "M19 12H5",
 	key: "x3x0zl"
 }]]);
+var ArrowUpDown = createLucideIcon("arrow-up-down", [
+	["path", {
+		d: "m21 16-4 4-4-4",
+		key: "f6ql7i"
+	}],
+	["path", {
+		d: "M17 20V4",
+		key: "1ejh1v"
+	}],
+	["path", {
+		d: "m3 8 4-4 4 4",
+		key: "11wl7u"
+	}],
+	["path", {
+		d: "M7 4v16",
+		key: "1glfcx"
+	}]
+]);
 var Banknote = createLucideIcon("banknote", [
 	["rect", {
 		width: "20",
@@ -19012,6 +19030,44 @@ var CalendarDays = createLucideIcon("calendar-days", [
 		key: "kzsmim"
 	}]
 ]);
+var CalendarRange = createLucideIcon("calendar-range", [
+	["rect", {
+		width: "18",
+		height: "18",
+		x: "3",
+		y: "4",
+		rx: "2",
+		key: "1hopcy"
+	}],
+	["path", {
+		d: "M16 2v4",
+		key: "4m81vk"
+	}],
+	["path", {
+		d: "M3 10h18",
+		key: "8toen8"
+	}],
+	["path", {
+		d: "M8 2v4",
+		key: "1cmpym"
+	}],
+	["path", {
+		d: "M17 14h-6",
+		key: "bkmgh3"
+	}],
+	["path", {
+		d: "M13 18H7",
+		key: "bb0bb7"
+	}],
+	["path", {
+		d: "M7 14h.01",
+		key: "1qa3f1"
+	}],
+	["path", {
+		d: "M17 18h.01",
+		key: "1bdyru"
+	}]
+]);
 var Calendar = createLucideIcon("calendar", [
 	["path", {
 		d: "M8 2v4",
@@ -19079,6 +19135,28 @@ var ChevronUp = createLucideIcon("chevron-up", [["path", {
 	d: "m18 15-6-6-6 6",
 	key: "153udz"
 }]]);
+var CircleAlert = createLucideIcon("circle-alert", [
+	["circle", {
+		cx: "12",
+		cy: "12",
+		r: "10",
+		key: "1mglay"
+	}],
+	["line", {
+		x1: "12",
+		x2: "12",
+		y1: "8",
+		y2: "12",
+		key: "1pkeuh"
+	}],
+	["line", {
+		x1: "12",
+		x2: "12.01",
+		y1: "16",
+		y2: "16",
+		key: "4dfq90"
+	}]
+]);
 var CircleArrowDown = createLucideIcon("circle-arrow-down", [
 	["circle", {
 		cx: "12",
@@ -24494,7 +24572,8 @@ var INITIAL_TRANSACTIONS = [{
 	employeePayment: 150,
 	splits: [{
 		employeeId: "1",
-		amount: 150
+		amount: 150,
+		isPaid: false
 	}],
 	itemId: "s1",
 	itemType: "service",
@@ -24603,7 +24682,7 @@ function DataProvider({ children }) {
 			...data
 		} : emp));
 	};
-	const payEmployee = (id, amount) => {
+	const payEmployee = (id, amount, transactionIds) => {
 		const employee = employees.find((e) => e.id === id);
 		if (!employee) return;
 		updateEmployee(id, {
@@ -24621,6 +24700,24 @@ function DataProvider({ children }) {
 			employeeId: id,
 			paymentMethod: "pix"
 		});
+		if (transactionIds && transactionIds.length > 0) setTransactions((prev) => prev.map((t$1) => {
+			if (!transactionIds.includes(t$1.id)) return t$1;
+			if (t$1.splits && t$1.splits.length > 0) {
+				const newSplits = t$1.splits.map((s$2) => s$2.employeeId === id ? {
+					...s$2,
+					isPaid: true
+				} : s$2);
+				return {
+					...t$1,
+					splits: newSplits
+				};
+			}
+			if (t$1.employeeId === id) return {
+				...t$1,
+				isPaid: true
+			};
+			return t$1;
+		}));
 	};
 	const addProduct = (product) => {
 		setProducts((prev) => [...prev, product]);
@@ -38563,7 +38660,7 @@ var require_use_sync_external_store_shim_development = /* @__PURE__ */ __commonJ
 				var cachedValue = getSnapshot();
 				objectIs(value, cachedValue) || (console.error("The result of getSnapshot should be cached to avoid an infinite loop"), didWarnUncachedGetSnapshot = !0);
 			}
-			cachedValue = useState$17({ inst: {
+			cachedValue = useState$18({ inst: {
 				value,
 				getSnapshot
 			} });
@@ -38600,7 +38697,7 @@ var require_use_sync_external_store_shim_development = /* @__PURE__ */ __commonJ
 			return getSnapshot();
 		}
 		"undefined" !== typeof __REACT_DEVTOOLS_GLOBAL_HOOK__ && "function" === typeof __REACT_DEVTOOLS_GLOBAL_HOOK__.registerInternalModuleStart && __REACT_DEVTOOLS_GLOBAL_HOOK__.registerInternalModuleStart(Error());
-		var React$30 = require_react(), objectIs = "function" === typeof Object.is ? Object.is : is, useState$17 = React$30.useState, useEffect$6 = React$30.useEffect, useLayoutEffect$2 = React$30.useLayoutEffect, useDebugValue = React$30.useDebugValue, didWarnOld18Alpha = !1, didWarnUncachedGetSnapshot = !1, shim = "undefined" === typeof window || "undefined" === typeof window.document || "undefined" === typeof window.document.createElement ? useSyncExternalStore$1 : useSyncExternalStore$2;
+		var React$30 = require_react(), objectIs = "function" === typeof Object.is ? Object.is : is, useState$18 = React$30.useState, useEffect$6 = React$30.useEffect, useLayoutEffect$2 = React$30.useLayoutEffect, useDebugValue = React$30.useDebugValue, didWarnOld18Alpha = !1, didWarnUncachedGetSnapshot = !1, shim = "undefined" === typeof window || "undefined" === typeof window.document || "undefined" === typeof window.document.createElement ? useSyncExternalStore$1 : useSyncExternalStore$2;
 		exports.useSyncExternalStore = void 0 !== React$30.useSyncExternalStore ? React$30.useSyncExternalStore : shim;
 		"undefined" !== typeof __REACT_DEVTOOLS_GLOBAL_HOOK__ && "function" === typeof __REACT_DEVTOOLS_GLOBAL_HOOK__.registerInternalModuleStop && __REACT_DEVTOOLS_GLOBAL_HOOK__.registerInternalModuleStop(Error());
 	})();
@@ -38728,74 +38825,6 @@ var AvatarFallback = import_react.forwardRef(({ className, ...props }, ref) => /
 	...props
 }));
 AvatarFallback.displayName = Fallback.displayName;
-function ProductionTable({ services, quantities, onQuantityChange, readOnly = false }) {
-	return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(Card, {
-		className: "shadow-subtle border-none overflow-hidden bg-card",
-		children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(CardHeader, {
-			className: "bg-card border-b border-border/50",
-			children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(CardTitle, {
-				className: "text-lg font-semibold text-foreground",
-				children: "Produção por Serviço"
-			})
-		}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)(CardContent, {
-			className: "p-0",
-			children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
-				className: "relative w-full overflow-auto",
-				children: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(Table, { children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(TableHeader, {
-					className: "bg-muted/30",
-					children: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(TableRow, { children: [
-						/* @__PURE__ */ (0, import_jsx_runtime.jsx)(TableHead, { children: "Serviço" }),
-						/* @__PURE__ */ (0, import_jsx_runtime.jsx)(TableHead, { children: "Comissão (Payout)" }),
-						/* @__PURE__ */ (0, import_jsx_runtime.jsx)(TableHead, {
-							className: "w-[150px]",
-							children: "Quantidade"
-						}),
-						/* @__PURE__ */ (0, import_jsx_runtime.jsx)(TableHead, {
-							className: "text-right",
-							children: "Subtotal"
-						})
-					] })
-				}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)(TableBody, { children: services.map((service) => /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(TableRow, {
-					className: "hover:bg-muted/20 transition-colors border-border/50",
-					children: [
-						/* @__PURE__ */ (0, import_jsx_runtime.jsx)(TableCell, {
-							className: "font-medium",
-							children: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-								className: "flex flex-col",
-								children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
-									className: "text-foreground",
-									children: service.name
-								}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
-									className: "text-xs text-muted-foreground",
-									children: service.description
-								})]
-							})
-						}),
-						/* @__PURE__ */ (0, import_jsx_runtime.jsx)(TableCell, {
-							className: "text-muted-foreground",
-							children: formatCurrency(service.payout)
-						}),
-						/* @__PURE__ */ (0, import_jsx_runtime.jsx)(TableCell, { children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Input, {
-							type: "number",
-							min: "0",
-							className: "w-full text-center bg-secondary/30 border-input",
-							value: quantities[service.id] || "",
-							onChange: (e) => {
-								const val = parseInt(e.target.value) || 0;
-								onQuantityChange(service.id, val);
-							},
-							disabled: readOnly
-						}) }),
-						/* @__PURE__ */ (0, import_jsx_runtime.jsx)(TableCell, {
-							className: "text-right font-bold text-muted-foreground",
-							children: formatCurrency(service.payout * (quantities[service.id] || 0))
-						})
-					]
-				}, service.id)) })] })
-			})
-		})]
-	});
-}
 function FinancialSummary({ totalReceivable, paidAmount, onPaidAmountChange, status, onStatusChange, lastUpdated, readOnly = false }) {
 	const openAmount = totalReceivable - paidAmount;
 	return /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Card, {
@@ -38886,70 +38915,237 @@ function FinancialSummary({ totalReceivable, paidAmount, onPaidAmountChange, sta
 		})
 	});
 }
+function EmployeeHistoryTable({ transactions, employeeId, getCustomerName }) {
+	const [sortOrder, setSortOrder] = (0, import_react.useState)("desc");
+	const toggleSort = () => {
+		setSortOrder((prev) => prev === "asc" ? "desc" : "asc");
+	};
+	const sortedTransactions = [...transactions].sort((a$1, b$1) => {
+		const timeA = new Date(a$1.date).getTime();
+		const timeB = new Date(b$1.date).getTime();
+		return sortOrder === "asc" ? timeA - timeB : timeB - timeA;
+	});
+	return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(Card, {
+		className: "shadow-subtle border-none bg-card",
+		children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)(CardHeader, {
+			className: "flex flex-row items-center justify-between",
+			children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(CardTitle, {
+				className: "text-lg font-semibold",
+				children: "Histórico Detalhado"
+			}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(Button, {
+				variant: "ghost",
+				size: "sm",
+				onClick: toggleSort,
+				className: "text-xs text-muted-foreground",
+				children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(ArrowUpDown, { className: "w-3 h-3 mr-1" }), sortOrder === "asc" ? "Mais Antigos" : "Mais Recentes"]
+			})]
+		}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)(CardContent, {
+			className: "p-0",
+			children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+				className: "relative w-full overflow-auto max-h-[500px]",
+				children: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(Table, { children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(TableHeader, {
+					className: "bg-muted/30 sticky top-0 z-10",
+					children: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(TableRow, { children: [
+						/* @__PURE__ */ (0, import_jsx_runtime.jsx)(TableHead, {
+							className: "w-[100px]",
+							children: "Data"
+						}),
+						/* @__PURE__ */ (0, import_jsx_runtime.jsx)(TableHead, { children: "Cliente" }),
+						/* @__PURE__ */ (0, import_jsx_runtime.jsx)(TableHead, { children: "Descrição" }),
+						/* @__PURE__ */ (0, import_jsx_runtime.jsx)(TableHead, {
+							className: "text-center",
+							children: "Status"
+						}),
+						/* @__PURE__ */ (0, import_jsx_runtime.jsx)(TableHead, {
+							className: "text-right",
+							children: "Valor Repasse"
+						})
+					] })
+				}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)(TableBody, { children: sortedTransactions.length === 0 ? /* @__PURE__ */ (0, import_jsx_runtime.jsx)(TableRow, { children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(TableCell, {
+					colSpan: 5,
+					className: "h-24 text-center text-muted-foreground",
+					children: "Nenhuma movimentação registrada para este funcionário."
+				}) }) : sortedTransactions.map((t$1) => {
+					let amount = 0;
+					let isPaid = false;
+					if (t$1.splits && t$1.splits.length > 0) {
+						const split = t$1.splits.find((s$2) => s$2.employeeId === employeeId);
+						if (split) {
+							amount = split.amount;
+							isPaid = !!split.isPaid;
+						}
+					} else if (t$1.employeeId === employeeId) {
+						amount = t$1.employeePayment || 0;
+						isPaid = !!t$1.isPaid;
+					}
+					return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(TableRow, {
+						className: "hover:bg-muted/10",
+						children: [
+							/* @__PURE__ */ (0, import_jsx_runtime.jsx)(TableCell, {
+								className: "font-medium whitespace-nowrap",
+								children: formatDate(t$1.date)
+							}),
+							/* @__PURE__ */ (0, import_jsx_runtime.jsx)(TableCell, {
+								className: "text-sm",
+								children: getCustomerName(t$1.customerId)
+							}),
+							/* @__PURE__ */ (0, import_jsx_runtime.jsx)(TableCell, {
+								className: "text-sm",
+								children: t$1.description
+							}),
+							/* @__PURE__ */ (0, import_jsx_runtime.jsx)(TableCell, {
+								className: "text-center",
+								children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Badge, {
+									variant: isPaid ? "secondary" : "outline",
+									className: isPaid ? "bg-emerald-500/10 text-emerald-600 hover:bg-emerald-500/20" : "text-amber-600 border-amber-200 bg-amber-50",
+									children: isPaid ? "Pago" : "Pendente"
+								})
+							}),
+							/* @__PURE__ */ (0, import_jsx_runtime.jsx)(TableCell, {
+								className: "text-right font-medium",
+								children: formatCurrency(amount)
+							})
+						]
+					}, t$1.id);
+				}) })] })
+			})
+		})]
+	});
+}
+var alertVariants = cva("relative w-full rounded-lg border p-4 [&>svg~*]:pl-7 [&>svg+div]:translate-y-[-3px] [&>svg]:absolute [&>svg]:left-4 [&>svg]:top-4 [&>svg]:text-foreground", {
+	variants: { variant: {
+		default: "bg-background text-foreground",
+		destructive: "border-destructive/50 text-destructive dark:border-destructive [&>svg]:text-destructive"
+	} },
+	defaultVariants: { variant: "default" }
+});
+var Alert = import_react.forwardRef(({ className, variant, ...props }, ref) => /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+	ref,
+	role: "alert",
+	className: cn(alertVariants({ variant }), className),
+	...props
+}));
+Alert.displayName = "Alert";
+var AlertTitle = import_react.forwardRef(({ className, ...props }, ref) => /* @__PURE__ */ (0, import_jsx_runtime.jsx)("h5", {
+	ref,
+	className: cn("mb-1 font-medium leading-none tracking-tight", className),
+	...props
+}));
+AlertTitle.displayName = "AlertTitle";
+var AlertDescription = import_react.forwardRef(({ className, ...props }, ref) => /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+	ref,
+	className: cn("text-sm [&_p]:leading-relaxed", className),
+	...props
+}));
+AlertDescription.displayName = "AlertDescription";
+function PaymentAlert() {
+	const alertInfo = (0, import_react.useMemo)(() => {
+		const today = /* @__PURE__ */ new Date();
+		const currentDay = today.getDate();
+		const currentMonth = today.getMonth();
+		const currentYear = today.getFullYear();
+		const lastDayOfMonth = new Date(currentYear, currentMonth + 1, 0).getDate();
+		if (currentDay === 14) return {
+			show: true,
+			title: "Lembrete de Pagamento",
+			description: "Os pagamentos quinzenais (ciclo 1 a 15) devem ser realizados amanhã (dia 15).",
+			type: "mid-month"
+		};
+		if (currentDay === lastDayOfMonth - 1) return {
+			show: true,
+			title: "Fechamento de Mês",
+			description: `Os pagamentos do segundo ciclo (16 a ${lastDayOfMonth}) devem ser realizados amanhã.`,
+			type: "end-month"
+		};
+		if (currentDay === 15) return {
+			show: true,
+			title: "Dia de Pagamento",
+			description: "Hoje é dia de realizar os pagamentos quinzenais.",
+			type: "mid-month-today"
+		};
+		if (currentDay === lastDayOfMonth) return {
+			show: true,
+			title: "Dia de Pagamento",
+			description: "Hoje é dia de realizar o fechamento mensal dos pagamentos.",
+			type: "end-month-today"
+		};
+		return {
+			show: false,
+			title: "",
+			description: "",
+			type: ""
+		};
+	}, []);
+	if (!alertInfo.show) return null;
+	return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(Alert, {
+		className: "mb-6 border-l-4 border-l-amber-500 bg-amber-500/10",
+		children: [
+			alertInfo.title.includes("Lembrete") ? /* @__PURE__ */ (0, import_jsx_runtime.jsx)(CalendarClock, { className: "h-4 w-4 text-amber-600" }) : /* @__PURE__ */ (0, import_jsx_runtime.jsx)(CircleAlert, { className: "h-4 w-4 text-amber-600" }),
+			/* @__PURE__ */ (0, import_jsx_runtime.jsx)(AlertTitle, {
+				className: "text-amber-800 font-semibold",
+				children: alertInfo.title
+			}),
+			/* @__PURE__ */ (0, import_jsx_runtime.jsx)(AlertDescription, {
+				className: "text-amber-700",
+				children: alertInfo.description
+			})
+		]
+	});
+}
 function EmployeePayments() {
-	const { employees, services, transactions, updateEmployee, payEmployee } = useDataStore();
+	const { employees, transactions, customers, updateEmployee, payEmployee } = useDataStore();
 	const [selectedEmployeeId, setSelectedEmployeeId] = (0, import_react.useState)("");
-	const [quantities, setQuantities] = (0, import_react.useState)({});
-	const [paidAmount, setPaidAmount] = (0, import_react.useState)(0);
-	const [status, setStatus] = (0, import_react.useState)("open");
-	const [notes, setNotes] = (0, import_react.useState)("");
-	const [lastUpdated, setLastUpdated] = (0, import_react.useState)(/* @__PURE__ */ new Date());
 	const { toast: toast$2 } = useToast();
-	const selectedEmployee = (0, import_react.useMemo)(() => employees.find((e) => e.id === selectedEmployeeId), [employees, selectedEmployeeId]);
 	(0, import_react.useEffect)(() => {
 		if (employees.length > 0 && !selectedEmployeeId) setSelectedEmployeeId(employees[0].id);
 	}, [employees, selectedEmployeeId]);
-	(0, import_react.useEffect)(() => {
-		if (selectedEmployee) {
-			setQuantities(selectedEmployee.quantities || {});
-			setPaidAmount(selectedEmployee.paidAmount || 0);
-			setStatus(selectedEmployee.status || "open");
-			setLastUpdated(selectedEmployee.lastUpdated ? new Date(selectedEmployee.lastUpdated) : /* @__PURE__ */ new Date());
-		}
-	}, [selectedEmployee]);
-	const handleQuantityChange = (serviceId, quantity) => {
-		setQuantities((prev) => ({
-			...prev,
-			[serviceId]: quantity
-		}));
-	};
-	const commissionFromQuantities = (0, import_react.useMemo)(() => {
-		return services.reduce((total, service) => {
-			return total + service.payout * (quantities[service.id] || 0);
-		}, 0);
-	}, [quantities, services]);
-	const commissionFromTransactions = (0, import_react.useMemo)(() => {
-		if (!selectedEmployeeId) return 0;
-		return transactions.reduce((sum, t$1) => {
-			if (t$1.description.startsWith("Pagamento de Funcionário")) return sum;
-			if (t$1.type === "exit" && t$1.itemType !== "bonus") return sum;
+	const selectedEmployee = (0, import_react.useMemo)(() => employees.find((e) => e.id === selectedEmployeeId), [employees, selectedEmployeeId]);
+	const employeeTransactions = (0, import_react.useMemo)(() => {
+		if (!selectedEmployeeId) return [];
+		return transactions.filter((t$1) => {
+			if (t$1.type === "exit" && t$1.itemType !== "bonus") return false;
+			if (t$1.splits && t$1.splits.length > 0) return t$1.splits.some((s$2) => s$2.employeeId === selectedEmployeeId);
+			return t$1.employeeId === selectedEmployeeId;
+		});
+	}, [transactions, selectedEmployeeId]);
+	const { currentPeriodLabel, periodTotal, pendingTotal, pendingTransactions } = (0, import_react.useMemo)(() => {
+		const today = /* @__PURE__ */ new Date();
+		const isFirstCycle = today.getDate() <= 15;
+		const periodLabel = isFirstCycle ? `1 a 15 de ${today.toLocaleString("default", { month: "long" })}` : `16 a ${new Date(today.getFullYear(), today.getMonth() + 1, 0).getDate()} de ${today.toLocaleString("default", { month: "long" })}`;
+		const startDate = new Date(today.getFullYear(), today.getMonth(), isFirstCycle ? 1 : 16).toISOString().split("T")[0];
+		const endDate = new Date(today.getFullYear(), today.getMonth(), isFirstCycle ? 15 : 31).toISOString().split("T")[0];
+		let periodSum = 0;
+		let pendingSum = 0;
+		const pendingTx = [];
+		employeeTransactions.forEach((t$1) => {
 			let amount = 0;
+			let isPaid = false;
 			if (t$1.splits && t$1.splits.length > 0) {
 				const split = t$1.splits.find((s$2) => s$2.employeeId === selectedEmployeeId);
-				if (split) amount = split.amount;
-			} else if (t$1.employeeId === selectedEmployeeId) amount = t$1.employeePayment || 0;
-			return sum + amount;
-		}, 0);
-	}, [transactions, selectedEmployeeId]);
-	const totalReceivable = commissionFromQuantities + commissionFromTransactions;
-	const handleSave = () => {
-		if (!selectedEmployeeId) return;
-		updateEmployee(selectedEmployeeId, {
-			quantities,
-			paidAmount,
-			status,
-			lastUpdated: (/* @__PURE__ */ new Date()).toISOString()
+				if (split) {
+					amount = split.amount;
+					isPaid = !!split.isPaid;
+				}
+			} else {
+				amount = t$1.employeePayment || 0;
+				isPaid = !!t$1.isPaid;
+			}
+			if (t$1.date >= startDate && t$1.date <= endDate) periodSum += amount;
+			if (!isPaid) {
+				pendingSum += amount;
+				pendingTx.push(t$1.id);
+			}
 		});
-		setLastUpdated(/* @__PURE__ */ new Date());
-		toast$2({
-			title: "Dados Salvos",
-			description: `As informações de ${selectedEmployee?.name} foram atualizadas.`
-		});
-	};
+		return {
+			currentPeriodLabel: periodLabel,
+			periodTotal: periodSum,
+			pendingTotal: pendingSum,
+			pendingTransactions: pendingTx
+		};
+	}, [employeeTransactions, selectedEmployeeId]);
 	const handleConfirmPayment = () => {
 		if (!selectedEmployeeId) return;
-		const amountToPay = totalReceivable - paidAmount;
-		if (amountToPay <= 0) {
+		if (pendingTotal <= 0) {
 			toast$2({
 				title: "Nada a pagar",
 				description: "Não há saldo pendente para este funcionário.",
@@ -38957,12 +39153,10 @@ function EmployeePayments() {
 			});
 			return;
 		}
-		payEmployee(selectedEmployeeId, amountToPay);
-		setPaidAmount((prev) => prev + amountToPay);
-		setStatus("paid");
+		payEmployee(selectedEmployeeId, pendingTotal, pendingTransactions);
 		toast$2({
 			title: "Pagamento Realizado",
-			description: `O pagamento de ${formatCurrency(amountToPay)} foi registrado e o gasto lançado no caixa.`
+			description: `O pagamento de ${formatCurrency(pendingTotal)} foi registrado e as transações marcadas como pagas.`
 		});
 	};
 	const copyPix = () => {
@@ -38974,139 +39168,208 @@ function EmployeePayments() {
 			});
 		}
 	};
+	const getCustomerName = (id) => {
+		if (!id) return "-";
+		return customers.find((c) => c.id === id)?.name || "Cliente Removido";
+	};
 	if (employees.length === 0) return /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
 		className: "p-8 text-center text-muted-foreground",
 		children: "Nenhum funcionário cadastrado."
 	});
 	return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
 		className: "space-y-6 pb-10",
-		children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-			className: "flex flex-col md:flex-row justify-between items-start md:items-center gap-4 bg-card p-6 rounded-xl shadow-subtle border border-border/50",
-			children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-				className: "w-full md:w-1/3",
-				children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("label", {
-					className: "text-sm font-medium text-muted-foreground mb-2 block",
-					children: "Selecione o Funcionário"
-				}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(Select, {
-					value: selectedEmployeeId,
-					onValueChange: setSelectedEmployeeId,
-					children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(SelectTrigger, {
-						className: "w-full h-11 bg-secondary/30",
-						children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(SelectValue, { placeholder: "Selecione..." })
-					}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)(SelectContent, { children: employees.map((emp) => /* @__PURE__ */ (0, import_jsx_runtime.jsx)(SelectItem, {
-						value: emp.id,
-						children: emp.name
-					}, emp.id)) })]
-				})]
-			}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-				className: "flex items-center gap-2",
-				children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)(Button, {
-					onClick: handleSave,
-					variant: "outline",
-					className: "rounded-full px-6 border-primary/20 hover:bg-primary/10 hover:text-primary",
-					children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Save, { className: "w-4 h-4 mr-2" }), "Salvar Rascunho"]
-				}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(Button, {
-					onClick: handleConfirmPayment,
-					className: "rounded-full bg-emerald-600 hover:bg-emerald-700 text-white px-6 shadow-md",
-					children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(CircleCheck, { className: "w-4 h-4 mr-2" }), "Confirmar Pagamento"]
-				})]
-			})]
-		}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-			className: "grid grid-cols-1 lg:grid-cols-3 gap-6",
-			children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-				className: "space-y-6 lg:col-span-1",
-				children: [selectedEmployee && /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(Card, {
-					className: "shadow-subtle border-none bg-card",
-					children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)(CardHeader, {
-						className: "flex flex-row items-center gap-4",
-						children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)(Avatar, {
-							className: "w-16 h-16 border-4 border-secondary shadow-md",
-							children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(AvatarImage, { src: `https://img.usecurling.com/ppl/medium?gender=female&seed=${selectedEmployee.id}` }), /* @__PURE__ */ (0, import_jsx_runtime.jsx)(AvatarFallback, { children: selectedEmployee.name.substring(0, 2) })]
-						}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(CardTitle, {
-							className: "text-xl",
-							children: selectedEmployee.name
-						}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
-							className: "text-sm text-muted-foreground",
-							children: "Profissional"
-						})] })]
-					}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)(CardContent, { children: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-						className: "p-4 bg-muted/30 rounded-lg border border-border/50",
-						children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
-							className: "text-xs font-semibold text-muted-foreground uppercase tracking-wide mb-1",
-							children: "Chave PIX"
-						}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-							className: "flex items-center justify-between",
-							children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
-								className: "font-mono text-sm text-foreground truncate mr-2",
-								children: selectedEmployee.pix
-							}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Button, {
-								variant: "ghost",
-								size: "icon",
-								className: "h-8 w-8 text-primary hover:text-primary hover:bg-primary/10",
-								onClick: copyPix,
-								children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Copy, { className: "w-4 h-4" })
-							})]
-						})]
-					}) })]
-				}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(Card, {
-					className: "shadow-subtle border-none h-full bg-card",
-					children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(CardHeader, { children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(CardTitle, {
-						className: "text-lg",
-						children: "Observações"
-					}) }), /* @__PURE__ */ (0, import_jsx_runtime.jsx)(CardContent, { children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Textarea, {
-						placeholder: "Observações sobre este pagamento...",
-						className: "min-h-[150px] resize-none bg-secondary/20 focus:bg-card transition-colors border-border/50",
-						value: notes,
-						onChange: (e) => setNotes(e.target.value)
-					}) })]
-				})]
-			}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-				className: "space-y-6 lg:col-span-2",
-				children: [
-					/* @__PURE__ */ (0, import_jsx_runtime.jsx)(FinancialSummary, {
-						totalReceivable,
-						paidAmount,
-						onPaidAmountChange: (val) => setPaidAmount(val),
-						status,
-						onStatusChange: (val) => setStatus(val),
-						lastUpdated,
-						readOnly: false
-					}),
-					/* @__PURE__ */ (0, import_jsx_runtime.jsxs)(Card, {
-						className: "shadow-subtle border-none mb-6 bg-card",
-						children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(CardHeader, { children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(CardTitle, {
-							className: "text-lg font-semibold",
-							children: "Origem dos Ganhos"
-						}) }), /* @__PURE__ */ (0, import_jsx_runtime.jsx)(CardContent, { children: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-							className: "grid grid-cols-2 gap-4",
-							children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-								className: "p-4 rounded-lg bg-secondary/30 border border-border",
-								children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
-									className: "text-sm text-muted-foreground block mb-1",
-									children: "Produção Manual (Quantidade)"
-								}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
-									className: "text-xl font-bold text-foreground",
-									children: formatCurrency(commissionFromQuantities)
-								})]
-							}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-								className: "p-4 rounded-lg bg-secondary/30 border border-border",
-								children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
-									className: "text-sm text-muted-foreground block mb-1",
-									children: "Via Caixa (Movimentações)"
-								}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
-									className: "text-xl font-bold text-foreground",
-									children: formatCurrency(commissionFromTransactions)
-								})]
-							})]
-						}) })]
-					}),
-					/* @__PURE__ */ (0, import_jsx_runtime.jsx)(ProductionTable, {
-						services,
-						quantities,
-						onQuantityChange: handleQuantityChange
+		children: [
+			/* @__PURE__ */ (0, import_jsx_runtime.jsx)(PaymentAlert, {}),
+			/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+				className: "flex flex-col md:flex-row justify-between items-start md:items-center gap-4 bg-card p-6 rounded-xl shadow-subtle border border-border/50",
+				children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+					className: "w-full md:w-1/3",
+					children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("label", {
+						className: "text-sm font-medium text-muted-foreground mb-2 block",
+						children: "Selecione o Funcionário"
+					}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(Select, {
+						value: selectedEmployeeId,
+						onValueChange: setSelectedEmployeeId,
+						children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(SelectTrigger, {
+							className: "w-full h-11 bg-secondary/30",
+							children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(SelectValue, { placeholder: "Selecione..." })
+						}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)(SelectContent, { children: employees.map((emp) => /* @__PURE__ */ (0, import_jsx_runtime.jsx)(SelectItem, {
+							value: emp.id,
+							children: emp.name
+						}, emp.id)) })]
+					})]
+				}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+					className: "flex items-center gap-2",
+					children: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(Button, {
+						onClick: handleConfirmPayment,
+						className: "rounded-full bg-emerald-600 hover:bg-emerald-700 text-white px-6 shadow-md",
+						disabled: pendingTotal <= 0,
+						children: [
+							/* @__PURE__ */ (0, import_jsx_runtime.jsx)(CircleCheck, { className: "w-4 h-4 mr-2" }),
+							"Pagar Pendentes (",
+							formatCurrency(pendingTotal),
+							")"
+						]
 					})
-				]
-			})]
+				})]
+			}),
+			/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+				className: "grid grid-cols-1 lg:grid-cols-3 gap-6",
+				children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+					className: "space-y-6 lg:col-span-1",
+					children: [
+						selectedEmployee && /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(Card, {
+							className: "shadow-subtle border-none bg-card",
+							children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)(CardHeader, {
+								className: "flex flex-row items-center gap-4",
+								children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)(Avatar, {
+									className: "w-16 h-16 border-4 border-secondary shadow-md",
+									children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(AvatarImage, { src: `https://img.usecurling.com/ppl/medium?gender=female&seed=${selectedEmployee.id}` }), /* @__PURE__ */ (0, import_jsx_runtime.jsx)(AvatarFallback, { children: selectedEmployee.name.substring(0, 2) })]
+								}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(CardTitle, {
+									className: "text-xl",
+									children: selectedEmployee.name
+								}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
+									className: "text-sm text-muted-foreground",
+									children: "Profissional"
+								})] })]
+							}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)(CardContent, { children: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+								className: "p-4 bg-muted/30 rounded-lg border border-border/50",
+								children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
+									className: "text-xs font-semibold text-muted-foreground uppercase tracking-wide mb-1",
+									children: "Chave PIX"
+								}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+									className: "flex items-center justify-between",
+									children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+										className: "font-mono text-sm text-foreground truncate mr-2",
+										children: selectedEmployee.pix
+									}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Button, {
+										variant: "ghost",
+										size: "icon",
+										className: "h-8 w-8 text-primary hover:text-primary hover:bg-primary/10",
+										onClick: copyPix,
+										children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Copy, { className: "w-4 h-4" })
+									})]
+								})]
+							}) })]
+						}),
+						/* @__PURE__ */ (0, import_jsx_runtime.jsxs)(Card, {
+							className: "shadow-subtle border-none bg-primary/5 border-l-4 border-l-primary",
+							children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(CardHeader, {
+								className: "pb-2",
+								children: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(CardTitle, {
+									className: "text-sm font-medium text-muted-foreground uppercase tracking-wider flex items-center gap-2",
+									children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(CalendarRange, { className: "w-4 h-4 text-primary" }), "Total do Ciclo Atual"]
+								})
+							}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(CardContent, { children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+								className: "text-2xl font-bold text-foreground",
+								children: formatCurrency(periodTotal)
+							}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
+								className: "text-xs text-muted-foreground mt-1",
+								children: currentPeriodLabel
+							})] })]
+						}),
+						/* @__PURE__ */ (0, import_jsx_runtime.jsxs)(Card, {
+							className: "shadow-subtle border-none bg-amber-500/5 border-l-4 border-l-amber-500",
+							children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(CardHeader, {
+								className: "pb-2",
+								children: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(CardTitle, {
+									className: "text-sm font-medium text-muted-foreground uppercase tracking-wider flex items-center gap-2",
+									children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Wallet, { className: "w-4 h-4 text-amber-500" }), "Saldo Pendente Total"]
+								})
+							}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(CardContent, { children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+								className: "text-2xl font-bold text-foreground",
+								children: formatCurrency(pendingTotal)
+							}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
+								className: "text-xs text-muted-foreground mt-1",
+								children: "Acumulado (todos os ciclos)"
+							})] })]
+						})
+					]
+				}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+					className: "space-y-6 lg:col-span-2",
+					children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(FinancialSummary, {
+						totalReceivable: pendingTotal + selectedEmployee.paidAmount,
+						paidAmount: selectedEmployee.paidAmount,
+						onPaidAmountChange: () => {},
+						status: selectedEmployee?.status || "open",
+						onStatusChange: () => {},
+						lastUpdated: selectedEmployee?.lastUpdated ? new Date(selectedEmployee.lastUpdated) : /* @__PURE__ */ new Date(),
+						readOnly: true
+					}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)(EmployeeHistoryTable, {
+						transactions: employeeTransactions,
+						employeeId: selectedEmployeeId,
+						getCustomerName
+					})]
+				})]
+			})
+		]
+	});
+}
+function ProductionTable({ services, quantities, onQuantityChange, readOnly = false }) {
+	return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(Card, {
+		className: "shadow-subtle border-none overflow-hidden bg-card",
+		children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(CardHeader, {
+			className: "bg-card border-b border-border/50",
+			children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(CardTitle, {
+				className: "text-lg font-semibold text-foreground",
+				children: "Produção por Serviço"
+			})
+		}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)(CardContent, {
+			className: "p-0",
+			children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+				className: "relative w-full overflow-auto",
+				children: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(Table, { children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(TableHeader, {
+					className: "bg-muted/30",
+					children: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(TableRow, { children: [
+						/* @__PURE__ */ (0, import_jsx_runtime.jsx)(TableHead, { children: "Serviço" }),
+						/* @__PURE__ */ (0, import_jsx_runtime.jsx)(TableHead, { children: "Comissão (Payout)" }),
+						/* @__PURE__ */ (0, import_jsx_runtime.jsx)(TableHead, {
+							className: "w-[150px]",
+							children: "Quantidade"
+						}),
+						/* @__PURE__ */ (0, import_jsx_runtime.jsx)(TableHead, {
+							className: "text-right",
+							children: "Subtotal"
+						})
+					] })
+				}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)(TableBody, { children: services.map((service) => /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(TableRow, {
+					className: "hover:bg-muted/20 transition-colors border-border/50",
+					children: [
+						/* @__PURE__ */ (0, import_jsx_runtime.jsx)(TableCell, {
+							className: "font-medium",
+							children: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+								className: "flex flex-col",
+								children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+									className: "text-foreground",
+									children: service.name
+								}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+									className: "text-xs text-muted-foreground",
+									children: service.description
+								})]
+							})
+						}),
+						/* @__PURE__ */ (0, import_jsx_runtime.jsx)(TableCell, {
+							className: "text-muted-foreground",
+							children: formatCurrency(service.payout)
+						}),
+						/* @__PURE__ */ (0, import_jsx_runtime.jsx)(TableCell, { children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Input, {
+							type: "number",
+							min: "0",
+							className: "w-full text-center bg-secondary/30 border-input",
+							value: quantities[service.id] || "",
+							onChange: (e) => {
+								const val = parseInt(e.target.value) || 0;
+								onQuantityChange(service.id, val);
+							},
+							disabled: readOnly
+						}) }),
+						/* @__PURE__ */ (0, import_jsx_runtime.jsx)(TableCell, {
+							className: "text-right font-bold text-muted-foreground",
+							children: formatCurrency(service.payout * (quantities[service.id] || 0))
+						})
+					]
+				}, service.id)) })] })
+			})
 		})]
 	});
 }
@@ -41011,6 +41274,7 @@ function ManagerDashboard() {
 	return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
 		className: "space-y-8 pb-10",
 		children: [
+			/* @__PURE__ */ (0, import_jsx_runtime.jsx)(PaymentAlert, {}),
 			/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
 				className: "flex flex-col md:flex-row justify-between items-start md:items-center gap-4",
 				children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("h1", {
@@ -42469,4 +42733,4 @@ var App = () => /* @__PURE__ */ (0, import_jsx_runtime.jsx)(BrowserRouter, {
 var App_default = App;
 (0, import_client.createRoot)(document.getElementById("root")).render(/* @__PURE__ */ (0, import_jsx_runtime.jsx)(App_default, {}));
 
-//# sourceMappingURL=index-CB92WDpd.js.map
+//# sourceMappingURL=index-BAku3dfN.js.map

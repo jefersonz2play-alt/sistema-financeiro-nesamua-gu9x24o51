@@ -12,6 +12,7 @@ export type PaymentMethod =
 export interface TransactionSplit {
   employeeId: string
   amount: number
+  isPaid?: boolean
 }
 
 export interface Transaction {
@@ -24,6 +25,7 @@ export interface Transaction {
   customerId?: string // Linked customer
   employeeId?: string // Linked employee (Primary or Legacy)
   employeePayment?: number // Payment allocated to employee (Legacy)
+  isPaid?: boolean // Legacy payment status
   splits?: TransactionSplit[] // Multiple employees distribution
   itemId?: string // Linked product or service ID
   itemType?: 'product' | 'service' | 'bonus' // Type of item

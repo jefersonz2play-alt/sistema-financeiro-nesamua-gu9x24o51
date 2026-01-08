@@ -8,106 +8,117 @@ import {
   SelectValue,
 } from '@/components/ui/select'
 import { Button } from '@/components/ui/button'
-import { Textarea } from '@/components/ui/textarea'
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
-import { Copy, Save, CheckCircle2 } from 'lucide-react'
+import { Copy, CheckCircle2, Wallet, CalendarRange } from 'lucide-react'
 import { useToast } from '@/hooks/use-toast'
-import { ProductionTable } from '@/components/employees/ProductionTable'
 import { FinancialSummary } from '@/components/employees/FinancialSummary'
+import { EmployeeHistoryTable } from '@/components/employees/EmployeeHistoryTable'
+import { PaymentAlert } from '@/components/dashboard/PaymentAlert'
 import useDataStore from '@/stores/useDataStore'
 import { formatCurrency } from '@/lib/utils'
 
 export default function EmployeePayments() {
-  const { employees, services, transactions, updateEmployee, payEmployee } =
+  const { employees, transactions, customers, updateEmployee, payEmployee } =
     useDataStore()
   const [selectedEmployeeId, setSelectedEmployeeId] = useState<string>('')
-
-  const [quantities, setQuantities] = useState<Record<string, number>>({})
-  const [paidAmount, setPaidAmount] = useState(0)
-  const [status, setStatus] = useState<'paid' | 'partial' | 'open'>('open')
-  const [notes, setNotes] = useState('')
-  const [lastUpdated, setLastUpdated] = useState(new Date())
-
   const { toast } = useToast()
 
-  const selectedEmployee = useMemo(
-    () => employees.find((e) => e.id === selectedEmployeeId),
-    [employees, selectedEmployeeId],
-  )
-
+  // Ensure an employee is selected
   useEffect(() => {
     if (employees.length > 0 && !selectedEmployeeId) {
       setSelectedEmployeeId(employees[0].id)
     }
   }, [employees, selectedEmployeeId])
 
-  useEffect(() => {
-    if (selectedEmployee) {
-      setQuantities(selectedEmployee.quantities || {})
-      setPaidAmount(selectedEmployee.paidAmount || 0)
-      setStatus(selectedEmployee.status || 'open')
-      setLastUpdated(
-        selectedEmployee.lastUpdated
-          ? new Date(selectedEmployee.lastUpdated)
-          : new Date(),
-      )
-    }
-  }, [selectedEmployee])
+  const selectedEmployee = useMemo(
+    () => employees.find((e) => e.id === selectedEmployeeId),
+    [employees, selectedEmployeeId],
+  )
 
-  const handleQuantityChange = (serviceId: string, quantity: number) => {
-    setQuantities((prev) => ({ ...prev, [serviceId]: quantity }))
-  }
+  // Filter transactions for the selected employee
+  const employeeTransactions = useMemo(() => {
+    if (!selectedEmployeeId) return []
+    return transactions.filter((t) => {
+      // Relevant types: entry (service) or exit (bonus)
+      if (t.type === 'exit' && t.itemType !== 'bonus') return false
 
-  const commissionFromQuantities = useMemo(() => {
-    return services.reduce((total, service) => {
-      return total + service.payout * (quantities[service.id] || 0)
-    }, 0)
-  }, [quantities, services])
-
-  const commissionFromTransactions = useMemo(() => {
-    if (!selectedEmployeeId) return 0
-    return transactions.reduce((sum, t) => {
-      // Avoid double counting payments made to the employee as earnings
-      if (t.description.startsWith('Pagamento de Funcionário')) return sum
-
-      // Only count if type is entry (service) or exit (bonus)
-      // Standard supplier payments (exit) shouldn't count, but typically don't have employeeId set in splits
-      if (t.type === 'exit' && t.itemType !== 'bonus') return sum
-
-      let amount = 0
       if (t.splits && t.splits.length > 0) {
-        const split = t.splits.find((s) => s.employeeId === selectedEmployeeId)
-        if (split) amount = split.amount
-      } else if (t.employeeId === selectedEmployeeId) {
-        // Legacy fallback
-        amount = t.employeePayment || 0
+        return t.splits.some((s) => s.employeeId === selectedEmployeeId)
       }
-
-      return sum + amount
-    }, 0)
+      return t.employeeId === selectedEmployeeId
+    })
   }, [transactions, selectedEmployeeId])
 
-  const totalReceivable = commissionFromQuantities + commissionFromTransactions
+  // Current Cycle Logic
+  const { currentPeriodLabel, periodTotal, pendingTotal, pendingTransactions } =
+    useMemo(() => {
+      const today = new Date()
+      const day = today.getDate()
+      const isFirstCycle = day <= 15
 
-  const handleSave = () => {
-    if (!selectedEmployeeId) return
-    updateEmployee(selectedEmployeeId, {
-      quantities,
-      paidAmount,
-      status,
-      lastUpdated: new Date().toISOString(),
-    })
-    setLastUpdated(new Date())
-    toast({
-      title: 'Dados Salvos',
-      description: `As informações de ${selectedEmployee?.name} foram atualizadas.`,
-    })
-  }
+      const periodLabel = isFirstCycle
+        ? `1 a 15 de ${today.toLocaleString('default', { month: 'long' })}`
+        : `16 a ${new Date(today.getFullYear(), today.getMonth() + 1, 0).getDate()} de ${today.toLocaleString('default', { month: 'long' })}`
+
+      const startDate = new Date(
+        today.getFullYear(),
+        today.getMonth(),
+        isFirstCycle ? 1 : 16,
+      )
+        .toISOString()
+        .split('T')[0]
+      const endDate = new Date(
+        today.getFullYear(),
+        today.getMonth(),
+        isFirstCycle ? 15 : 31,
+      )
+        .toISOString()
+        .split('T')[0]
+
+      let periodSum = 0
+      let pendingSum = 0
+      const pendingTx: string[] = []
+
+      employeeTransactions.forEach((t) => {
+        let amount = 0
+        let isPaid = false
+
+        if (t.splits && t.splits.length > 0) {
+          const split = t.splits.find(
+            (s) => s.employeeId === selectedEmployeeId,
+          )
+          if (split) {
+            amount = split.amount
+            isPaid = !!split.isPaid
+          }
+        } else {
+          amount = t.employeePayment || 0
+          isPaid = !!t.isPaid
+        }
+
+        // Period Total (Consolidated Period Totals)
+        if (t.date >= startDate && t.date <= endDate) {
+          periodSum += amount
+        }
+
+        // Pending Total (All time pending)
+        if (!isPaid) {
+          pendingSum += amount
+          pendingTx.push(t.id)
+        }
+      })
+
+      return {
+        currentPeriodLabel: periodLabel,
+        periodTotal: periodSum,
+        pendingTotal: pendingSum,
+        pendingTransactions: pendingTx,
+      }
+    }, [employeeTransactions, selectedEmployeeId])
 
   const handleConfirmPayment = () => {
     if (!selectedEmployeeId) return
-    const amountToPay = totalReceivable - paidAmount
-    if (amountToPay <= 0) {
+    if (pendingTotal <= 0) {
       toast({
         title: 'Nada a pagar',
         description: 'Não há saldo pendente para este funcionário.',
@@ -115,12 +126,12 @@ export default function EmployeePayments() {
       })
       return
     }
-    payEmployee(selectedEmployeeId, amountToPay)
-    setPaidAmount((prev) => prev + amountToPay)
-    setStatus('paid')
+
+    payEmployee(selectedEmployeeId, pendingTotal, pendingTransactions)
+
     toast({
       title: 'Pagamento Realizado',
-      description: `O pagamento de ${formatCurrency(amountToPay)} foi registrado e o gasto lançado no caixa.`,
+      description: `O pagamento de ${formatCurrency(pendingTotal)} foi registrado e as transações marcadas como pagas.`,
     })
   }
 
@@ -134,6 +145,11 @@ export default function EmployeePayments() {
     }
   }
 
+  const getCustomerName = (id?: string) => {
+    if (!id) return '-'
+    return customers.find((c) => c.id === id)?.name || 'Cliente Removido'
+  }
+
   if (employees.length === 0) {
     return (
       <div className="p-8 text-center text-muted-foreground">
@@ -144,6 +160,8 @@ export default function EmployeePayments() {
 
   return (
     <div className="space-y-6 pb-10">
+      <PaymentAlert />
+
       <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 bg-card p-6 rounded-xl shadow-subtle border border-border/50">
         <div className="w-full md:w-1/3">
           <label className="text-sm font-medium text-muted-foreground mb-2 block">
@@ -167,19 +185,12 @@ export default function EmployeePayments() {
         </div>
         <div className="flex items-center gap-2">
           <Button
-            onClick={handleSave}
-            variant="outline"
-            className="rounded-full px-6 border-primary/20 hover:bg-primary/10 hover:text-primary"
-          >
-            <Save className="w-4 h-4 mr-2" />
-            Salvar Rascunho
-          </Button>
-          <Button
             onClick={handleConfirmPayment}
             className="rounded-full bg-emerald-600 hover:bg-emerald-700 text-white px-6 shadow-md"
+            disabled={pendingTotal <= 0}
           >
             <CheckCircle2 className="w-4 h-4 mr-2" />
-            Confirmar Pagamento
+            Pagar Pendentes ({formatCurrency(pendingTotal)})
           </Button>
         </div>
       </div>
@@ -227,64 +238,61 @@ export default function EmployeePayments() {
             </Card>
           )}
 
-          <Card className="shadow-subtle border-none h-full bg-card">
-            <CardHeader>
-              <CardTitle className="text-lg">Observações</CardTitle>
+          <Card className="shadow-subtle border-none bg-primary/5 border-l-4 border-l-primary">
+            <CardHeader className="pb-2">
+              <CardTitle className="text-sm font-medium text-muted-foreground uppercase tracking-wider flex items-center gap-2">
+                <CalendarRange className="w-4 h-4 text-primary" />
+                Total do Ciclo Atual
+              </CardTitle>
             </CardHeader>
             <CardContent>
-              <Textarea
-                placeholder="Observações sobre este pagamento..."
-                className="min-h-[150px] resize-none bg-secondary/20 focus:bg-card transition-colors border-border/50"
-                value={notes}
-                onChange={(e) => setNotes(e.target.value)}
-              />
+              <div className="text-2xl font-bold text-foreground">
+                {formatCurrency(periodTotal)}
+              </div>
+              <p className="text-xs text-muted-foreground mt-1">
+                {currentPeriodLabel}
+              </p>
+            </CardContent>
+          </Card>
+
+          <Card className="shadow-subtle border-none bg-amber-500/5 border-l-4 border-l-amber-500">
+            <CardHeader className="pb-2">
+              <CardTitle className="text-sm font-medium text-muted-foreground uppercase tracking-wider flex items-center gap-2">
+                <Wallet className="w-4 h-4 text-amber-500" />
+                Saldo Pendente Total
+              </CardTitle>
+            </CardHeader>
+            <CardContent>
+              <div className="text-2xl font-bold text-foreground">
+                {formatCurrency(pendingTotal)}
+              </div>
+              <p className="text-xs text-muted-foreground mt-1">
+                Acumulado (todos os ciclos)
+              </p>
             </CardContent>
           </Card>
         </div>
 
         <div className="space-y-6 lg:col-span-2">
+          {/* Legacy Financial Summary - kept for read-only view of aggregate data if needed, but primary focus is history */}
           <FinancialSummary
-            totalReceivable={totalReceivable}
-            paidAmount={paidAmount}
-            onPaidAmountChange={(val) => setPaidAmount(val)}
-            status={status}
-            onStatusChange={(val) => setStatus(val)}
-            lastUpdated={lastUpdated}
-            readOnly={false}
+            totalReceivable={pendingTotal + selectedEmployee!.paidAmount} // Approx logic
+            paidAmount={selectedEmployee!.paidAmount}
+            onPaidAmountChange={() => {}}
+            status={selectedEmployee?.status || 'open'}
+            onStatusChange={() => {}}
+            lastUpdated={
+              selectedEmployee?.lastUpdated
+                ? new Date(selectedEmployee.lastUpdated)
+                : new Date()
+            }
+            readOnly={true}
           />
 
-          <Card className="shadow-subtle border-none mb-6 bg-card">
-            <CardHeader>
-              <CardTitle className="text-lg font-semibold">
-                Origem dos Ganhos
-              </CardTitle>
-            </CardHeader>
-            <CardContent>
-              <div className="grid grid-cols-2 gap-4">
-                <div className="p-4 rounded-lg bg-secondary/30 border border-border">
-                  <span className="text-sm text-muted-foreground block mb-1">
-                    Produção Manual (Quantidade)
-                  </span>
-                  <span className="text-xl font-bold text-foreground">
-                    {formatCurrency(commissionFromQuantities)}
-                  </span>
-                </div>
-                <div className="p-4 rounded-lg bg-secondary/30 border border-border">
-                  <span className="text-sm text-muted-foreground block mb-1">
-                    Via Caixa (Movimentações)
-                  </span>
-                  <span className="text-xl font-bold text-foreground">
-                    {formatCurrency(commissionFromTransactions)}
-                  </span>
-                </div>
-              </div>
-            </CardContent>
-          </Card>
-
-          <ProductionTable
-            services={services}
-            quantities={quantities}
-            onQuantityChange={handleQuantityChange}
+          <EmployeeHistoryTable
+            transactions={employeeTransactions}
+            employeeId={selectedEmployeeId}
+            getCustomerName={getCustomerName}
           />
         </div>
       </div>

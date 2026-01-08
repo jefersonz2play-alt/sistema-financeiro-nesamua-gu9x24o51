@@ -27,7 +27,7 @@ interface DataContextType {
   updateTransaction: (id: string, data: Partial<Transaction>) => void
   addEmployee: (employee: Employee) => void
   updateEmployee: (id: string, data: Partial<Employee>) => void
-  payEmployee: (id: string, amount: number) => void
+  payEmployee: (id: string, amount: number, transactionIds?: string[]) => void
   addProduct: (product: Product) => void
   updateProduct: (id: string, data: Partial<Product>) => void
   deleteProduct: (id: string) => void
@@ -97,7 +97,7 @@ const INITIAL_TRANSACTIONS: Transaction[] = [
     customerId: 'c2',
     employeeId: '1',
     employeePayment: 150.0,
-    splits: [{ employeeId: '1', amount: 150.0 }],
+    splits: [{ employeeId: '1', amount: 150.0, isPaid: false }],
     itemId: 's1',
     itemType: 'service',
     paymentMethod: 'pix',
@@ -231,7 +231,11 @@ export function DataProvider({ children }: { children: ReactNode }) {
     )
   }
 
-  const payEmployee = (id: string, amount: number) => {
+  const payEmployee = (
+    id: string,
+    amount: number,
+    transactionIds?: string[],
+  ) => {
     const employee = employees.find((e) => e.id === id)
     if (!employee) return
 
@@ -255,6 +259,30 @@ export function DataProvider({ children }: { children: ReactNode }) {
     }
 
     addTransaction(transaction)
+
+    // Mark transactions as paid
+    if (transactionIds && transactionIds.length > 0) {
+      setTransactions((prev) =>
+        prev.map((t) => {
+          if (!transactionIds.includes(t.id)) return t
+
+          // Handle splits
+          if (t.splits && t.splits.length > 0) {
+            const newSplits = t.splits.map((s) =>
+              s.employeeId === id ? { ...s, isPaid: true } : s,
+            )
+            return { ...t, splits: newSplits }
+          }
+
+          // Handle legacy
+          if (t.employeeId === id) {
+            return { ...t, isPaid: true }
+          }
+
+          return t
+        }),
+      )
+    }
   }
 
   const addProduct = (product: Product) => {
