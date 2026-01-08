@@ -108,7 +108,7 @@ export function AppSidebar() {
           {/* Studio Nesamua Logo */}
           <div className="flex-shrink-0 w-12 h-12 rounded-full border-2 border-primary/20 flex items-center justify-center overflow-hidden bg-white/5">
             <img
-              src="https://img.usecurling.com/i?q=braids&color=rose"
+              src="https://img.usecurling.com/i?q=braid%20wreath&color=rose"
               alt="NesaMua Logo"
               className="w-8 h-8 object-cover opacity-90"
             />

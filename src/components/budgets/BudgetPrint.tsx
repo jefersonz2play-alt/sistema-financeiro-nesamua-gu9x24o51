@@ -31,7 +31,7 @@ export function BudgetPrint({ budget, customer }: BudgetPrintProps) {
         <div className="flex items-center gap-4">
           <div className="w-20 h-20 rounded-full border-2 border-primary/20 flex items-center justify-center overflow-hidden">
             <img
-              src="https://img.usecurling.com/i?q=braids&color=rose"
+              src="https://img.usecurling.com/i?q=braid%20wreath&color=rose"
               alt="NesaMua Logo"
               className="w-16 h-16 object-cover"
             />

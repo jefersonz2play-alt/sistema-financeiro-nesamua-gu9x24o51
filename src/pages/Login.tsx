@@ -100,7 +100,7 @@ export default function Login() {
           <div className="flex justify-center mb-4">
             <div className="w-16 h-16 bg-primary/20 rounded-full flex items-center justify-center border-2 border-primary">
               <img
-                src="https://img.usecurling.com/i?q=braids&color=rose"
+                src="https://img.usecurling.com/i?q=braid%20wreath&color=rose"
                 alt="Logo Studio Nesamua"
                 className="w-10 h-10 opacity-90"
               />
