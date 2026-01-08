@@ -17,6 +17,7 @@ import {
   Smartphone,
   Link as LinkIcon,
   Sparkles,
+  Users,
 } from 'lucide-react'
 import { Transaction, PaymentMethod } from '@/types'
 import useDataStore from '@/stores/useDataStore'
@@ -54,9 +55,31 @@ export function TransactionTable({ transactions }: TransactionTableProps) {
     return customers.find((c) => c.id === id)?.name || 'Cliente Removido'
   }
 
-  const getEmployeeName = (id?: string) => {
-    if (!id) return '-'
-    return employees.find((e) => e.id === id)?.name || 'Func. Removido'
+  const getEmployeeName = (transaction: Transaction) => {
+    if (transaction.splits && transaction.splits.length > 0) {
+      if (transaction.splits.length === 1) {
+        const empId = transaction.splits[0].employeeId
+        return employees.find((e) => e.id === empId)?.name || 'Func. Removido'
+      }
+      return (
+        <div
+          className="flex items-center gap-1"
+          title={transaction.splits
+            .map((s) => employees.find((e) => e.id === s.employeeId)?.name)
+            .join(', ')}
+        >
+          <Users className="w-3 h-3 text-primary" />
+          <span>{transaction.splits.length} funcionários</span>
+        </div>
+      )
+    }
+
+    // Fallback for legacy data
+    if (!transaction.employeeId) return '-'
+    return (
+      employees.find((e) => e.id === transaction.employeeId)?.name ||
+      'Func. Removido'
+    )
   }
 
   return (
@@ -74,7 +97,7 @@ export function TransactionTable({ transactions }: TransactionTableProps) {
                 <TableHead className="w-[100px]">Data</TableHead>
                 <TableHead>Descrição</TableHead>
                 <TableHead>Cliente</TableHead>
-                <TableHead>Funcionário</TableHead>
+                <TableHead>Equipe</TableHead>
                 <TableHead>Pagamento</TableHead>
                 <TableHead className="w-[100px]">Tipo</TableHead>
                 <TableHead className="text-right">Valor Bruto</TableHead>
@@ -132,7 +155,7 @@ export function TransactionTable({ transactions }: TransactionTableProps) {
                         {getCustomerName(transaction.customerId)}
                       </TableCell>
                       <TableCell className="text-sm">
-                        {getEmployeeName(transaction.employeeId)}
+                        {getEmployeeName(transaction)}
                       </TableCell>
                       <TableCell>
                         <div className="flex items-center gap-1 text-sm text-foreground/80">

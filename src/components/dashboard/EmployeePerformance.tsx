@@ -29,18 +29,32 @@ export function EmployeePerformance({
 }: EmployeePerformanceProps) {
   const stats = useMemo(() => {
     const employeeStats = employees.map((emp) => {
-      // Filter transactions for this employee in the period
+      // Filter transactions related to this employee (either via splits or primary employeeId)
       const empTransactions = transactions.filter((t) => {
-        return (
-          t.employeeId === emp.id &&
-          t.type === 'entry' &&
-          t.date >= startDate &&
-          t.date <= endDate
-        )
+        const isEntry = t.type === 'entry'
+        const inRange = t.date >= startDate && t.date <= endDate
+        if (!isEntry || !inRange) return false
+
+        // Check if employee is in splits
+        if (t.splits && t.splits.length > 0) {
+          return t.splits.some((s) => s.employeeId === emp.id)
+        }
+
+        // Fallback check for primary employeeId
+        return t.employeeId === emp.id
       })
 
       const count = empTransactions.length
-      const totalRevenue = empTransactions.reduce((sum, t) => sum + t.amount, 0)
+
+      // Calculate revenue based on the specific share (repasse) for this employee
+      const totalRevenue = empTransactions.reduce((sum, t) => {
+        if (t.splits && t.splits.length > 0) {
+          const split = t.splits.find((s) => s.employeeId === emp.id)
+          return sum + (split?.amount || 0)
+        }
+        return sum + (t.employeePayment || 0)
+      }, 0)
+
       const avgTicket = count > 0 ? totalRevenue / count : 0
 
       return {
@@ -62,7 +76,7 @@ export function EmployeePerformance({
       <CardHeader className="flex flex-row items-start justify-between">
         <div>
           <CardTitle className="text-lg">Desempenho da Equipe</CardTitle>
-          <CardDescription>Resultados no período selecionado.</CardDescription>
+          <CardDescription>Comissões/Repasses no período.</CardDescription>
         </div>
         <Button variant="ghost" size="icon" asChild className="h-8 w-8">
           <Link
@@ -91,7 +105,7 @@ export function EmployeePerformance({
                     </p>
                     <span className="text-xs text-muted-foreground">•</span>
                     <p className="text-xs text-muted-foreground">
-                      Ticket Médio: {formatCurrency(emp.avgTicket)}
+                      Média: {formatCurrency(emp.avgTicket)}
                     </p>
                   </div>
                 </div>

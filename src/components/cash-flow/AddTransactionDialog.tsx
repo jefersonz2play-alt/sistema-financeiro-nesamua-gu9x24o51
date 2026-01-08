@@ -1,8 +1,8 @@
 import { useState, useEffect } from 'react'
-import { useForm } from 'react-hook-form'
+import { useForm, useFieldArray } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import * as z from 'zod'
-import { CalendarIcon, Plus } from 'lucide-react'
+import { CalendarIcon, Plus, Trash2, UserPlus } from 'lucide-react'
 import { format } from 'date-fns'
 import { ptBR } from 'date-fns/locale'
 
@@ -66,8 +66,21 @@ const formSchema = z
     ),
     cardFee: z.string().optional(),
     customerId: z.string().optional(),
-    employeeId: z.string().optional(),
-    employeePayment: z.string().optional(),
+    // Replace single employeeId with splits array
+    splits: z
+      .array(
+        z.object({
+          employeeId: z.string().min(1, 'Selecione o funcionário'),
+          amount: z
+            .string()
+            .min(1, 'Informe o valor')
+            .refine(
+              (val) => !isNaN(Number(val)) && Number(val) >= 0,
+              'Deve ser número positivo',
+            ),
+        }),
+      )
+      .optional(),
     itemId: z.string().optional(),
     quantity: z.string().optional(),
   })
@@ -82,11 +95,11 @@ const formSchema = z
             path: ['customerId'],
           })
         }
-        if (!data.employeeId) {
+        if (!data.splits || data.splits.length === 0) {
           ctx.addIssue({
             code: z.ZodIssueCode.custom,
-            message: 'Funcionário é obrigatório para serviços.',
-            path: ['employeeId'],
+            message: 'Adicione pelo menos um funcionário.',
+            path: ['splits'],
           })
         }
       } else if (data.category === 'product') {
@@ -100,11 +113,14 @@ const formSchema = z
       }
     } else if (data.type === 'exit') {
       // Bonus requirements
-      if (data.category === 'bonus' && !data.employeeId) {
+      if (
+        data.category === 'bonus' &&
+        (!data.splits || data.splits.length === 0)
+      ) {
         ctx.addIssue({
           code: z.ZodIssueCode.custom,
           message: 'Selecione o funcionário para o bônus.',
-          path: ['employeeId'],
+          path: ['splits'],
         })
       }
     }
@@ -141,11 +157,15 @@ export function AddTransactionDialog({ onAdd }: AddTransactionDialogProps) {
       paymentMethod: 'money',
       cardFee: '',
       customerId: undefined,
-      employeeId: undefined,
-      employeePayment: '',
+      splits: [{ employeeId: '', amount: '' }],
       itemId: undefined,
       quantity: '1',
     },
+  })
+
+  const { fields, append, remove } = useFieldArray({
+    control: form.control,
+    name: 'splits',
   })
 
   const watchType = form.watch('type')
@@ -174,11 +194,17 @@ export function AddTransactionDialog({ onAdd }: AddTransactionDialogProps) {
       const service = services.find((s) => s.id === watchItemId)
       if (service) {
         form.setValue('description', service.name)
+        // Optionally pre-fill the first split amount with service payout if only 1 split exists
+        if (fields.length === 1 && service.payout) {
+          form.setValue(`splits.0.amount`, service.payout.toString())
+        }
       }
     }
-  }, [watchItemId, watchCategory, services, form])
+  }, [watchItemId, watchCategory, services, form, fields.length])
 
   function onSubmit(values: z.infer<typeof formSchema>) {
+    const primarySplit = values.splits?.[0]
+
     const newTransaction: Transaction = {
       id: Math.random().toString(36).substr(2, 9),
       date: values.date.toISOString().split('T')[0],
@@ -187,10 +213,14 @@ export function AddTransactionDialog({ onAdd }: AddTransactionDialogProps) {
       amount: Number(values.amount),
       balanceAfter: 0,
       customerId: values.customerId,
-      employeeId: values.employeeId,
-      employeePayment: values.employeePayment
-        ? Number(values.employeePayment)
-        : 0,
+      // Legacy fields for backward compatibility
+      employeeId: primarySplit?.employeeId,
+      employeePayment: primarySplit?.amount ? Number(primarySplit.amount) : 0,
+      // New splits field
+      splits: values.splits?.map((s) => ({
+        employeeId: s.employeeId,
+        amount: Number(s.amount),
+      })),
       itemId: values.itemId,
       itemType:
         values.category === 'other'
@@ -209,7 +239,7 @@ export function AddTransactionDialog({ onAdd }: AddTransactionDialogProps) {
       category: 'service',
       date: new Date(),
       quantity: '1',
-      employeePayment: '',
+      splits: [{ employeeId: '', amount: '' }],
       paymentMethod: 'money',
       cardFee: '',
     })
@@ -382,13 +412,7 @@ export function AddTransactionDialog({ onAdd }: AddTransactionDialogProps) {
 
             {/* Show Employee/Customer selection for Services OR Bonus */}
             {(watchCategory === 'service' || watchCategory === 'bonus') && (
-              <div
-                className={
-                  watchCategory === 'bonus'
-                    ? 'grid grid-cols-1'
-                    : 'grid grid-cols-2 gap-4'
-                }
-              >
+              <div className="space-y-4">
                 {watchCategory === 'service' && (
                   <FormField
                     control={form.control}
@@ -419,33 +443,92 @@ export function AddTransactionDialog({ onAdd }: AddTransactionDialogProps) {
                   />
                 )}
 
-                <FormField
-                  control={form.control}
-                  name="employeeId"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>Funcionário</FormLabel>
-                      <Select
-                        onValueChange={field.onChange}
-                        defaultValue={field.value}
+                {/* Dynamic Employees Fields */}
+                <div className="space-y-2">
+                  <div className="flex items-center justify-between">
+                    <FormLabel>Profissionais e Comissões</FormLabel>
+                    {fields.length < 4 && (
+                      <Button
+                        type="button"
+                        variant="ghost"
+                        size="sm"
+                        className="h-8 text-primary"
+                        onClick={() => append({ employeeId: '', amount: '' })}
                       >
-                        <FormControl>
-                          <SelectTrigger>
-                            <SelectValue placeholder="Selecione..." />
-                          </SelectTrigger>
-                        </FormControl>
-                        <SelectContent>
-                          {employees.map((e) => (
-                            <SelectItem key={e.id} value={e.id}>
-                              {e.name}
-                            </SelectItem>
-                          ))}
-                        </SelectContent>
-                      </Select>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
+                        <UserPlus className="w-3 h-3 mr-1" />
+                        Adicionar
+                      </Button>
+                    )}
+                  </div>
+
+                  {fields.map((field, index) => (
+                    <div
+                      key={field.id}
+                      className="grid grid-cols-6 gap-2 items-end"
+                    >
+                      <div className="col-span-3">
+                        <FormField
+                          control={form.control}
+                          name={`splits.${index}.employeeId`}
+                          render={({ field }) => (
+                            <FormItem>
+                              <Select
+                                onValueChange={field.onChange}
+                                defaultValue={field.value}
+                              >
+                                <FormControl>
+                                  <SelectTrigger>
+                                    <SelectValue placeholder="Funcionário" />
+                                  </SelectTrigger>
+                                </FormControl>
+                                <SelectContent>
+                                  {employees.map((e) => (
+                                    <SelectItem key={e.id} value={e.id}>
+                                      {e.name}
+                                    </SelectItem>
+                                  ))}
+                                </SelectContent>
+                              </Select>
+                            </FormItem>
+                          )}
+                        />
+                      </div>
+                      <div className="col-span-2">
+                        <FormField
+                          control={form.control}
+                          name={`splits.${index}.amount`}
+                          render={({ field }) => (
+                            <FormItem>
+                              <FormControl>
+                                <Input
+                                  placeholder="R$ Repasse"
+                                  type="number"
+                                  {...field}
+                                />
+                              </FormControl>
+                            </FormItem>
+                          )}
+                        />
+                      </div>
+                      <div className="col-span-1 flex justify-end pb-2">
+                        {fields.length > 1 && (
+                          <Button
+                            type="button"
+                            variant="ghost"
+                            size="icon"
+                            className="h-8 w-8 text-destructive hover:bg-destructive/10"
+                            onClick={() => remove(index)}
+                          >
+                            <Trash2 className="w-4 h-4" />
+                          </Button>
+                        )}
+                      </div>
+                    </div>
+                  ))}
+                  <FormMessage>
+                    {form.formState.errors.splits?.message}
+                  </FormMessage>
+                </div>
               </div>
             )}
 
@@ -522,30 +605,6 @@ export function AddTransactionDialog({ onAdd }: AddTransactionDialogProps) {
                 )}
               />
             </div>
-
-            {watchType === 'entry' && watchCategory === 'service' && (
-              <FormField
-                control={form.control}
-                name="employeePayment"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Repasse Funcionário (R$)</FormLabel>
-                    <FormControl>
-                      <Input
-                        placeholder="0.00"
-                        type="number"
-                        step="0.01"
-                        {...field}
-                      />
-                    </FormControl>
-                    <FormDescription className="text-xs">
-                      Comissão do profissional.
-                    </FormDescription>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-            )}
 
             <div className="grid grid-cols-2 gap-4">
               <FormField

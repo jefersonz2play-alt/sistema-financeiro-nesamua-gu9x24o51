@@ -9,6 +9,11 @@ export type PaymentMethod =
   | 'debit_card'
   | 'credit_card'
 
+export interface TransactionSplit {
+  employeeId: string
+  amount: number
+}
+
 export interface Transaction {
   id: string
   date: string
@@ -17,8 +22,9 @@ export interface Transaction {
   amount: number
   balanceAfter: number
   customerId?: string // Linked customer
-  employeeId?: string // Linked employee
-  employeePayment?: number // Payment allocated to employee
+  employeeId?: string // Linked employee (Primary or Legacy)
+  employeePayment?: number // Payment allocated to employee (Legacy)
+  splits?: TransactionSplit[] // Multiple employees distribution
   itemId?: string // Linked product or service ID
   itemType?: 'product' | 'service' | 'bonus' // Type of item
   quantity?: number // Quantity sold (for products)

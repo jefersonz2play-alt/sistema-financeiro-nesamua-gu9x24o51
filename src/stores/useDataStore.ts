@@ -97,6 +97,7 @@ const INITIAL_TRANSACTIONS: Transaction[] = [
     customerId: 'c2',
     employeeId: '1',
     employeePayment: 150.0,
+    splits: [{ employeeId: '1', amount: 150.0 }],
     itemId: 's1',
     itemType: 'service',
     paymentMethod: 'pix',

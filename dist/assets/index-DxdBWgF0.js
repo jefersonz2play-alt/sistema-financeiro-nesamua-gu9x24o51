@@ -24492,6 +24492,10 @@ var INITIAL_TRANSACTIONS = [{
 	customerId: "c2",
 	employeeId: "1",
 	employeePayment: 150,
+	splits: [{
+		employeeId: "1",
+		amount: 150
+	}],
 	itemId: "s1",
 	itemType: "service",
 	paymentMethod: "pix"
@@ -26202,6 +26206,248 @@ function createFormControl(props = {}) {
 	return {
 		...methods,
 		formControl: methods
+	};
+}
+var generateId = () => {
+	if (typeof crypto !== "undefined" && crypto.randomUUID) return crypto.randomUUID();
+	const d = typeof performance === "undefined" ? Date.now() : performance.now() * 1e3;
+	return "xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx".replace(/[xy]/g, (c) => {
+		const r$2 = (Math.random() * 16 + d) % 16 | 0;
+		return (c == "x" ? r$2 : r$2 & 3 | 8).toString(16);
+	});
+};
+var getFocusFieldName = (name, index$1, options$1 = {}) => options$1.shouldFocus || isUndefined(options$1.shouldFocus) ? options$1.focusName || `${name}.${isUndefined(options$1.focusIndex) ? index$1 : options$1.focusIndex}.` : "";
+var appendAt = (data, value) => [...data, ...convertToArrayPayload(value)];
+var fillEmptyArray = (value) => Array.isArray(value) ? value.map(() => void 0) : void 0;
+function insert(data, index$1, value) {
+	return [
+		...data.slice(0, index$1),
+		...convertToArrayPayload(value),
+		...data.slice(index$1)
+	];
+}
+var moveArrayAt = (data, from, to) => {
+	if (!Array.isArray(data)) return [];
+	if (isUndefined(data[to])) data[to] = void 0;
+	data.splice(to, 0, data.splice(from, 1)[0]);
+	return data;
+};
+var prependAt = (data, value) => [...convertToArrayPayload(value), ...convertToArrayPayload(data)];
+function removeAtIndexes(data, indexes) {
+	let i$2 = 0;
+	const temp = [...data];
+	for (const index$1 of indexes) {
+		temp.splice(index$1 - i$2, 1);
+		i$2++;
+	}
+	return compact(temp).length ? temp : [];
+}
+var removeArrayAt = (data, index$1) => isUndefined(index$1) ? [] : removeAtIndexes(data, convertToArrayPayload(index$1).sort((a$1, b$1) => a$1 - b$1));
+var swapArrayAt = (data, indexA, indexB) => {
+	[data[indexA], data[indexB]] = [data[indexB], data[indexA]];
+};
+var updateAt = (fieldValues, index$1, value) => {
+	fieldValues[index$1] = value;
+	return fieldValues;
+};
+function useFieldArray(props) {
+	const methods = useFormContext();
+	const { control = methods.control, name, keyName = "id", shouldUnregister, rules } = props;
+	const [fields, setFields] = import_react.useState(control._getFieldArray(name));
+	const ids = import_react.useRef(control._getFieldArray(name).map(generateId));
+	const _actioned = import_react.useRef(false);
+	control._names.array.add(name);
+	import_react.useMemo(() => rules && fields.length >= 0 && control.register(name, rules), [
+		control,
+		name,
+		fields.length,
+		rules
+	]);
+	useIsomorphicLayoutEffect$1(() => control._subjects.array.subscribe({ next: ({ values, name: fieldArrayName }) => {
+		if (fieldArrayName === name || !fieldArrayName) {
+			const fieldValues = get(values, name);
+			if (Array.isArray(fieldValues)) {
+				setFields(fieldValues);
+				ids.current = fieldValues.map(generateId);
+			}
+		}
+	} }).unsubscribe, [control, name]);
+	const updateValues = import_react.useCallback((updatedFieldArrayValues) => {
+		_actioned.current = true;
+		control._setFieldArray(name, updatedFieldArrayValues);
+	}, [control, name]);
+	const append = (value, options$1) => {
+		const appendValue = convertToArrayPayload(cloneObject(value));
+		const updatedFieldArrayValues = appendAt(control._getFieldArray(name), appendValue);
+		control._names.focus = getFocusFieldName(name, updatedFieldArrayValues.length - 1, options$1);
+		ids.current = appendAt(ids.current, appendValue.map(generateId));
+		updateValues(updatedFieldArrayValues);
+		setFields(updatedFieldArrayValues);
+		control._setFieldArray(name, updatedFieldArrayValues, appendAt, { argA: fillEmptyArray(value) });
+	};
+	const prepend = (value, options$1) => {
+		const prependValue = convertToArrayPayload(cloneObject(value));
+		const updatedFieldArrayValues = prependAt(control._getFieldArray(name), prependValue);
+		control._names.focus = getFocusFieldName(name, 0, options$1);
+		ids.current = prependAt(ids.current, prependValue.map(generateId));
+		updateValues(updatedFieldArrayValues);
+		setFields(updatedFieldArrayValues);
+		control._setFieldArray(name, updatedFieldArrayValues, prependAt, { argA: fillEmptyArray(value) });
+	};
+	const remove = (index$1) => {
+		const updatedFieldArrayValues = removeArrayAt(control._getFieldArray(name), index$1);
+		ids.current = removeArrayAt(ids.current, index$1);
+		updateValues(updatedFieldArrayValues);
+		setFields(updatedFieldArrayValues);
+		!Array.isArray(get(control._fields, name)) && set(control._fields, name, void 0);
+		control._setFieldArray(name, updatedFieldArrayValues, removeArrayAt, { argA: index$1 });
+	};
+	const insert$1 = (index$1, value, options$1) => {
+		const insertValue = convertToArrayPayload(cloneObject(value));
+		const updatedFieldArrayValues = insert(control._getFieldArray(name), index$1, insertValue);
+		control._names.focus = getFocusFieldName(name, index$1, options$1);
+		ids.current = insert(ids.current, index$1, insertValue.map(generateId));
+		updateValues(updatedFieldArrayValues);
+		setFields(updatedFieldArrayValues);
+		control._setFieldArray(name, updatedFieldArrayValues, insert, {
+			argA: index$1,
+			argB: fillEmptyArray(value)
+		});
+	};
+	const swap = (indexA, indexB) => {
+		const updatedFieldArrayValues = control._getFieldArray(name);
+		swapArrayAt(updatedFieldArrayValues, indexA, indexB);
+		swapArrayAt(ids.current, indexA, indexB);
+		updateValues(updatedFieldArrayValues);
+		setFields(updatedFieldArrayValues);
+		control._setFieldArray(name, updatedFieldArrayValues, swapArrayAt, {
+			argA: indexA,
+			argB: indexB
+		}, false);
+	};
+	const move = (from, to) => {
+		const updatedFieldArrayValues = control._getFieldArray(name);
+		moveArrayAt(updatedFieldArrayValues, from, to);
+		moveArrayAt(ids.current, from, to);
+		updateValues(updatedFieldArrayValues);
+		setFields(updatedFieldArrayValues);
+		control._setFieldArray(name, updatedFieldArrayValues, moveArrayAt, {
+			argA: from,
+			argB: to
+		}, false);
+	};
+	const update = (index$1, value) => {
+		const updateValue = cloneObject(value);
+		const updatedFieldArrayValues = updateAt(control._getFieldArray(name), index$1, updateValue);
+		ids.current = [...updatedFieldArrayValues].map((item, i$2) => !item || i$2 === index$1 ? generateId() : ids.current[i$2]);
+		updateValues(updatedFieldArrayValues);
+		setFields([...updatedFieldArrayValues]);
+		control._setFieldArray(name, updatedFieldArrayValues, updateAt, {
+			argA: index$1,
+			argB: updateValue
+		}, true, false);
+	};
+	const replace = (value) => {
+		const updatedFieldArrayValues = convertToArrayPayload(cloneObject(value));
+		ids.current = updatedFieldArrayValues.map(generateId);
+		updateValues([...updatedFieldArrayValues]);
+		setFields([...updatedFieldArrayValues]);
+		control._setFieldArray(name, [...updatedFieldArrayValues], (data) => data, {}, true, false);
+	};
+	import_react.useEffect(() => {
+		control._state.action = false;
+		isWatched(name, control._names) && control._subjects.state.next({ ...control._formState });
+		if (_actioned.current && (!getValidationModes(control._options.mode).isOnSubmit || control._formState.isSubmitted) && !getValidationModes(control._options.reValidateMode).isOnSubmit) if (control._options.resolver) control._runSchema([name]).then((result) => {
+			control._updateIsValidating([name]);
+			const error = get(result.errors, name);
+			const existingError = get(control._formState.errors, name);
+			if (existingError ? !error && existingError.type || error && (existingError.type !== error.type || existingError.message !== error.message) : error && error.type) {
+				error ? set(control._formState.errors, name, error) : unset(control._formState.errors, name);
+				control._subjects.state.next({ errors: control._formState.errors });
+			}
+		});
+		else {
+			const field = get(control._fields, name);
+			if (field && field._f && !(getValidationModes(control._options.reValidateMode).isOnSubmit && getValidationModes(control._options.mode).isOnSubmit)) validateField(field, control._names.disabled, control._formValues, control._options.criteriaMode === VALIDATION_MODE.all, control._options.shouldUseNativeValidation, true).then((error) => !isEmptyObject(error) && control._subjects.state.next({ errors: updateFieldArrayRootError(control._formState.errors, error, name) }));
+		}
+		control._subjects.state.next({
+			name,
+			values: cloneObject(control._formValues)
+		});
+		control._names.focus && iterateFieldsByAction(control._fields, (ref, key) => {
+			if (control._names.focus && key.startsWith(control._names.focus) && ref.focus) {
+				ref.focus();
+				return 1;
+			}
+		});
+		control._names.focus = "";
+		control._setValid();
+		_actioned.current = false;
+	}, [
+		fields,
+		name,
+		control
+	]);
+	import_react.useEffect(() => {
+		!get(control._formValues, name) && control._setFieldArray(name);
+		return () => {
+			const updateMounted = (name$1, value) => {
+				const field = get(control._fields, name$1);
+				if (field && field._f) field._f.mount = value;
+			};
+			control._options.shouldUnregister || shouldUnregister ? control.unregister(name) : updateMounted(name, false);
+		};
+	}, [
+		name,
+		control,
+		keyName,
+		shouldUnregister
+	]);
+	return {
+		swap: import_react.useCallback(swap, [
+			updateValues,
+			name,
+			control
+		]),
+		move: import_react.useCallback(move, [
+			updateValues,
+			name,
+			control
+		]),
+		prepend: import_react.useCallback(prepend, [
+			updateValues,
+			name,
+			control
+		]),
+		append: import_react.useCallback(append, [
+			updateValues,
+			name,
+			control
+		]),
+		remove: import_react.useCallback(remove, [
+			updateValues,
+			name,
+			control
+		]),
+		insert: import_react.useCallback(insert$1, [
+			updateValues,
+			name,
+			control
+		]),
+		update: import_react.useCallback(update, [
+			updateValues,
+			name,
+			control
+		]),
+		replace: import_react.useCallback(replace, [
+			updateValues,
+			name,
+			control
+		]),
+		fields: import_react.useMemo(() => fields.map((field, index$1) => ({
+			...field,
+			[keyName]: ids.current[index$1] || generateId()
+		})), [fields, keyName])
 	};
 }
 function useForm(props = {}) {
@@ -36677,8 +36923,10 @@ var formSchema$1 = object({
 	], { required_error: "Selecione a forma de pagamento." }),
 	cardFee: string().optional(),
 	customerId: string().optional(),
-	employeeId: string().optional(),
-	employeePayment: string().optional(),
+	splits: array(object({
+		employeeId: string().min(1, "Selecione o funcionário"),
+		amount: string().min(1, "Informe o valor").refine((val) => !isNaN(Number(val)) && Number(val) >= 0, "Deve ser número positivo")
+	})).optional(),
 	itemId: string().optional(),
 	quantity: string().optional()
 }).superRefine((data, ctx) => {
@@ -36689,10 +36937,10 @@ var formSchema$1 = object({
 				message: "Cliente é obrigatório para serviços.",
 				path: ["customerId"]
 			});
-			if (!data.employeeId) ctx.addIssue({
+			if (!data.splits || data.splits.length === 0) ctx.addIssue({
 				code: ZodIssueCode.custom,
-				message: "Funcionário é obrigatório para serviços.",
-				path: ["employeeId"]
+				message: "Adicione pelo menos um funcionário.",
+				path: ["splits"]
 			});
 		} else if (data.category === "product") {
 			if (!data.itemId) ctx.addIssue({
@@ -36702,10 +36950,10 @@ var formSchema$1 = object({
 			});
 		}
 	} else if (data.type === "exit") {
-		if (data.category === "bonus" && !data.employeeId) ctx.addIssue({
+		if (data.category === "bonus" && (!data.splits || data.splits.length === 0)) ctx.addIssue({
 			code: ZodIssueCode.custom,
 			message: "Selecione o funcionário para o bônus.",
-			path: ["employeeId"]
+			path: ["splits"]
 		});
 	}
 	if (["credit_card", "debit_card"].includes(data.paymentMethod) && (!data.cardFee || Number(data.cardFee) < 0)) ctx.addIssue({
@@ -36724,6 +36972,20 @@ function EditTransactionDialog({ transaction }) {
 		if (t$1.itemType === "bonus") return "bonus";
 		return "other";
 	};
+	const getInitialSplits = (t$1) => {
+		if (t$1.splits && t$1.splits.length > 0) return t$1.splits.map((s$2) => ({
+			employeeId: s$2.employeeId,
+			amount: s$2.amount.toString()
+		}));
+		if (t$1.employeeId) return [{
+			employeeId: t$1.employeeId,
+			amount: (t$1.employeePayment || 0).toString()
+		}];
+		return [{
+			employeeId: "",
+			amount: ""
+		}];
+	};
 	const form = useForm({
 		resolver: a(formSchema$1),
 		defaultValues: {
@@ -36735,11 +36997,14 @@ function EditTransactionDialog({ transaction }) {
 			paymentMethod: transaction.paymentMethod || "money",
 			cardFee: transaction.cardFee?.toString() || "",
 			customerId: transaction.customerId,
-			employeeId: transaction.employeeId,
-			employeePayment: transaction.employeePayment?.toString() || "",
+			splits: getInitialSplits(transaction),
 			itemId: transaction.itemId,
 			quantity: transaction.quantity?.toString() || "1"
 		}
+	});
+	const { fields, append, remove, replace } = useFieldArray({
+		control: form.control,
+		name: "splits"
 	});
 	(0, import_react.useEffect)(() => {
 		if (open) form.reset({
@@ -36751,8 +37016,7 @@ function EditTransactionDialog({ transaction }) {
 			paymentMethod: transaction.paymentMethod || "money",
 			cardFee: transaction.cardFee?.toString() || "",
 			customerId: transaction.customerId,
-			employeeId: transaction.employeeId,
-			employeePayment: transaction.employeePayment?.toString() || "",
+			splits: getInitialSplits(transaction),
 			itemId: transaction.itemId,
 			quantity: transaction.quantity?.toString() || "1"
 		});
@@ -36789,7 +37053,10 @@ function EditTransactionDialog({ transaction }) {
 	(0, import_react.useEffect)(() => {
 		if (watchCategory === "service" && watchItemId && open && watchItemId !== transaction.itemId) {
 			const service = services.find((s$2) => s$2.id === watchItemId);
-			if (service) form.setValue("description", service.name);
+			if (service) {
+				form.setValue("description", service.name);
+				if (fields.length === 1 && !fields[0].employeeId && service.payout) form.setValue(`splits.0.amount`, service.payout.toString());
+			}
 		}
 	}, [
 		watchItemId,
@@ -36797,17 +37064,23 @@ function EditTransactionDialog({ transaction }) {
 		services,
 		form,
 		open,
-		transaction.itemId
+		transaction.itemId,
+		fields.length
 	]);
 	function onSubmit(values) {
+		const primarySplit = values.splits?.[0];
 		const updatedTransaction = {
 			date: values.date.toISOString().split("T")[0],
 			description: values.description,
 			type: values.type,
 			amount: Number(values.amount),
 			customerId: values.customerId,
-			employeeId: values.employeeId,
-			employeePayment: values.employeePayment ? Number(values.employeePayment) : 0,
+			employeeId: primarySplit?.employeeId,
+			employeePayment: primarySplit?.amount ? Number(primarySplit.amount) : 0,
+			splits: values.splits?.map((s$2) => ({
+				employeeId: s$2.employeeId,
+				amount: Number(s$2.amount)
+			})),
 			itemId: values.itemId,
 			itemType: values.category === "other" ? void 0 : values.category,
 			quantity: values.quantity ? Number(values.quantity) : void 0,
@@ -36949,7 +37222,7 @@ function EditTransactionDialog({ transaction }) {
 							] })
 						}),
 						(watchCategory === "service" || watchCategory === "bonus") && /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-							className: watchCategory === "bonus" ? "grid grid-cols-1" : "grid grid-cols-2 gap-4",
+							className: "space-y-4",
 							children: [watchCategory === "service" && /* @__PURE__ */ (0, import_jsx_runtime.jsx)(FormField, {
 								control: form.control,
 								name: "customerId",
@@ -36965,21 +37238,68 @@ function EditTransactionDialog({ transaction }) {
 									}),
 									/* @__PURE__ */ (0, import_jsx_runtime.jsx)(FormMessage, {})
 								] })
-							}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)(FormField, {
-								control: form.control,
-								name: "employeeId",
-								render: ({ field }) => /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(FormItem, { children: [
-									/* @__PURE__ */ (0, import_jsx_runtime.jsx)(FormLabel, { children: "Funcionário" }),
-									/* @__PURE__ */ (0, import_jsx_runtime.jsxs)(Select, {
-										onValueChange: field.onChange,
-										value: field.value,
-										children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(FormControl, { children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(SelectTrigger, { children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(SelectValue, { placeholder: "Selecione..." }) }) }), /* @__PURE__ */ (0, import_jsx_runtime.jsx)(SelectContent, { children: employees.map((e) => /* @__PURE__ */ (0, import_jsx_runtime.jsx)(SelectItem, {
-											value: e.id,
-											children: e.name
-										}, e.id)) })]
+							}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+								className: "space-y-2",
+								children: [
+									/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+										className: "flex items-center justify-between",
+										children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(FormLabel, { children: "Profissionais e Comissões" }), fields.length < 4 && /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(Button, {
+											type: "button",
+											variant: "ghost",
+											size: "sm",
+											className: "h-8 text-primary",
+											onClick: () => append({
+												employeeId: "",
+												amount: ""
+											}),
+											children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(UserPlus, { className: "w-3 h-3 mr-1" }), "Adicionar"]
+										})]
 									}),
-									/* @__PURE__ */ (0, import_jsx_runtime.jsx)(FormMessage, {})
-								] })
+									fields.map((field, index$1) => /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+										className: "grid grid-cols-6 gap-2 items-end",
+										children: [
+											/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+												className: "col-span-3",
+												children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(FormField, {
+													control: form.control,
+													name: `splits.${index$1}.employeeId`,
+													render: ({ field: field$1 }) => /* @__PURE__ */ (0, import_jsx_runtime.jsx)(FormItem, { children: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(Select, {
+														onValueChange: field$1.onChange,
+														value: field$1.value,
+														children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(FormControl, { children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(SelectTrigger, { children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(SelectValue, { placeholder: "Funcionário" }) }) }), /* @__PURE__ */ (0, import_jsx_runtime.jsx)(SelectContent, { children: employees.map((e) => /* @__PURE__ */ (0, import_jsx_runtime.jsx)(SelectItem, {
+															value: e.id,
+															children: e.name
+														}, e.id)) })]
+													}) })
+												})
+											}),
+											/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+												className: "col-span-2",
+												children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(FormField, {
+													control: form.control,
+													name: `splits.${index$1}.amount`,
+													render: ({ field: field$1 }) => /* @__PURE__ */ (0, import_jsx_runtime.jsx)(FormItem, { children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(FormControl, { children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Input, {
+														placeholder: "R$ Repasse",
+														type: "number",
+														...field$1
+													}) }) })
+												})
+											}),
+											/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+												className: "col-span-1 flex justify-end pb-2",
+												children: fields.length > 1 && /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Button, {
+													type: "button",
+													variant: "ghost",
+													size: "icon",
+													className: "h-8 w-8 text-destructive hover:bg-destructive/10",
+													onClick: () => remove(index$1),
+													children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Trash2, { className: "w-4 h-4" })
+												})
+											})
+										]
+									}, field.id)),
+									/* @__PURE__ */ (0, import_jsx_runtime.jsx)(FormMessage, { children: form.formState.errors.splits?.message })
+								]
 							})]
 						}),
 						/* @__PURE__ */ (0, import_jsx_runtime.jsx)(FormField, {
@@ -37037,24 +37357,6 @@ function EditTransactionDialog({ transaction }) {
 									]
 								})
 							})]
-						}),
-						watchType === "entry" && watchCategory === "service" && /* @__PURE__ */ (0, import_jsx_runtime.jsx)(FormField, {
-							control: form.control,
-							name: "employeePayment",
-							render: ({ field }) => /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(FormItem, { children: [
-								/* @__PURE__ */ (0, import_jsx_runtime.jsx)(FormLabel, { children: "Repasse Funcionário (R$)" }),
-								/* @__PURE__ */ (0, import_jsx_runtime.jsx)(FormControl, { children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Input, {
-									placeholder: "0.00",
-									type: "number",
-									step: "0.01",
-									...field
-								}) }),
-								/* @__PURE__ */ (0, import_jsx_runtime.jsx)(FormDescription, {
-									className: "text-xs",
-									children: "Comissão do profissional."
-								}),
-								/* @__PURE__ */ (0, import_jsx_runtime.jsx)(FormMessage, {})
-							] })
 						}),
 						/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
 							className: "grid grid-cols-2 gap-4",
@@ -37158,9 +37460,20 @@ function TransactionTable({ transactions }) {
 		if (!id) return "-";
 		return customers.find((c) => c.id === id)?.name || "Cliente Removido";
 	};
-	const getEmployeeName = (id) => {
-		if (!id) return "-";
-		return employees.find((e) => e.id === id)?.name || "Func. Removido";
+	const getEmployeeName = (transaction) => {
+		if (transaction.splits && transaction.splits.length > 0) {
+			if (transaction.splits.length === 1) {
+				const empId = transaction.splits[0].employeeId;
+				return employees.find((e) => e.id === empId)?.name || "Func. Removido";
+			}
+			return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+				className: "flex items-center gap-1",
+				title: transaction.splits.map((s$2) => employees.find((e) => e.id === s$2.employeeId)?.name).join(", "),
+				children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Users, { className: "w-3 h-3 text-primary" }), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("span", { children: [transaction.splits.length, " funcionários"] })]
+			});
+		}
+		if (!transaction.employeeId) return "-";
+		return employees.find((e) => e.id === transaction.employeeId)?.name || "Func. Removido";
 	};
 	return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(Card, {
 		className: "shadow-subtle border-none overflow-hidden bg-card",
@@ -37183,7 +37496,7 @@ function TransactionTable({ transactions }) {
 						}),
 						/* @__PURE__ */ (0, import_jsx_runtime.jsx)(TableHead, { children: "Descrição" }),
 						/* @__PURE__ */ (0, import_jsx_runtime.jsx)(TableHead, { children: "Cliente" }),
-						/* @__PURE__ */ (0, import_jsx_runtime.jsx)(TableHead, { children: "Funcionário" }),
+						/* @__PURE__ */ (0, import_jsx_runtime.jsx)(TableHead, { children: "Equipe" }),
 						/* @__PURE__ */ (0, import_jsx_runtime.jsx)(TableHead, { children: "Pagamento" }),
 						/* @__PURE__ */ (0, import_jsx_runtime.jsx)(TableHead, {
 							className: "w-[100px]",
@@ -37243,7 +37556,7 @@ function TransactionTable({ transactions }) {
 							}),
 							/* @__PURE__ */ (0, import_jsx_runtime.jsx)(TableCell, {
 								className: "text-sm",
-								children: getEmployeeName(transaction.employeeId)
+								children: getEmployeeName(transaction)
 							}),
 							/* @__PURE__ */ (0, import_jsx_runtime.jsx)(TableCell, { children: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
 								className: "flex items-center gap-1 text-sm text-foreground/80",
@@ -37304,8 +37617,10 @@ var formSchema = object({
 	], { required_error: "Selecione a forma de pagamento." }),
 	cardFee: string().optional(),
 	customerId: string().optional(),
-	employeeId: string().optional(),
-	employeePayment: string().optional(),
+	splits: array(object({
+		employeeId: string().min(1, "Selecione o funcionário"),
+		amount: string().min(1, "Informe o valor").refine((val) => !isNaN(Number(val)) && Number(val) >= 0, "Deve ser número positivo")
+	})).optional(),
 	itemId: string().optional(),
 	quantity: string().optional()
 }).superRefine((data, ctx) => {
@@ -37316,10 +37631,10 @@ var formSchema = object({
 				message: "Cliente é obrigatório para serviços.",
 				path: ["customerId"]
 			});
-			if (!data.employeeId) ctx.addIssue({
+			if (!data.splits || data.splits.length === 0) ctx.addIssue({
 				code: ZodIssueCode.custom,
-				message: "Funcionário é obrigatório para serviços.",
-				path: ["employeeId"]
+				message: "Adicione pelo menos um funcionário.",
+				path: ["splits"]
 			});
 		} else if (data.category === "product") {
 			if (!data.itemId) ctx.addIssue({
@@ -37329,10 +37644,10 @@ var formSchema = object({
 			});
 		}
 	} else if (data.type === "exit") {
-		if (data.category === "bonus" && !data.employeeId) ctx.addIssue({
+		if (data.category === "bonus" && (!data.splits || data.splits.length === 0)) ctx.addIssue({
 			code: ZodIssueCode.custom,
 			message: "Selecione o funcionário para o bônus.",
-			path: ["employeeId"]
+			path: ["splits"]
 		});
 	}
 	if (["credit_card", "debit_card"].includes(data.paymentMethod) && (!data.cardFee || Number(data.cardFee) < 0)) ctx.addIssue({
@@ -37355,11 +37670,17 @@ function AddTransactionDialog({ onAdd }) {
 			paymentMethod: "money",
 			cardFee: "",
 			customerId: void 0,
-			employeeId: void 0,
-			employeePayment: "",
+			splits: [{
+				employeeId: "",
+				amount: ""
+			}],
 			itemId: void 0,
 			quantity: "1"
 		}
+	});
+	const { fields, append, remove } = useFieldArray({
+		control: form.control,
+		name: "splits"
 	});
 	const watchType = form.watch("type");
 	const watchCategory = form.watch("category");
@@ -37387,15 +37708,20 @@ function AddTransactionDialog({ onAdd }) {
 	(0, import_react.useEffect)(() => {
 		if (watchCategory === "service" && watchItemId) {
 			const service = services.find((s$2) => s$2.id === watchItemId);
-			if (service) form.setValue("description", service.name);
+			if (service) {
+				form.setValue("description", service.name);
+				if (fields.length === 1 && service.payout) form.setValue(`splits.0.amount`, service.payout.toString());
+			}
 		}
 	}, [
 		watchItemId,
 		watchCategory,
 		services,
-		form
+		form,
+		fields.length
 	]);
 	function onSubmit(values) {
+		const primarySplit = values.splits?.[0];
 		onAdd({
 			id: Math.random().toString(36).substr(2, 9),
 			date: values.date.toISOString().split("T")[0],
@@ -37404,8 +37730,12 @@ function AddTransactionDialog({ onAdd }) {
 			amount: Number(values.amount),
 			balanceAfter: 0,
 			customerId: values.customerId,
-			employeeId: values.employeeId,
-			employeePayment: values.employeePayment ? Number(values.employeePayment) : 0,
+			employeeId: primarySplit?.employeeId,
+			employeePayment: primarySplit?.amount ? Number(primarySplit.amount) : 0,
+			splits: values.splits?.map((s$2) => ({
+				employeeId: s$2.employeeId,
+				amount: Number(s$2.amount)
+			})),
 			itemId: values.itemId,
 			itemType: values.category === "other" ? void 0 : values.category,
 			quantity: values.quantity ? Number(values.quantity) : void 0,
@@ -37419,7 +37749,10 @@ function AddTransactionDialog({ onAdd }) {
 			category: "service",
 			date: /* @__PURE__ */ new Date(),
 			quantity: "1",
-			employeePayment: "",
+			splits: [{
+				employeeId: "",
+				amount: ""
+			}],
 			paymentMethod: "money",
 			cardFee: ""
 		});
@@ -37553,7 +37886,7 @@ function AddTransactionDialog({ onAdd }) {
 							] })
 						}),
 						(watchCategory === "service" || watchCategory === "bonus") && /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-							className: watchCategory === "bonus" ? "grid grid-cols-1" : "grid grid-cols-2 gap-4",
+							className: "space-y-4",
 							children: [watchCategory === "service" && /* @__PURE__ */ (0, import_jsx_runtime.jsx)(FormField, {
 								control: form.control,
 								name: "customerId",
@@ -37569,21 +37902,68 @@ function AddTransactionDialog({ onAdd }) {
 									}),
 									/* @__PURE__ */ (0, import_jsx_runtime.jsx)(FormMessage, {})
 								] })
-							}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)(FormField, {
-								control: form.control,
-								name: "employeeId",
-								render: ({ field }) => /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(FormItem, { children: [
-									/* @__PURE__ */ (0, import_jsx_runtime.jsx)(FormLabel, { children: "Funcionário" }),
-									/* @__PURE__ */ (0, import_jsx_runtime.jsxs)(Select, {
-										onValueChange: field.onChange,
-										defaultValue: field.value,
-										children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(FormControl, { children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(SelectTrigger, { children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(SelectValue, { placeholder: "Selecione..." }) }) }), /* @__PURE__ */ (0, import_jsx_runtime.jsx)(SelectContent, { children: employees.map((e) => /* @__PURE__ */ (0, import_jsx_runtime.jsx)(SelectItem, {
-											value: e.id,
-											children: e.name
-										}, e.id)) })]
+							}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+								className: "space-y-2",
+								children: [
+									/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+										className: "flex items-center justify-between",
+										children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(FormLabel, { children: "Profissionais e Comissões" }), fields.length < 4 && /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(Button, {
+											type: "button",
+											variant: "ghost",
+											size: "sm",
+											className: "h-8 text-primary",
+											onClick: () => append({
+												employeeId: "",
+												amount: ""
+											}),
+											children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(UserPlus, { className: "w-3 h-3 mr-1" }), "Adicionar"]
+										})]
 									}),
-									/* @__PURE__ */ (0, import_jsx_runtime.jsx)(FormMessage, {})
-								] })
+									fields.map((field, index$1) => /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+										className: "grid grid-cols-6 gap-2 items-end",
+										children: [
+											/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+												className: "col-span-3",
+												children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(FormField, {
+													control: form.control,
+													name: `splits.${index$1}.employeeId`,
+													render: ({ field: field$1 }) => /* @__PURE__ */ (0, import_jsx_runtime.jsx)(FormItem, { children: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(Select, {
+														onValueChange: field$1.onChange,
+														defaultValue: field$1.value,
+														children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(FormControl, { children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(SelectTrigger, { children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(SelectValue, { placeholder: "Funcionário" }) }) }), /* @__PURE__ */ (0, import_jsx_runtime.jsx)(SelectContent, { children: employees.map((e) => /* @__PURE__ */ (0, import_jsx_runtime.jsx)(SelectItem, {
+															value: e.id,
+															children: e.name
+														}, e.id)) })]
+													}) })
+												})
+											}),
+											/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+												className: "col-span-2",
+												children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(FormField, {
+													control: form.control,
+													name: `splits.${index$1}.amount`,
+													render: ({ field: field$1 }) => /* @__PURE__ */ (0, import_jsx_runtime.jsx)(FormItem, { children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(FormControl, { children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Input, {
+														placeholder: "R$ Repasse",
+														type: "number",
+														...field$1
+													}) }) })
+												})
+											}),
+											/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+												className: "col-span-1 flex justify-end pb-2",
+												children: fields.length > 1 && /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Button, {
+													type: "button",
+													variant: "ghost",
+													size: "icon",
+													className: "h-8 w-8 text-destructive hover:bg-destructive/10",
+													onClick: () => remove(index$1),
+													children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Trash2, { className: "w-4 h-4" })
+												})
+											})
+										]
+									}, field.id)),
+									/* @__PURE__ */ (0, import_jsx_runtime.jsx)(FormMessage, { children: form.formState.errors.splits?.message })
+								]
 							})]
 						}),
 						/* @__PURE__ */ (0, import_jsx_runtime.jsx)(FormField, {
@@ -37641,24 +38021,6 @@ function AddTransactionDialog({ onAdd }) {
 									]
 								})
 							})]
-						}),
-						watchType === "entry" && watchCategory === "service" && /* @__PURE__ */ (0, import_jsx_runtime.jsx)(FormField, {
-							control: form.control,
-							name: "employeePayment",
-							render: ({ field }) => /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(FormItem, { children: [
-								/* @__PURE__ */ (0, import_jsx_runtime.jsx)(FormLabel, { children: "Repasse Funcionário (R$)" }),
-								/* @__PURE__ */ (0, import_jsx_runtime.jsx)(FormControl, { children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Input, {
-									placeholder: "0.00",
-									type: "number",
-									step: "0.01",
-									...field
-								}) }),
-								/* @__PURE__ */ (0, import_jsx_runtime.jsx)(FormDescription, {
-									className: "text-xs",
-									children: "Comissão do profissional."
-								}),
-								/* @__PURE__ */ (0, import_jsx_runtime.jsx)(FormMessage, {})
-							] })
 						}),
 						/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
 							className: "grid grid-cols-2 gap-4",
@@ -40320,10 +40682,17 @@ function EmployeePerformance({ employees, transactions, startDate, endDate }) {
 	const stats = (0, import_react.useMemo)(() => {
 		return employees.map((emp) => {
 			const empTransactions = transactions.filter((t$1) => {
-				return t$1.employeeId === emp.id && t$1.type === "entry" && t$1.date >= startDate && t$1.date <= endDate;
+				const isEntry = t$1.type === "entry";
+				const inRange = t$1.date >= startDate && t$1.date <= endDate;
+				if (!isEntry || !inRange) return false;
+				if (t$1.splits && t$1.splits.length > 0) return t$1.splits.some((s$2) => s$2.employeeId === emp.id);
+				return t$1.employeeId === emp.id;
 			});
 			const count$3 = empTransactions.length;
-			const totalRevenue = empTransactions.reduce((sum, t$1) => sum + t$1.amount, 0);
+			const totalRevenue = empTransactions.reduce((sum, t$1) => {
+				if (t$1.splits && t$1.splits.length > 0) return sum + (t$1.splits.find((s$2) => s$2.employeeId === emp.id)?.amount || 0);
+				return sum + (t$1.employeePayment || 0);
+			}, 0);
 			const avgTicket = count$3 > 0 ? totalRevenue / count$3 : 0;
 			return {
 				...emp,
@@ -40346,7 +40715,7 @@ function EmployeePerformance({ employees, transactions, startDate, endDate }) {
 			children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(CardTitle, {
 				className: "text-lg",
 				children: "Desempenho da Equipe"
-			}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)(CardDescription, { children: "Resultados no período selecionado." })] }), /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Button, {
+			}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)(CardDescription, { children: "Comissões/Repasses no período." })] }), /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Button, {
 				variant: "ghost",
 				size: "icon",
 				asChild: true,
@@ -40383,7 +40752,7 @@ function EmployeePerformance({ employees, transactions, startDate, endDate }) {
 								}),
 								/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("p", {
 									className: "text-xs text-muted-foreground",
-									children: ["Ticket Médio: ", formatCurrency(emp.avgTicket)]
+									children: ["Média: ", formatCurrency(emp.avgTicket)]
 								})
 							]
 						})] })]
@@ -42110,4 +42479,4 @@ var App = () => /* @__PURE__ */ (0, import_jsx_runtime.jsx)(BrowserRouter, {
 var App_default = App;
 (0, import_client.createRoot)(document.getElementById("root")).render(/* @__PURE__ */ (0, import_jsx_runtime.jsx)(App_default, {}));
 
-//# sourceMappingURL=index-CgaV61Jc.js.map
+//# sourceMappingURL=index-DxdBWgF0.js.map
